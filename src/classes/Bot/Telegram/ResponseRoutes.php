@@ -33,7 +33,7 @@ trait ResponseRoutes
 	 */
 	public function any(): bool
 	{
-
+		
 
 		return false;
 	}
