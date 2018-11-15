@@ -2,6 +2,8 @@
 
 namespace Bot\Telegram;
 
+use Exceptions\InvalidRouteException;
+
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
  * @license MIT
@@ -25,6 +27,43 @@ final class Response
 	public function __construct(Data $d)
 	{
 		$this->d = $d;
+	}
+
+	/**
+	 * @param string $class
+	 * @param string $method
+	 * @param array  $parameters
+	 * @return bool
+	 */
+	public function exec($class, string $method, array $parameters = []): bool
+	{
+		if (is_null($class)) {
+			if (is_callable($method)) {
+				return (bool)call_user_func_array($method, $parameters);
+			} else {
+				throw new InvalidRouteException("{$method} is not callable");
+			}
+		} else {
+			if (is_string($class)) {
+
+				$class = "\\Bot\\Telegram\\Responses\\{$class}";
+
+				if (!class_exists($class)) {
+					throw new InvalidRouteException("Class {$class} does not exist");
+				}
+
+				$class = new $class($this->d);
+				if (!is_callable([$class, $method])) {
+					throw new InvalidRouteException("{$class}::{$method} is not callable");
+				}
+
+				return (bool)call_user_func_array([$class, $method], $parameters);
+			} else {
+				throw new InvalidRouteException("Class name must be a string!");
+			}
+		}
+
+		return false;
 	}
 
 	/**
