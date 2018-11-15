@@ -8,29 +8,25 @@ namespace Bot\Telegram;
  * @version 5.0.0
  * @package \Bot\Telegram
  */
-final class Bot
+final class Response
 {
 	/**
 	 * @var \Bot\Telegram\Data
 	 */
-	public $d;
+	private $d;
 
 	/**
-	 * @param string $json
+	 * @param \Bot\Telegram\Data $d
 	 *
 	 * Constructor.
 	 */
-	public function __construct(string $json)
+	public function __construct(Data $d)
 	{
-		$this->d = new Data($json);
+		$this->d = $d;
 	}
 
-	/**
-	 * @return void
-	 */
 	public function run()
 	{
-		$st = new Response($this->d);
-		$st->run();
+		var_dump($this->d);
 	}
 }
