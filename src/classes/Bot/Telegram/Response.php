@@ -10,6 +10,8 @@ namespace Bot\Telegram;
  */
 final class Response
 {
+	use ResponseRoutes;
+
 	/**
 	 * @var \Bot\Telegram\Data
 	 */
@@ -25,8 +27,34 @@ final class Response
 		$this->d = $d;
 	}
 
-	public function run()
+	/**
+	 * @return void
+	 */
+	public function run(): void
 	{
-		var_dump($this->d);
+		if ($this->d["event_type"] === "general_message") {
+			$this->generalMessageHandler();
+			return;
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	private function generalMessageHandler(): void
+	{
+
+		if ($this->any()) {
+			return;
+		}
+
+		switch ($this->d["msg_type"]) {
+			case "text":
+				
+				break;
+			
+			default:
+				break;
+		}
 	}
 }
