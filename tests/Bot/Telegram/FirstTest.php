@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Exceptions
  */
+use Exceptions\InvalidArrayIndexException;
 use Exceptions\InvalidJsonFormatException;
 
 /**
@@ -36,5 +37,15 @@ class FirstTest extends TestCase
 	{
 		$this->expectException(InvalidJsonFormatException::class);
 		new Bot("... this is not a json ...");
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testInvalidOffsetOnDataClass(): void
+	{
+		$this->expectException(InvalidArrayIndexException::class);
+		$st = new Bot(file_get_contents(SAMPLE_DIR."/sample_1.json"));
+		$st = $st->d["... non exists index ..."];
 	}
 }
