@@ -6,3 +6,7 @@
 *.log
 /vendor/
 /.phpintel/
+
+# Telegram config
+/config/telegram/config.php
+/config/telegram/api_key.php
