@@ -40,6 +40,7 @@ class FirstTest extends TestCase
 	}
 
 	/**
+	 * @throws \Exceptions\InvalidArrayIndexException
 	 * @return void
 	 */
 	public function testInvalidOffsetOnDataClass(): void
