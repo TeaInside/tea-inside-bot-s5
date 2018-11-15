@@ -4,6 +4,7 @@ namespace tests\Bot\Telegram\Lang\En;
 
 use Bot\Telegram\Data;
 use Bot\Telegram\Lang;
+use Bot\Telegram\Lang\En\Start;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -41,7 +42,7 @@ class StartTest extends TestCase
 	{
 		$this->assertEquals(
 			$this->lang->get("Start", "private"),
-			"Send /help to show the command list!"
+			Start::$l["private"]
 		);
 	}
 
@@ -52,7 +53,7 @@ class StartTest extends TestCase
 	{
 		$this->assertEquals(
 			$this->lang->get("Start", "group"),
-			"Start command can only be used in private!"
+			Start::$l["group"]
 		);
 	}
 }
