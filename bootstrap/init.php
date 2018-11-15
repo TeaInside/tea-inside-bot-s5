@@ -29,7 +29,7 @@ if (!defined("_ICETEA_INIT")) {
 	/**
 	 * Load composer autoload.
 	 */
-	require BASEPATH."/vendor/autoload.php";
+	require_once BASEPATH."/vendor/autoload.php";
 
 	/**
 	 * Load helper functions.

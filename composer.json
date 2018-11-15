@@ -13,5 +13,10 @@
     "require": {},
     "require-dev": {
         "phpunit/phpunit": "^7.4"
+    },
+    "autoload-dev": {
+        "files": [
+            "bootstrap/init.php"
+        ]
     }
 }
