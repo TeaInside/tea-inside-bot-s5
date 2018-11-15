@@ -1,0 +1,14 @@
+{
+    "name": "ammarfaizi2/tea-inside-bot-s5",
+    "description": "Tea Inside Bot S5",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ammar Faizi",
+            "email": "ammarfaizi2@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
