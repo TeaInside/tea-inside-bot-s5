@@ -30,7 +30,8 @@ class Start extends ResponseFoundation
 		Exe::sendMessage(
 			[
 				"chat_id" => $this->d["chat_id"],
-				"text" => $r
+				"text" => $r,
+				"reply_to_message_id" => $this->d["msg_id"]
 			]
 		);
 
