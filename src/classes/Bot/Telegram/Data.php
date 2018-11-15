@@ -35,18 +35,21 @@ final class Data implements ArrayAccess, JsonSerializable
 	public function __construct(string $json)
 	{
 		$this->in = $json;
+		$this->build();
 	}
 
 	/**
 	 * @throws \Exceptions\InvalidJsonFormatException
 	 * @return void
 	 */
-	public function build(): void
+	private function build(): void
 	{
 		$this->in = json_decode($this->in, true);
 		if (!is_array($this->in)) {
 			throw new InvalidJsonFormatException("JSON must be a valid array.");
 		}
+
+		var_dump($this->in);
 	}
 
 	/**

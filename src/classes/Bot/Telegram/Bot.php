@@ -24,4 +24,12 @@ final class Bot
 	{
 		$this->d = new Data($json);
 	}
+
+	/**
+	 * @return void
+	 */
+	public function run()
+	{
+		
+	}
 }
