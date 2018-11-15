@@ -16,7 +16,7 @@ use Exceptions\InvalidJsonFormatException;
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
  * @license MIT
  * @version 5.0.0
- * @package \Bot\Telegram
+ * @package \tests\Bot\Telegram
  */
 class FirstTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bot\Telegram\Lang\Id;
+namespace Bot\Telegram\Lang\En;
 
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
@@ -12,7 +12,7 @@ namespace Bot\Telegram\Lang\Id;
 class Start
 {
 	public static $l = [
-		"private" => "Kirim /help untuk melihat daftar perintah!",
-		"group" => "Perintah start hanya dapat digunakan di private chat!"
+		"private" => "Send /help to show the command list!",
+		"group" => "Start command can only be used in private!"
 	];
 }

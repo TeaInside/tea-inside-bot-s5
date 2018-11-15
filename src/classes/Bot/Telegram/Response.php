@@ -26,7 +26,7 @@ final class Response
 	 */
 	public function __construct(Data $d)
 	{
-		Lang::init("Id", $d);
+		Lang::init("En", $d);
 		$this->d = $d;
 	}
 
