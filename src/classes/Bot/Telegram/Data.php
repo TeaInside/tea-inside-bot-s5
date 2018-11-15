@@ -49,7 +49,39 @@ final class Data implements ArrayAccess, JsonSerializable
 			throw new InvalidJsonFormatException("JSON must be a valid array.");
 		}
 
-		var_dump($this->in);
+		if (isset($this->in["message"]["message_id"])) {
+			$this["event_type"] = "general_message";
+			$this->buildGeneralMessage();
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	private function buildGeneralMessage(): void
+	{
+		$this["update_id"] = $this->in["update_id"];
+		$this["chat_id"] = $this->in["message"]["chat"]["id"];
+		$this["chat_title"] = $this->in["message"]["chat"]["title"];
+		$this["chat_type"] = $this->in["message"]["chat"]["type"];
+		$this["date"] = $this->in["message"]["date"];
+		$this["msg_id"] = $this->in["message"]["message_id"];
+		$this["user_id"] = $this->in["message"]["from"]["id"];
+		$this["is_bot"] = $this->in["message"]["from"]["is_bot"];
+		$this["first_name"] = $this->in["message"]["from"]["first_name"];
+		$this["last_name"] = isset($this->in["message"]["from"]["last_name"]) ?
+			$this->in["message"]["from"]["last_name"] : null;
+		$this["reply_to_message"] = isset($this->in["message"]["reply_to_message"]) ?
+			$this->in["message"]["reply_to_message"] : null;
+
+		if (isset($this->in["message"]["text"])) {
+			$this["msg_type"] = "text";
+			$this["text"] = $this->in["message"]["text"];
+			$this["entities"] = isset($this->in["message"]["entities"]) ? 
+				$this->in["message"]["entities"] : null;
+
+			return;
+		}
 	}
 
 	/**
