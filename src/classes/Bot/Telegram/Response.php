@@ -26,6 +26,7 @@ final class Response
 	 */
 	public function __construct(Data $d)
 	{
+		Lang::init("Id", $d);
 		$this->d = $d;
 	}
 
@@ -86,10 +87,10 @@ final class Response
 		if ($this->any()) {
 			return;
 		}
-
+		
 		switch ($this->d["msg_type"]) {
 			case "text":
-				
+				$this->text();		
 				break;
 			
 			default:

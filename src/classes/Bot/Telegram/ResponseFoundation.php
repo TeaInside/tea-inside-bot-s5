@@ -1,6 +1,6 @@
 <?php
 
-namespace Bot\Telegram\Responses;
+namespace Bot\Telegram;
 
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2

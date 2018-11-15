@@ -16,7 +16,8 @@ trait ResponseRoutes
 	public function text(): void
 	{
 		if ("/start" === $this->d["text"]) {
-			if ($this->exec()) {
+
+			if ($this->exec("Start", "start")) {
 				return;
 			}
 		}

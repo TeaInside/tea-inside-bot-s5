@@ -3,7 +3,8 @@
 namespace Bot\Telegram\Responses;
 
 use Bot\Telegram\Exe;
-use Bot\Telegram\Responses\ResponseFoundation;
+use Bot\Telegram\Lang;
+use Bot\Telegram\ResponseFoundation;
 
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
@@ -18,11 +19,21 @@ class Start extends ResponseFoundation
 	 */
 	public function start(): bool
 	{
+		$lang = Lang::getInstance();
+
+		if ($this->d["chat_type"] === "private") {
+			$r = $lang->get("Start", "private");
+		} else {
+			$r = $lang->get("Start", "group");
+		}
+
 		Exe::sendMessage(
 			[
 				"chat_id" => $this->d["chat_id"],
-				"text" => "test"
+				"text" => $r
 			]
 		);
+
+		return true;
 	}
 }
