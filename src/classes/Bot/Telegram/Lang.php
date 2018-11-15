@@ -94,9 +94,7 @@ final class Lang
 	 */
 	public static function init(string $lang, Data $d): void
 	{
-		if (!(self::$self instanceof Lang)) {
-			self::$self = new self($lang, $d);
-		}
+		self::$self = new self($lang, $d);
 	}
 
 	/**
