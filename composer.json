@@ -15,7 +15,11 @@
         "phpunit/phpunit": "^7.4"
     },
     "autoload-dev": {
+        "psr-4": {
+            "tests\\": "tests/"
+        },
         "files": [
+            "tests/config.php",
             "bootstrap/init.php"
         ]
     }
