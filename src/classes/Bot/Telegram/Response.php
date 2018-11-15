@@ -90,7 +90,7 @@ final class Response
 		
 		switch ($this->d["msg_type"]) {
 			case "text":
-				$this->text();		
+				$this->text();
 				break;
 			
 			default:
