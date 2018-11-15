@@ -15,7 +15,9 @@ trait ResponseRoutes
 	 */
 	public function text(): void
 	{
-
+		if () {
+			
+		}
 	}
 
 	/**
@@ -24,7 +26,7 @@ trait ResponseRoutes
 	public function any(): bool
 	{
 
-		var_dump($this->d);
+
 		return false;
 	}
 }
