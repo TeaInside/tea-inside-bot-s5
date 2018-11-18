@@ -3,6 +3,9 @@
 namespace Bot\Telegram;
 
 use Bot\Telegram\Logger\Text;
+use Bot\Telegram\Contracts\LoggerInterface;
+use Bot\Telegram\Logger\Master\GroupMessage;
+use Bot\Telegram\Logger\Master\PrivateMessage;
 
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
@@ -33,23 +36,40 @@ final class Logger
 	public function run(): void
 	{
 		if ($this->d["event_type"] === "general_message") {
+			
+			switch ($this->d["chat_type"]) {
+				case "private":
+					$se = new PrivateMessage($this->d);
+					break;
+				
+				default:
+					$se = new GroupMessage($this->d);
+					break;
+			}
+
 			switch ($this->d["msg_type"]) {
 				case "text":
-					$st = new Text();
+					$st = new Text($this->d, $se);
 					break;
 				
 				default:
 					break;
 			}
-			$this->invokeLogger($st);
+
+			$se = $this->invokeLogger($se);
+			$st->setMasterLogger($se);
+			$st = $this->invokeLogger($st);
+			unset($st, $se);
 		}
 	}
 
 	/**
-	 *
+	 * @param \Bot\Telegram\Contracts\LoggerInterface $st
+	 * @return \Bot\Telegram\Contracts\LoggerInterface
 	 */
-	private function invokeLogger(LoggerInterface $st): void
+	private function invokeLogger(LoggerInterface $st): LoggerInterface
 	{
-
+		$st();
+		return $st;
 	}
 }
