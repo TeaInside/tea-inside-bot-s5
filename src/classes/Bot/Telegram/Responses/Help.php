@@ -17,7 +17,7 @@ class Help extends ResponseFoundation
 	/**
 	 * @return bool
 	 */
-	public function start(): bool
+	public function help(): bool
 	{
 		$lang = Lang::getInstance();
 

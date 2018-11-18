@@ -13,6 +13,6 @@ class Start
 {
 	public static $l = [
 		"private" => "Send /help to show the command list!",
-		"group" => "Start command can only be used in private!"
+		"group" => "Start command can only be used in private chat!"
 	];
 }

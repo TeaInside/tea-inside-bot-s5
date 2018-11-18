@@ -5,6 +5,7 @@ SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
+
 DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -45,7 +46,7 @@ CREATE TABLE `groups` (
   KEY `name` (`name`),
   KEY `username` (`username`),
   KEY `link` (`link`),
-  CONSTRAINT `groups_ibfk_2` FOREIGN KEY (`photo`) REFERENCES `files` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `groups_ibfk_2` FOREIGN KEY (`photo`) REFERENCES `file` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -62,7 +63,7 @@ CREATE TABLE `groups_history` (
   KEY `group_id` (`group_id`),
   KEY `photo` (`photo`),
   CONSTRAINT `groups_history_ibfk_3` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `groups_history_ibfk_4` FOREIGN KEY (`photo`) REFERENCES `files` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `groups_history_ibfk_4` FOREIGN KEY (`photo`) REFERENCES `file` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -96,18 +97,18 @@ CREATE TABLE `group_messages` (
   `msg_type` varchar(32) NOT NULL,
   `text` text CHARACTER SET utf8mb4,
   `text_entities` text CHARACTER SET utf8mb4,
-  `files` bigint(20) DEFAULT NULL,
+  `file` bigint(20) DEFAULT NULL,
   `is_edited_message` tinyint(1) NOT NULL DEFAULT '0',
   `tmsg_datetime` datetime NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
-  KEY `files` (`files`),
+  KEY `file` (`file`),
   KEY `user_id` (`user_id`),
   KEY `tmsg_id` (`tmsg_id`),
   FULLTEXT KEY `text` (`text`),
   CONSTRAINT `group_messages_ibfk_4` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `group_messages_ibfk_5` FOREIGN KEY (`files`) REFERENCES `files` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `group_messages_ibfk_5` FOREIGN KEY (`file`) REFERENCES `file` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `group_messages_ibfk_6` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -133,17 +134,17 @@ CREATE TABLE `private_messages` (
   `msg_type` varchar(32) NOT NULL DEFAULT 'unknown',
   `text` text CHARACTER SET utf8mb4,
   `text_entities` text CHARACTER SET utf8mb4,
-  `files` bigint(20) DEFAULT NULL,
+  `file` bigint(20) DEFAULT NULL,
   `is_edited_message` tinyint(1) NOT NULL DEFAULT '0',
   `tmsg_datetime` datetime NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `tmsg_id` (`tmsg_id`),
-  KEY `files` (`files`),
+  KEY `file` (`file`),
   FULLTEXT KEY `text` (`text`),
   CONSTRAINT `private_messages_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `private_messages_ibfk_4` FOREIGN KEY (`files`) REFERENCES `files` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `private_messages_ibfk_4` FOREIGN KEY (`file`) REFERENCES `file` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -176,7 +177,7 @@ CREATE TABLE `users` (
   KEY `first_name` (`first_name`),
   KEY `last_name` (`last_name`),
   KEY `photo` (`photo`),
-  CONSTRAINT `users_ibfk_2` FOREIGN KEY (`photo`) REFERENCES `files` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `users_ibfk_2` FOREIGN KEY (`photo`) REFERENCES `file` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -195,7 +196,7 @@ CREATE TABLE `users_history` (
   KEY `last_name` (`last_name`),
   KEY `username` (`username`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `users_history_ibfk_4` FOREIGN KEY (`photo`) REFERENCES `files` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `users_history_ibfk_4` FOREIGN KEY (`photo`) REFERENCES `file` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `users_history_ibfk_5` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

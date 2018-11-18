@@ -29,7 +29,7 @@ class GroupMessage implements MasterLoggerInterface
 	/**
 	 * @var string
 	 */
-	private $now;
+	public $now;
 
 	/**
 	 * @param \Bot\Telegram\Data $d
@@ -82,8 +82,6 @@ class GroupMessage implements MasterLoggerInterface
 		}
 
 		$this->userLogger();
-
-		return;
 	}
 
 	/**
@@ -140,7 +138,7 @@ class GroupMessage implements MasterLoggerInterface
 	{
 		$data = [];
 
-		$query = "UPDATE `users` SET `group_message_count`=`group_message_count`+1";
+		$query = "UPDATE `users` SET `group_message_count`=`group_message_count`+1,`last_seen`=:last_seen";
 
 		if ($this->d["username"] !== $st["username"]) {
 			$query .= ",`username`=:username";
@@ -174,6 +172,7 @@ class GroupMessage implements MasterLoggerInterface
 
 		$query .= " WHERE `id`=:user_id LIMIT 1;";
 		$data[":user_id"] = $this->d["user_id"];
+		$data[":last_seen"] = $this->now;
 
 		unset($st);
 		$this->pdo->prepare($query)->execute($data);
@@ -315,12 +314,8 @@ class GroupMessage implements MasterLoggerInterface
 	/**
 	 * @return void
 	 */
-	private function createUser()
+	private function createUser(): void
 	{
-		if ($this->d["event_type"] === "general_message") {
-			$msgCount = 1;
-		}
-
 		$this->pdo->prepare(
 			"INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `is_bot`, `photo`, `private_message_count`, `group_message_count`, `created_at`, `updated_at`, `last_seen`) VALUES (:user_id, :username, :first_name, :last_name, :is_bot, :photo, 0, 1, :created_at, NULL, :last_seen);"
 		)->execute(

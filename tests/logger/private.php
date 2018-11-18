@@ -1,25 +1,26 @@
 <?php
 
 $argv[1] = '{
-    "update_id": 345083769,
+    "update_id": 345088312,
     "message": {
-        "message_id": 201576,
+        "message_id": 67511,
         "from": {
             "id": 243692601,
             "is_bot": false,
             "first_name": "Ammar",
             "last_name": "Faizi",
             "username": "ammarfaizi2",
-            "language_code": "en-US"
+            "language_code": "en"
         },
         "chat": {
-            "id": -1001134152012,
-            "title": "Berlatih dan Testing Bot",
-            "username": "berlatihbot",
-            "type": "supergroup"
+            "id": 243692601,
+            "first_name": "Ammar",
+            "last_name": "Faizi",
+            "username": "ammarfaizi2",
+            "type": "private"
         },
-        "date": 1542300037,
-        "text": "/help",
+        "date": 1542562347,
+        "text": "/debug",
         "entities": [
             {
                 "offset": 0,
@@ -30,4 +31,4 @@ $argv[1] = '{
     }
 }';
 
-require __DIR__."/../connectors/telegram/webhook_worker.php";
+require __DIR__."/../../connectors/telegram/logger.php";

@@ -51,6 +51,7 @@ class Text implements ContentLoggerInterface
 	 */
 	public function __invoke(): void
 	{
+		$this->pdo = DB::pdo();
 		if ($this->m instanceof GroupMessage) {
 			$this->groupMessageAction();
 		} else if ($this->m instanceof PrivateMessage) {
@@ -61,8 +62,53 @@ class Text implements ContentLoggerInterface
 	/**
 	 * @return void
 	 */
-	public function groupMessageAction(): void
+	private function groupMessageAction(): void
 	{
+		$this->pdo->prepare(
+			"INSERT INTO `group_messages` (`group_id`, `user_id`, `tmsg_id`, `reply_to_tmsg_id`, `msg_type`, `text`, `text_entities`, `file`, `is_edited_message`, `tmsg_datetime`, `created_at`) VALUES (:group_id, :user_id, :tmsg_id, :reply_to_tmsg_id, :msg_type, :_text, :text_entities, :file, :is_edited_message, :tmsg_datetime, :created_at);"
+		)->execute(
+			[
+				":group_id" => $this->d["chat_id"],
+				":user_id" => $this->d["user_id"],
+				":tmsg_id" => $this->d["msg_id"],
+				":reply_to_tmsg_id" => (isset($this->d["reply_to_message"]["message_id"]) ?
+					$this->d["reply_to_message"]["message_id"] : NULL),
+				":msg_type" => $this->d["msg_type"],
+				":_text" => $this->d["text"],
+				":text_entities" => (isset($this->d["entities"]) ?
+					json_encode($this->d["entities"]) : NULL
+				),
+				":file" => NULL,
+				":is_edited_message" => 0,
+				":tmsg_datetime" => date("Y-m-d H:i:s", $this->d["date"]),
+				":created_at" => $this->m->now
+			]
+		);
+	}
 
+	/**
+	 * @return void
+	 */
+	private function privateMessageAction(): void
+	{
+		$this->pdo->prepare(
+			"INSERT INTO `private_messages` (`user_id`, `tmsg_id`, `reply_to_tmsg_id`, `msg_type`, `text`, `text_entities`, `file`, `is_edited_message`, `tmsg_datetime`, `created_at`) VALUES (:user_id, :tmsg_id, :reply_to_tmsg_id, :msg_type, :_text, :text_entities, :file, :is_edited_message, :tmsg_datetime, :created_at);"
+		)->execute(
+			[
+				":user_id" => $this->d["user_id"],
+				":tmsg_id" => $this->d["msg_id"],
+				":reply_to_tmsg_id" => (isset($this->d["reply_to_message"]["message_id"]) ?
+					$this->d["reply_to_message"]["message_id"] : NULL),
+				":msg_type" => $this->d["msg_type"],
+				":_text" => $this->d["text"],
+				":text_entities" => (isset($this->d["entities"]) ?
+					json_encode($this->d["entities"]) : NULL
+				),
+				":file" => NULL,
+				":is_edited_message" => 0,
+				":tmsg_datetime" => date("Y-m-d H:i:s", $this->d["date"]),
+				":created_at" => $this->m->now
+			]
+		);
 	}
 }

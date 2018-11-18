@@ -55,6 +55,7 @@ final class Response
 
 				$class = new $class($this->d);
 				if (!is_callable([$class, $method])) {
+					is_object($class) and $class = get_class($class);
 					throw new InvalidRouteException("{$class}::{$method} is not callable");
 				}
 

@@ -30,4 +30,4 @@ $argv[1] = '{
     }
 }';
 
-require __DIR__."/../connectors/telegram/logger.php";
+require __DIR__."/../../connectors/telegram/logger.php";

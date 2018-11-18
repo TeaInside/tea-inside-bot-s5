@@ -12,7 +12,10 @@ namespace Bot\Telegram\Lang\En;
 class Help
 {
 	public static $l = [
-		"private" => "",
+		"private" => 
+"<b>Commands:</b>
+/sh <code>[command arg...]</code>\tExecute shell command",
+
 		"group" => "Help command can only be used in private!"
 	];
 }
