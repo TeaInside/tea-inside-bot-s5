@@ -69,7 +69,9 @@ final class Data implements ArrayAccess, JsonSerializable
 		$this["is_bot"] = $this->in["message"]["from"]["is_bot"];
 		$this["first_name"] = $this->in["message"]["from"]["first_name"];
 		$this["last_name"] = isset($this->in["message"]["from"]["last_name"]) ?
-			$this->in["message"]["from"]["last_name"] : null;
+			$this->in["message"]["from"]["last_name"] : NULL;
+		$this["username"] = isset($this->in["message"]["from"]["username"]) ?
+			$this->in["message"]["from"]["username"] : NULL;
 
 		if ($this["chat_type"] !== "private") {
 			$this["chat_title"] = $this->in["message"]["chat"]["title"];
@@ -80,14 +82,17 @@ final class Data implements ArrayAccess, JsonSerializable
 			);
 		}
 
+		$this["chat_username"] = isset($this->in["message"]["chat"]["username"]) ?
+			$this->in["message"]["chat"]["username"] : NULL;
+
 		$this["reply_to_message"] = isset($this->in["message"]["reply_to_message"]) ?
-			$this->in["message"]["reply_to_message"] : null;
+			$this->in["message"]["reply_to_message"] : NULL;
 
 		if (isset($this->in["message"]["text"])) {
 			$this["msg_type"] = "text";
 			$this["text"] = $this->in["message"]["text"];
 			$this["entities"] = isset($this->in["message"]["entities"]) ? 
-				$this->in["message"]["entities"] : null;
+				$this->in["message"]["entities"] : NULL;
 
 			return;
 		}

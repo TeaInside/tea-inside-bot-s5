@@ -4,6 +4,8 @@ namespace Bot\Telegram\Logger;
 
 use DB;
 use Bot\Telegram\Data;
+use Bot\Telegram\Logger\Master\GroupMessage;
+use Bot\Telegram\Logger\Master\PrivateMessage;
 use Bot\Telegram\Contracts\MasterLoggerInterface;
 use Bot\Telegram\Contracts\ContentLoggerInterface;
 
@@ -49,5 +51,18 @@ class Text implements ContentLoggerInterface
 	 */
 	public function __invoke(): void
 	{
+		if ($this->m instanceof GroupMessage) {
+			$this->groupMessageAction();
+		} else if ($this->m instanceof PrivateMessage) {
+			$this->privateMessageAction();
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function groupMessageAction(): void
+	{
+
 	}
 }
