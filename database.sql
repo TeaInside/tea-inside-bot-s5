@@ -14,7 +14,7 @@ CREATE TABLE `files` (
   `absolute_hash` varchar(73) NOT NULL,
   `hit_count` bigint(20) NOT NULL DEFAULT '0',
   `file_type` varchar(32) NOT NULL DEFAULT 'unknown',
-  `description` text NOT NULL,
+  `description` text CHARACTER SET utf8 NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -27,10 +27,12 @@ CREATE TABLE `files` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+SET NAMES utf8mb4;
+
 DROP TABLE IF EXISTS `groups`;
 CREATE TABLE `groups` (
   `id` bigint(20) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
   `username` varchar(255) DEFAULT NULL,
   `link` varchar(255) DEFAULT NULL,
   `photo` bigint(20) DEFAULT NULL,
@@ -51,7 +53,7 @@ DROP TABLE IF EXISTS `groups_history`;
 CREATE TABLE `groups_history` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `group_id` bigint(20) DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
   `username` varchar(255) DEFAULT NULL,
   `link` varchar(255) DEFAULT NULL,
   `photo` bigint(20) DEFAULT NULL,
@@ -92,8 +94,8 @@ CREATE TABLE `group_messages` (
   `tmsg_id` bigint(20) NOT NULL,
   `reply_to_tmsg_id` bigint(20) DEFAULT NULL,
   `msg_type` varchar(32) NOT NULL,
-  `text` text,
-  `text_entities` text,
+  `text` text CHARACTER SET utf8mb4,
+  `text_entities` text CHARACTER SET utf8mb4,
   `files` bigint(20) DEFAULT NULL,
   `is_edited_message` tinyint(1) NOT NULL DEFAULT '0',
   `tmsg_datetime` datetime NOT NULL,
@@ -110,6 +112,18 @@ CREATE TABLE `group_messages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+DROP TABLE IF EXISTS `group_settings`;
+CREATE TABLE `group_settings` (
+  `group_id` bigint(20) NOT NULL,
+  `max_warns` int(11) NOT NULL DEFAULT '3',
+  `welcome_message` text,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  KEY `group_id` (`group_id`),
+  CONSTRAINT `group_settings_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 DROP TABLE IF EXISTS `private_messages`;
 CREATE TABLE `private_messages` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -117,8 +131,8 @@ CREATE TABLE `private_messages` (
   `tmsg_id` bigint(20) NOT NULL,
   `reply_to_tmsg_id` bigint(20) DEFAULT NULL,
   `msg_type` varchar(32) NOT NULL DEFAULT 'unknown',
-  `text` text,
-  `text_entities` text,
+  `text` text CHARACTER SET utf8mb4,
+  `text_entities` text CHARACTER SET utf8mb4,
   `files` bigint(20) DEFAULT NULL,
   `is_edited_message` tinyint(1) NOT NULL DEFAULT '0',
   `tmsg_datetime` datetime NOT NULL,
@@ -147,9 +161,10 @@ CREATE TABLE `sudoers` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `first_name` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+  `last_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `is_bot` tinyint(1) DEFAULT '0',
   `photo` bigint(20) DEFAULT NULL,
   `private_message_count` bigint(20) DEFAULT '0',
   `group_message_count` bigint(20) DEFAULT '0',
@@ -170,8 +185,8 @@ CREATE TABLE `users_history` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+  `last_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
   `photo` bigint(20) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -191,7 +206,7 @@ CREATE TABLE `user_warning` (
   `group_id` bigint(20) NOT NULL,
   `user_id` int(11) NOT NULL,
   `warned_by` int(11) DEFAULT NULL,
-  `reason` text,
+  `reason` text CHARACTER SET utf8,
   `deleted_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
   KEY `group_id` (`group_id`),
@@ -203,4 +218,4 @@ CREATE TABLE `user_warning` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2018-11-18 08:28:13
+-- 2018-11-18 17:13:23

@@ -125,9 +125,11 @@ class GroupMessage implements MasterLoggerInterface
 		$data[":group_id"] = $st["id"];
 		$data[":last_seen"] = $this->now;
 
-		unset($st);
 		$this->pdo->prepare($query)->execute($data);
-		unset($query, $data);
+		if (($st["msg_count"] % 10) === 0) {
+			$this->adminFetcher(true);
+		}
+		unset($st, $query, $data);
 	}
 
 	/**
@@ -208,15 +210,25 @@ class GroupMessage implements MasterLoggerInterface
 			"INSERT INTO `groups_history` (`group_id`, `name`, `username`, `link`, `photo`, `created_at`) VALUES (:group_id, :name, :username, :link, :photo, :created_at);"
 		)->execute($data);
 
+		$this->pdo->prepare(
+			"INSERT INTO `group_settings` (`group_id`, `max_warns`, `welcome_message`, `created_at`, `updated_at`) VALUES (:group_id, '3', NULL, :created_at, NULL);"
+		)->execute(
+			[
+				":group_id" => $this->d["chat_id"],
+				":created_at" => $this->now
+			]
+		);
+
 		$this->adminFetcher();
 
 		unset($data);
 	}
 
 	/**
+	 * @param bool $reset
 	 * @return void
 	 */
-	private function adminFetcher(): void
+	private function adminFetcher($reset = false): void
 	{
 		$exe = json_decode(Exe::getChatAdministrators(["chat_id" => $this->d["chat_id"]])["out"], true);
 
@@ -231,7 +243,7 @@ class GroupMessage implements MasterLoggerInterface
 
 
 		foreach ($exe["result"] as $key => $v) {
-			$query .= "(:group_id, :user_id{$key}, :can_change_info{$key}, :can_delete_messages{$key}, :can_invite_users{$key}, :can_restrict_members{$key}, :can_pin_messages{$key}, :can_promote_members{key}, :created_at),";
+			$query .= "(:group_id, :user_id{$key}, :can_change_info{$key}, :can_delete_messages{$key}, :can_invite_users{$key}, :can_restrict_members{$key}, :can_pin_messages{$key}, :can_promote_members{$key}, :created_at),";
 			$data = array_merge($data,
 				[
 					":user_id{$key}" => $v["user"]["id"],
@@ -275,6 +287,11 @@ class GroupMessage implements MasterLoggerInterface
 		unset($exe, $data2, $st, $v);
 
 		if (isset($key)) {
+			if ($reset) {
+				$this->pdo->prepare(
+					"DELETE FROM `group_admin` WHERE `group_id` = :group_id;"
+				)->execute([":group_id" => $this->d["chat_id"]]);
+			}
 			$this->pdo->prepare(rtrim($query, ",").";")->execute($data);
 		}
 	}
