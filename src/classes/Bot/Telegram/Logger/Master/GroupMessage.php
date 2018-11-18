@@ -40,6 +40,27 @@ class GroupMessage implements MasterLoggerInterface
 	 */
 	public function __invoke(): void
 	{
+		/**
+		 * [__invoke flows]
+		 *
+		 * {fetch group info} -> (group is already been exists on database) and (jmp a) or (jmp b)
+		 *
+		 * a: 
+		 * 	call update() -> jmp c
+		 *
+		 * b:
+		 *	call create() -> jmp c
+		 *
+		 * c:
+		 *	call userLogger() -> (user exists) and (jmp d) or (jmp e)
+		 *
+		 * d:
+		 *	call createUser() -> {end of __invoke}
+		 *
+		 * e:
+		 * 	call updateUser() -> {end of __invoke}
+		 */
+
 		$this->pdo = DB::pdo();
 
 		$st = $this->pdo->prepare(
@@ -53,6 +74,8 @@ class GroupMessage implements MasterLoggerInterface
 		}
 
 		$this->userLogger();
+
+		return;
 	}
 
 	/**
