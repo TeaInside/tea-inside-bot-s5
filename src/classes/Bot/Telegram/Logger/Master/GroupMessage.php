@@ -4,6 +4,7 @@ namespace Bot\Telegram\Logger\Master;
 
 use DB;
 use PDO;
+use Bot\Telegram\Exe;
 use Bot\Telegram\Data;
 use Bot\Telegram\Contracts\MasterLoggerInterface;
 
@@ -24,6 +25,11 @@ class GroupMessage implements MasterLoggerInterface
 	 * @var \PDO
 	 */
 	private $pdo;
+
+	/**
+	 * @var string
+	 */
+	private $now;
 
 	/**
 	 * @param \Bot\Telegram\Data $d
@@ -62,13 +68,15 @@ class GroupMessage implements MasterLoggerInterface
 		 */
 
 		$this->pdo = DB::pdo();
+		$this->now = date("Y-m-d H:i:s");
 
 		$st = $this->pdo->prepare(
-			"SELECT `name`,`username`,`link`,`photo`,`msg_count` FROM `groups` WHERE `id` = :group_id LIMIT 1;"
+			"SELECT `id`,`name`,`username`,`link`,`photo`,`msg_count` FROM `groups` WHERE `id` = :group_id LIMIT 1;"
 		);
 		$st->execute([":group_id" => $this->d["chat_id"]]);
 		if ($st = $st->fetch(PDO::FETCH_ASSOC)) {
 			$this->update($st);
+			unset($st);
 		} else {
 			$this->create();
 		}
@@ -76,6 +84,98 @@ class GroupMessage implements MasterLoggerInterface
 		$this->userLogger();
 
 		return;
+	}
+
+	/**
+	 * @param array &$st
+	 * @return void
+	 */
+	private function update(array &$st): void
+	{
+		$data = [];
+
+		$query = "UPDATE `groups` SET `msg_count` = `msg_count` + 1,`last_seen`=:last_seen";
+
+		if ($this->d["chat_title"] !== $st["name"]) {
+			$query .= ",`name`=:name";
+			$data[":name"] = $this->d["chat_title"];
+		}
+
+		if ($this->d["chat_username"] !== $st["username"]) {
+			$query .= ",`username`=:username";
+			$data[":username"] = $this->d["chat_username"];
+		}
+
+		if (count($data)) {
+			$this->pdo->prepare(
+				"INSERT INTO `groups_history` (`group_id`, `name`, `username`, `link`, `photo`, `created_at`) VALUES (:group_id, :name, :username, :link, :photo, :created_at);"
+			)->execute(
+				[
+					":group_id" => $this->d["chat_id"],
+					":name" => $this->d["chat_title"],
+					":username" => $this->d["chat_username"],
+					":link" => NULL,
+					":photo" => NULL,
+					":created_at" => $this->now
+				]
+			);
+		}
+
+		$query .= " WHERE `id`=:group_id LIMIT 1;";
+		$data[":group_id"] = $st["id"];
+		$data[":last_seen"] = $this->now;
+
+		unset($st);
+		$this->pdo->prepare($query)->execute($data);
+		unset($query, $data);
+	}
+
+	/**
+	 * @param array &$st
+	 * @return void
+	 */
+	private function updateUser(array &$st): void
+	{
+		$data = [];
+
+		$query = "UPDATE `users` SET `group_message_count`=`group_message_count`+1";
+
+		if ($this->d["username"] !== $st["username"]) {
+			$query .= ",`username`=:username";
+			$data[":username"] = $this->d["username"];
+		}
+
+		if ($this->d["first_name"] !== $st["first_name"]) {
+			$query .= ",`first_name`=:first_name";
+			$data[":first_name"] = $this->d["first_name"];
+		}
+
+		if ($this->d["last_name"] !== $st["last_name"]) {
+			$query .= ",`last_name`=:last_name";
+			$data[":last_name"] = $this->d["last_name"];
+		}
+
+		if (count($data)) {
+			$this->pdo->prepare(
+				"INSERT INTO `users_history` (`user_id`, `username`, `first_name`, `last_name`, `photo`, `created_at`) VALUES (:user_id, :username, :first_name, :last_name, :photo, :created_at);"
+			)->execute(
+				[
+					":user_id" => $this->d["user_id"],
+					":username" => $this->d["username"],
+					":first_name" => $this->d["first_name"],
+					":last_name" => $this->d["last_name"],
+					":photo" => NULL,
+					":created_at" => $this->now
+				]
+			);
+		}
+
+		$query .= " WHERE `id`=:user_id LIMIT 1;";
+		$data[":user_id"] = $this->d["user_id"];
+
+		unset($st);
+		$this->pdo->prepare($query)->execute($data);
+		unset($query, $data);
 	}
 
 	/**
@@ -87,8 +187,6 @@ class GroupMessage implements MasterLoggerInterface
 			$msgCount = 1;
 		}
 
-		$now = date("Y-m-d H:i:s");
-
 		$st = $this->pdo->prepare(
 			"INSERT INTO `groups` (`id`, `name`, `username`, `link`, `photo`, `msg_count`, `created_at`, `updated_at`, `last_seen`) VALUES (:group_id, :name, :username, :link, :photo, :msg_count, :created_at, NULL, :last_seen);"
 		)->execute(
@@ -99,8 +197,8 @@ class GroupMessage implements MasterLoggerInterface
 				":link" => NULL,
 				":photo" => NULL,
 				":msg_count" => $msgCount,
-				":created_at" => $now,
-				":last_seen" => $now
+				":created_at" => $this->now,
+				":last_seen" => $this->now
 			]
 		);
 
@@ -110,7 +208,66 @@ class GroupMessage implements MasterLoggerInterface
 			"INSERT INTO `groups_history` (`group_id`, `name`, `username`, `link`, `photo`, `created_at`) VALUES (:group_id, :name, :username, :link, :photo, :created_at);"
 		)->execute($data);
 
-		unset($data, $now);
+		$exe = json_decode(Exe::getChatAdministrators(["chat_id" => $this->d["chat_id"]])["out"], true);
+
+		$query = "INSERT INTO `group_admin` (`group_id`, `user_id`, `can_change_info`, `can_delete_messages`, `can_invite_users`, `can_restrict_members`, `can_pin_messages`, `can_promote_members`, `created_at`) VALUES ";
+		
+		$key = NULL;
+
+		$data = [
+			":group_id" => $this->d["chat_id"],
+			":created_at" => $this->now
+		];
+
+		foreach ($exe["result"] as $key => $v) {
+			$query .= "(:group_id, :user_id{$key}, :can_change_info{$key}, :can_delete_messages{$key}, :can_invite_users{$key}, :can_restrict_members{$key}, :can_pin_messages{$key}, :can_promote_members{key}, :created_at),";
+			$data = array_merge($data,
+				[
+					":user_id{$key}" => $v["user"]["id"],
+					":can_change_info{$key}" => (int)$v["can_change_info"],
+					":can_delete_messages{$key}" => (int)$v["can_delete_messages"],
+					":can_invite_users{$key}" => (int)$v["can_invite_users"],
+					":can_restrict_members{$key}" => (int)$v["can_restrict_members"],
+					":can_pin_messages{$key}" => (int)$v["can_pin_messages"],
+					":can_promote_members{$key}" => (int)$v["can_promote_members"]
+				]
+			);
+
+			$st = $this->pdo->prepare(
+				"SELECT `username`,`first_name`,`last_name`,`photo` FROM `users` WHERE `id` = :user_id LIMIT 1;"
+			);
+			$st->execute([":user_id" => $v["user"]["id"]]);
+			if (!$st->fetch(PDO::FETCH_ASSOC)) {
+				$this->pdo->prepare(
+					"INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `is_bot`, `photo`, `private_message_count`, `group_message_count`, `created_at`, `updated_at`, `last_seen`) VALUES (:user_id, :username, :first_name, :last_name, :is_bot, :photo, 0, 0, :created_at, NULL, :last_seen);"
+				)->execute(
+					$data2 = [
+						":user_id" => $v["user"]["id"],
+						":username" => (isset($v["user"]["username"]) ? $v["user"]["username"] : NULL),
+						":first_name" => $v["user"]["first_name"],
+						":last_name" => (isset($v["user"]["last_name"]) ? $v["user"]["last_name"] : NULL),
+						":is_bot" => (int)$v["user"]["is_bot"],
+						":photo" => NULL,
+						":created_at" => $this->now,
+						":last_seen" => NULL
+					]
+				);
+
+				unset($data2[":last_seen"], $data2[":is_bot"]);
+
+				$this->pdo->prepare(
+					"INSERT INTO `users_history` (`user_id`, `username`, `first_name`, `last_name`, `photo`, `created_at`) VALUES (:user_id, :username, :first_name, :last_name, :photo, :created_at);"
+				)->execute($data2);
+			}
+		}
+
+		var_dump($data, $query);
+
+		if (isset($key)) {
+			$this->pdo->prepare(rtrim($query, ",").";")->execute($data);
+		}
+
+		unset($data);
 	}
 
 	/**
@@ -137,30 +294,28 @@ class GroupMessage implements MasterLoggerInterface
 		if ($this->d["event_type"] === "general_message") {
 			$msgCount = 1;
 		}
-		
-		$now = date("Y-m-d H:i:s");
 
-		$st = $this->pdo->prepare(
-			"INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `photo`, `private_message_count`, `group_message_count`, `created_at`, `updated_at`, `last_seen`) VALUES (:user_id, :username, :first_name, :last_name, :photo, 0, 1, :created_at, NULL, :last_seen);"
+		$this->pdo->prepare(
+			"INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `is_bot`, `photo`, `private_message_count`, `group_message_count`, `created_at`, `updated_at`, `last_seen`) VALUES (:user_id, :username, :first_name, :last_name, :is_bot, :photo, 0, 1, :created_at, NULL, :last_seen);"
 		)->execute(
 			$data = [
 				":user_id" => $this->d["user_id"],
 				":username" => $this->d["username"],
 				":first_name" => $this->d["first_name"],
 				":last_name" => $this->d["last_name"],
+				":is_bot" => (int)$this->d["is_bot"],
 				":photo" => NULL,
-				":created_at" => $now,
-				":last_seen" => $now
+				":created_at" => $this->now,
+				":last_seen" => $this->now
 			]
 		);
 
-		unset($data[":last_seen"]);
+		unset($data[":last_seen"], $data[":is_bot"]);
 
-		$st = $this->pdo->prepare(
+		$this->pdo->prepare(
 			"INSERT INTO `users_history` (`user_id`, `username`, `first_name`, `last_name`, `photo`, `created_at`) VALUES (:user_id, :username, :first_name, :last_name, :photo, :created_at);"
-		);
-		$st->execute($data);
+		)->execute($data);
 
-		unset($data, $now);
+		unset($data);
 	}
 }
