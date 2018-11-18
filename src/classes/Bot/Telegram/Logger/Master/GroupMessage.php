@@ -218,6 +218,7 @@ class GroupMessage implements MasterLoggerInterface
 			":group_id" => $this->d["chat_id"],
 			":created_at" => $this->now
 		];
+		
 
 		foreach ($exe["result"] as $key => $v) {
 			$query .= "(:group_id, :user_id{$key}, :can_change_info{$key}, :can_delete_messages{$key}, :can_invite_users{$key}, :can_restrict_members{$key}, :can_pin_messages{$key}, :can_promote_members{key}, :created_at),";
