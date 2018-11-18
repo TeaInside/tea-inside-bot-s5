@@ -3,6 +3,7 @@
 namespace Bot\Telegram\Logger\Master;
 
 use DB;
+use PDO;
 use Bot\Telegram\Data;
 use Bot\Telegram\Contracts\MasterLoggerInterface;
 
