@@ -21,13 +21,13 @@ final class Logger
 	private $d;
 
 	/**
-	 * @param \Bot\Telegram\Data $data
+	 * @param string $json
 	 *
 	 * Constructor.
 	 */
-	public function __construct(Data $data)
+	public function __construct(string $json)
 	{
-		$this->d = $data;
+		$this->d = new Data($json);
 	}
 
 	/**
