@@ -5,6 +5,7 @@ namespace Bot\Telegram\Responses;
 use Bot\Telegram\Exe;
 use Bot\Telegram\Lang;
 use Bot\Telegram\ResponseFoundation;
+use Bot\Telegram\Utils\GroupSetting;
 
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
@@ -24,6 +25,11 @@ class Help extends ResponseFoundation
 		if ($this->d["chat_type"] === "private") {
 			$r = $lang->get("Help", "private");
 		} else {
+
+			if (GroupSetting::get($this->d["chat_id"])["cmd_help"] == 0) {
+				return false;
+			}
+
 			$r = $lang->get("Help", "group");
 		}
 
@@ -31,7 +37,8 @@ class Help extends ResponseFoundation
 			[
 				"chat_id" => $this->d["chat_id"],
 				"text" => $r,
-				"reply_to_message_id" => $this->d["msg_id"]
+				"reply_to_message_id" => $this->d["msg_id"],
+				"parse_mode" => "HTML"
 			]
 		);
 

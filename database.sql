@@ -5,7 +5,6 @@ SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-
 DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -118,6 +117,12 @@ CREATE TABLE `group_settings` (
   `group_id` bigint(20) NOT NULL,
   `max_warns` int(11) NOT NULL DEFAULT '3',
   `welcome_message` text,
+  `cmd_global` tinyint(1) DEFAULT '0',
+  `cmd_start` tinyint(1) DEFAULT '0',
+  `cmd_help` tinyint(1) DEFAULT '0',
+  `cmd_debug` tinyint(1) DEFAULT '0',
+  `cmd_shell` tinyint(1) DEFAULT '0',
+  `ai_chat` tinyint(1) DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   KEY `group_id` (`group_id`),
@@ -219,4 +224,4 @@ CREATE TABLE `user_warning` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2018-11-18 17:13:23
+-- 2018-11-18 18:09:39

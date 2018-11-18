@@ -37,8 +37,7 @@ class Start extends ResponseFoundation
 			[
 				"chat_id" => $this->d["chat_id"],
 				"text" => $r,
-				"reply_to_message_id" => $this->d["msg_id"],
-				"parse_mode" => "HTML"
+				"reply_to_message_id" => $this->d["msg_id"]				
 			]
 		);
 
