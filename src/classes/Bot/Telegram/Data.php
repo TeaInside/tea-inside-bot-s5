@@ -74,7 +74,7 @@ final class Data implements ArrayAccess, JsonSerializable
 		if ($this["chat_type"] !== "private") {
 			$this["chat_title"] = $this->in["message"]["chat"]["title"];
 		} else {
-			$this["chat_title"] = $this["fisrt_name"].(
+			$this["chat_title"] = $this["first_name"].(
 				isset($this->in["message"]["from"]["last_name"]) ?
 				" {$this->in["message"]["from"]["last_name"]}" : ""
 			);
