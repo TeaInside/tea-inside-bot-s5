@@ -62,7 +62,6 @@ final class Data implements ArrayAccess, JsonSerializable
 	{
 		$this["update_id"] = $this->in["update_id"];
 		$this["chat_id"] = $this->in["message"]["chat"]["id"];
-		$this["chat_title"] = $this->in["message"]["chat"]["title"];
 		$this["chat_type"] = $this->in["message"]["chat"]["type"];
 		$this["date"] = $this->in["message"]["date"];
 		$this["msg_id"] = $this->in["message"]["message_id"];
@@ -71,6 +70,16 @@ final class Data implements ArrayAccess, JsonSerializable
 		$this["first_name"] = $this->in["message"]["from"]["first_name"];
 		$this["last_name"] = isset($this->in["message"]["from"]["last_name"]) ?
 			$this->in["message"]["from"]["last_name"] : null;
+
+		if ($this["chat_type"] !== "private") {
+			$this["chat_title"] = $this->in["message"]["chat"]["title"];
+		} else {
+			$this["chat_title"] = $this["fisrt_name"].(
+				isset($this->in["message"]["from"]["last_name"]) ?
+				" {$this->in["message"]["from"]["last_name"]}" : ""
+			);
+		}
+
 		$this["reply_to_message"] = isset($this->in["message"]["reply_to_message"]) ?
 			$this->in["message"]["reply_to_message"] : null;
 
