@@ -43,7 +43,7 @@ class GroupMessage implements MasterLoggerInterface
 		/**
 		 * [__invoke flows]
 		 *
-		 * {fetch group info} -> (group is already been exists on database) and (jmp a) or (jmp b)
+		 * {fetch group info} -> (the group is already been exists on database) and (jmp a) or (jmp b)
 		 *
 		 * a: 
 		 * 	call update() -> jmp c
@@ -52,7 +52,7 @@ class GroupMessage implements MasterLoggerInterface
 		 *	call create() -> jmp c
 		 *
 		 * c:
-		 *	call userLogger() -> (user exists) and (jmp d) or (jmp e)
+		 *	call userLogger() -> (the user is already been exists on database) and (jmp d) or (jmp e)
 		 *
 		 * d:
 		 *	call createUser() -> {end of __invoke}
