@@ -21,7 +21,7 @@ trait ResponseRoutes
 			}
 		}
 
-		if ("/help" === $this->d["help"]) {
+		if ("/help" === $this->d["text"]) {
 			if ($this->exec("Help", "help")) {
 				return;
 			}
