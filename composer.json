@@ -16,7 +16,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "tests\\": "tests/"
+            "tests\\": "tests/classes/"
         },
         "files": [
             "tests/config.php",

@@ -8,6 +8,8 @@
 /vendor/
 /.phpintel/
 
+/config/isolate.php
+
 # Telegram config
 /config/telegram/config.php
 /config/telegram/api_key.php

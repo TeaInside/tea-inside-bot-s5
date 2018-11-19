@@ -1,0 +1,3 @@
+<?php
+
+define("ISOLATE_BASE_DIR", STORAGE_PATH."/container/isolate");
