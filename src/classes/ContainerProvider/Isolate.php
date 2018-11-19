@@ -25,6 +25,11 @@ final class Isolate
 	private $cmd;
 
 	/**
+	 * @var string
+	 */
+	private $isolateCmd;
+
+	/**
 	 * @var int
 	 */
 	private $boxId;
@@ -68,6 +73,16 @@ final class Isolate
 	 * @var string
 	 */
 	private $userKey;
+
+	/**
+	 * @var string
+	 */
+	private $stdoutFile;
+
+	/**
+	 * @var string
+	 */
+	private $stderrFile;
 
 	/**
 	 * @param string $userKey
@@ -179,6 +194,66 @@ final class Isolate
 			($g = $g && is_dir("{$this->containerSupportDir}/home/ubuntu"))
 		);
 
+		$this->stdoutFile = "{$this->userInfoDir}/stdout";
+		$this->stderrFile = "{$this->userInfoDir}/stderr";
+
 		return $g;
+	}
+
+	/**
+	 * @param string $cmd
+	 * @return void
+	 */
+	public function setCmd(string $cmd): void
+	{
+		$this->cmd = $cmd;
+	}
+
+	/**
+	 * @param string $str
+	 * @return string
+	 */
+	private function param(string $str): string
+	{
+		$p = "";
+		switch ($str) {
+			case "dir":
+				$p .= escapeshellarg("--dir=/opt={$this->containerSupportDir}/etc:rw");
+				break;
+			case "env":
+				$p .= "--env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=/home/u{$this->uid}";
+				break;
+			case "chdir":
+				$p .= "--chdir=/home/u{$this->uid}";
+				break;
+			case "stdout":
+				$p .= "--stdout={$this->stdoutFile}";
+				break;
+			case "stdout":
+				$p .= "--stderr={$this->stderrFile}";
+				break;
+			default:
+				break;
+		}
+
+		return $p;
+	}
+
+	/**
+	 * @return void
+	 */
+	private function buildIsolateCmd(): void
+	{
+		$cmd = escapeshellarg($this->cmd);
+		$this->isolateCmd = "/usr/local/bin/isolate {$this->param("dir")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stdout")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
+	}
+
+	/**
+	 * @return void
+	 */
+	public function exec(): void
+	{
+		$this->buildIsolateCmd();
+		$this->isolateOut = shell_exec($this->isolateCmd);
 	}
 }
