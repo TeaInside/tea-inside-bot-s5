@@ -460,7 +460,7 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 				$p .= "--fsize={$this->maxFsize}";
 				break;
 			case "maxStack":
-				$p .= "--stack={$this->stack}";
+				$p .= "--stack={$this->maxStack}";
 				break;
 			default:
 				break;

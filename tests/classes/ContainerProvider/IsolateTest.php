@@ -21,9 +21,8 @@ class FirstTest extends TestCase
 		$st = new Isolate("a");
 		$this->checkLink($st);
 		$st->setErrToOut();
-		$st->setCmd("ls");
+		$st->setCmd("echo Hello World!");
 		$st->exec();
-		var_dump($st->getStdout());die;
 		$this->assertEquals($st->getStdout(), "Hello World!\n");
 	}
 
