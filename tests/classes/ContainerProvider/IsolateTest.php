@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  * @version 5.0.0
  * @package \tests\ContainerProvider
  */
-class FirstTest extends TestCase
+class IsolateTest extends TestCase
 {
 	/**
 	 * @return void
@@ -19,6 +19,33 @@ class FirstTest extends TestCase
 	public function testIsolate(): void
 	{
 		$st = new Isolate("a");
+		$this->checkLink($st);
+		$st->setErrToOut();
+		$st->setCmd("echo Hello World!");
+		$st->exec();
+		$this->assertEquals($st->getStdout(), "Hello World!\n");
+
+		$st = new Isolate("a");
+		$this->checkLink($st);
+		$st->setErrToOut();
+		$st->setCmd("echo Hello World!");
+		$st->exec();
+		$this->assertEquals($st->getStdout(), "Hello World!\n");
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testIsolate2(): void
+	{
+		$st = new Isolate("b");
+		$this->checkLink($st);
+		$st->setErrToOut();
+		$st->setCmd("echo Hello World!");
+		$st->exec();
+		$this->assertEquals($st->getStdout(), "Hello World!\n");
+
+		$st = new Isolate("b");
 		$this->checkLink($st);
 		$st->setErrToOut();
 		$st->setCmd("echo Hello World!");
