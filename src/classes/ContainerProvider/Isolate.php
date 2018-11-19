@@ -37,17 +37,17 @@ final class Isolate
 	/**
 	 * @var string
 	 */
-	private $containerDir;
+	private $containerDir = "";
 
 	/**
 	 * @var string
 	 */
-	private $containerSupportDir;
+	private $containerSupportDir = "";
 
 	/**
 	 * @var string
 	 */
-	private $userInfoDir;
+	private $userInfoDir = "";
 
 	/**
 	 * @var int
@@ -255,5 +255,13 @@ final class Isolate
 	{
 		$this->buildIsolateCmd();
 		$this->isolateOut = shell_exec($this->isolateCmd);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getContainerSupportDir(): string
+	{
+		return $this->containerSupportDir;
 	}
 }
