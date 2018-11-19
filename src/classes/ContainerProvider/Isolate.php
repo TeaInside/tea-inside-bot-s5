@@ -85,6 +85,16 @@ final class Isolate
 	private $stderrFile;
 
 	/**
+	 * @var string
+	 */
+	private $stdoutRealFile;
+
+	/**
+	 * @var string
+	 */
+	private $stderrRealFile;
+
+	/**
 	 * @param string $userKey
 	 *
 	 * Constructor.
@@ -146,7 +156,7 @@ final class Isolate
 
 		if (!is_dir($this->containerDir = "/var/local/lib/isolate/{$this->boxId}")) {
 			shell_exec("/usr/local/bin/isolate --box-id={$this->boxId} --init");
-			shell_exec("mkdir -p {$this->boxDir}");
+			shell_exec("mkdir -p {$this->containerDir}");
 		}
 
 		if (!is_dir($this->containerSupportDir = ISOLATE_BASE_DIR."/users/{$this->boxId}")) {
@@ -167,8 +177,8 @@ final class Isolate
 			$g = $g && mkdir("{$this->containerSupportDir}/etc")
 		);
 
-		is_dir("{$this->containerSupportDir}/parent_dockerd") or (
-			$g = $g && mkdir("{$this->containerSupportDir}/parent_dockerd")
+		is_dir("{$this->containerSupportDir}/dockerd") or (
+			$g = $g && mkdir("{$this->containerSupportDir}/dockerd")
 		);
 
 		$scan = scandir("/etc");
@@ -198,13 +208,22 @@ final class Isolate
 			($g = $g && is_dir("{$this->containerSupportDir}/home/ubuntu"))
 		);
 
+		$this->stdoutFile = "/isolated_proc/stdout";
+		$this->stderrFile = "/isolated_proc/stderr";
 
+		$this->stdoutRealFile = "{$this->userInfoDir}/stdout";
+		$this->stderrRealFile = "{$this->userInfoDir}/stderr";
 
-		$this->stdoutFile = "{$this->containerSupportDir}/tmp/stdout";
-		$this->stderrFile = "{$this->containerSupportDir}/tmp/stderr";
+		file_put_contents($this->stdoutRealFile, "");
+		file_put_contents($this->stderrRealFile, "");
 
-		file_put_contents($this->stdoutFile, "");
-		file_put_contents($this->stderrFile, "");
+		chmod($this->stdoutRealFile, 0755);
+		chmod($this->stderrRealFile, 0755);
+		chmod("{$this->containerSupportDir}/home/u{$this->uid}", 755);
+
+		chown($this->stdoutRealFile, 60000);
+		chown($this->stderrRealFile, 60000);
+		chown("{$this->containerSupportDir}/home/u{$this->uid}", 60000);
 
 		return $g;
 	}
@@ -227,9 +246,10 @@ final class Isolate
 		$p = "";
 		switch ($str) {
 			case "dir":
-				$p .= escapeshellarg("--dir=/opt={$this->containerSupportDir}/etc:rw");
-				$p .= escapeshellarg("--dir=/parent_dockerd={$this->containerSupportDir}/dockerd:noexec");
-				$p .= escapeshellarg("--dir=/boot={$this->containerSupportDir}/boot:noexec");
+				$p .= escapeshellarg("--dir=/opt={$this->containerSupportDir}/etc:rw")." ";
+				$p .= escapeshellarg("--dir=/parent_dockerd={$this->containerSupportDir}/dockerd:noexec")." ";
+				$p .= escapeshellarg("--dir=/boot=/boot:noexec")." ";
+				$p .= escapeshellarg("--dir=/isolated_proc={$this->userInfoDir}:rw");
 				break;
 			case "env":
 				$p .= "--env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
@@ -249,7 +269,7 @@ final class Isolate
 				break;
 		}
 
-		return $p;
+		return "{$p} ";
 	}
 
 	/**
