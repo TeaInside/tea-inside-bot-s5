@@ -375,7 +375,6 @@ final class Isolate
 	public function exec(): void
 	{
 		$this->buildIsolateCmd();
-		var_dump($this->isolateCmd);
 		$this->isolateOut = shell_exec($this->isolateCmd);
 		
 		// print "\n\n";
