@@ -289,6 +289,9 @@ final class Isolate
 			shell_exec("cp -rf /etc/skel {$this->containerSupportDir}/home/u{$this->uid}") xor
 			($g = $g && is_dir("{$this->containerSupportDir}/home/ubuntu"))
 		);
+		is_dir("{$this->containerSupportDir}/home/u{$this->uid}/scripts") or (
+			$g = $g && mkdir("{$this->containerSupportDir}/home/u{$this->uid}/scripts")
+		);
 
 		$this->stdoutFile = "/isolated_proc/stdout";
 		$this->stderrFile = "/isolated_proc/stderr";
@@ -299,13 +302,15 @@ final class Isolate
 		file_put_contents($this->stdoutRealFile, "");
 		file_put_contents($this->stderrRealFile, "");
 
+		chmod($this->userInfoDir, 0755);
 		chmod($this->stdoutRealFile, 0755);
 		chmod($this->stderrRealFile, 0755);
 		chmod("{$this->containerSupportDir}/home/u{$this->uid}", 0755);
 
-		chown($this->stdoutRealFile, 60000);
-		chown($this->stderrRealFile, 60000);
-		chown("{$this->containerSupportDir}/home/u{$this->uid}", 60000);
+		chown($this->userInfoDir, $this->uid);
+		chown($this->stdoutRealFile, $this->uid);
+		chown($this->stderrRealFile, $this->uid);
+		chown("{$this->containerSupportDir}/home/u{$this->uid}", $this->uid);
 
 		file_put_contents("{$this->containerSupportDir}/etc/passwd",
 "root:x:0:0:root:/root:/bin/bash
@@ -420,13 +425,14 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 		$p = "";
 		switch ($str) {
 			case "dir":
+				$p .= escapeshellarg("--dir=/home={$this->containerSupportDir}/home")." ";
 				$p .= escapeshellarg("--dir=/opt={$this->containerSupportDir}/opt:rw")." ";
 				$p .= escapeshellarg("--dir=/etc={$this->containerSupportDir}/etc:rw")." ";
 				$p .= escapeshellarg("--dir=/parent_dockerd={$this->containerSupportDir}/dockerd:noexec")." ";
 				$p .= escapeshellarg("--dir=/isolated_proc={$this->userInfoDir}:rw");
 				$p .= " --dir=/boot=/boot:noexec";
 				$p .= " --dir=/sbin=/sbin:rw";
-				$p .= " --dir=/parent_etc=/etc:rw";				
+				$p .= " --dir=/parent_etc=/etc:rw";
 				break;
 			case "env":
 				$p .= "--env=HOME=/home/u{$this->uid} --env=TMPDIR=/tmp --env=LC_ADDRESS=id_ID.UTF-8 --env=LC_NUMERIC=id_ID.UTF-8 --env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
@@ -474,7 +480,7 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 	private function buildIsolateCmd(): void
 	{
 		$cmd = escapeshellarg($this->cmd);
-		$this->isolateCmd = "/usr/local/bin/isolate {$this->param("dir")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("extraTime")} {$this->param("sharenet")} {$this->param("fsize")} {$this->param("maxStack")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
+		$this->isolateCmd = "/usr/local/bin/isolate --box-id={$this->boxId} {$this->param("dir")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("extraTime")} {$this->param("sharenet")} {$this->param("fsize")} {$this->param("maxStack")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
 	}
 
 	/**
@@ -520,5 +526,13 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 	public function getContainerSupportDir(): string
 	{
 		return $this->containerSupportDir;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getUid(): int
+	{
+		return $this->uid;
 	}
 }
