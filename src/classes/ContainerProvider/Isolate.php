@@ -336,7 +336,7 @@ final class Isolate
 				$p .= " --dir=/parent_etc=/etc:rw";				
 				break;
 			case "env":
-				$p .= "--env=TMPDIR=/tmp --env=LC_ADDRESS=id_ID.UTF-8 --env=LC_NUMERIC=id_ID.UTF-8 --env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
+				$p .= "--env=HOME=/home/u{$this->uid} --env=TMPDIR=/tmp --env=LC_ADDRESS=id_ID.UTF-8 --env=LC_NUMERIC=id_ID.UTF-8 --env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
 				break;
 			case "chdir":
 				$p .= "--chdir=".escapeshellarg($this->chdir);
@@ -383,7 +383,7 @@ final class Isolate
 		$this->buildIsolateCmd();
 		var_dump($this->isolateCmd);
 		$this->isolateOut = shell_exec($this->isolateCmd);
-		
+		// var_dump($this->isolateOut);
 		// print "\n\n";
 		// var_dump($this->isolateOut, $this->isolateCmd);
 		// print "\n\n";
