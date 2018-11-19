@@ -20,9 +20,10 @@ class FirstTest extends TestCase
 	{
 		$st = new Isolate("myid");
 		$this->checkLink($st);
-		$st->setCmd("echo Hello World");
+		$st->setErrToOut();
+		$st->setCmd("echo Hello World!");
 		$st->exec();
-		$this->assertEquals($st->getStdout(), "Hello World\n");
+		$this->assertEquals($st->getStdout(), "Hello World!\n");
 		$this->assertTrue(true);
 	}
 

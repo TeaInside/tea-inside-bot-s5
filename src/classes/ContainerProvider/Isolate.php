@@ -89,7 +89,12 @@ final class Isolate
 	/**
 	 * @var bool
 	 */
-	public $sharenet = true;
+	private $sharenet = true;
+
+	/**
+	 * @var string
+	 */
+	private $chdir = "/";
 
 	/**
 	 * @var string
@@ -115,6 +120,11 @@ final class Isolate
 	 * @var string
 	 */
 	private $stderrRealFile;
+
+	/**
+	 * @var bool
+	 */
+	private $errToOut = false;
 
 	/**
 	 * @param string $userKey
@@ -296,6 +306,15 @@ final class Isolate
 	}
 
 	/**
+	 * @param bool $b
+	 * @return void
+	 */
+	public function setErrToOut(bool $b = true): void
+	{
+		$this->errToOut = $b;
+	}
+
+	/**
 	 * @param string $str
 	 * @return string
 	 */
@@ -306,20 +325,21 @@ final class Isolate
 			case "dir":
 				$p .= escapeshellarg("--dir=/opt={$this->containerSupportDir}/etc:rw")." ";
 				$p .= escapeshellarg("--dir=/parent_dockerd={$this->containerSupportDir}/dockerd:noexec")." ";
-				$p .= escapeshellarg("--dir=/boot=/boot:noexec")." ";
 				$p .= escapeshellarg("--dir=/isolated_proc={$this->userInfoDir}:rw");
+				$p .= " --dir=/boot=/boot:noexec";
+				$p .= " --dir=/sbin=/sbin";
 				break;
 			case "env":
-				$p .= "--env=LC_ADDRESS=id_ID.UTF-8 --env=LC_NUMERIC=id_ID.UTF-8 --env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
+				$p .= "--env=TMPDIR=/tmp --env=LC_ADDRESS=id_ID.UTF-8 --env=LC_NUMERIC=id_ID.UTF-8 --env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
 				break;
 			case "chdir":
-				$p .= "--chdir=/";
+				$p .= "--chdir=".escapeshellarg($this->chdir);
 				break;
 			case "stdout":
 				$p .= "--stdout={$this->stdoutFile}";
 				break;
 			case "stderr":
-				$p .= "--stderr={$this->stderrFile}";
+				$p .= $this->errToOut ? "--stderr-to-stdout" : "--stderr={$this->stderrFile}";
 				break;
 			case "memoryLimit":
 				$p .= "--mem={$this->memoryLimit}";
@@ -328,7 +348,10 @@ final class Isolate
 				$p .= "--wall-time={$this->maxWallTime}";
 				break;
 			case "extraTime":
-				$param = "--extra-time={$this->extraTime}";
+				$p = "--extra-time={$this->extraTime}";
+				break;
+			case "sharenet":
+				$p = $this->sharenet ? "--share-net" : "";
 				break;
 			default:
 				break;
@@ -343,7 +366,7 @@ final class Isolate
 	private function buildIsolateCmd(): void
 	{
 		$cmd = escapeshellarg($this->cmd);
-		$this->isolateCmd = "/usr/local/bin/isolate {$this->param("dir")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
+		$this->isolateCmd = "/usr/local/bin/isolate {$this->param("dir")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("extraTime")} {$this->param("sharenet")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
 	}
 
 	/**
@@ -352,6 +375,7 @@ final class Isolate
 	public function exec(): void
 	{
 		$this->buildIsolateCmd();
+		var_dump($this->isolateCmd);
 		$this->isolateOut = shell_exec($this->isolateCmd);
 		
 		// print "\n\n";
