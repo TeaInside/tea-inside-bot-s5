@@ -221,7 +221,7 @@ final class Isolate
 				$p .= escapeshellarg("--dir=/opt={$this->containerSupportDir}/etc:rw");
 				break;
 			case "env":
-				$p .= "--env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=/home/u{$this->uid}";
+				$p .= "--env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
 				break;
 			case "chdir":
 				$p .= "--chdir=/home/u{$this->uid}";
@@ -231,6 +231,8 @@ final class Isolate
 				break;
 			case "stdout":
 				$p .= "--stderr={$this->stderrFile}";
+				break;
+			case "":
 				break;
 			default:
 				break;
