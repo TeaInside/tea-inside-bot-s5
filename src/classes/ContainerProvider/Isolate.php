@@ -209,6 +209,10 @@ final class Isolate
 			$g = $g && mkdir("{$this->containerSupportDir}/etc")
 		);
 
+		is_dir("{$this->containerSupportDir}/opt") or (
+			$g = $g && mkdir("{$this->containerSupportDir}/opt")
+		);
+
 		is_dir("{$this->containerSupportDir}/dockerd") or (
 			$g = $g && mkdir("{$this->containerSupportDir}/dockerd")
 		);
@@ -323,11 +327,13 @@ final class Isolate
 		$p = "";
 		switch ($str) {
 			case "dir":
-				$p .= escapeshellarg("--dir=/opt={$this->containerSupportDir}/etc:rw")." ";
+				$p .= escapeshellarg("--dir=/opt={$this->containerSupportDir}/opt:rw")." ";
+				$p .= escapeshellarg("--dir=/etc={$this->containerSupportDir}/etc:rw")." ";
 				$p .= escapeshellarg("--dir=/parent_dockerd={$this->containerSupportDir}/dockerd:noexec")." ";
 				$p .= escapeshellarg("--dir=/isolated_proc={$this->userInfoDir}:rw");
 				$p .= " --dir=/boot=/boot:noexec";
-				$p .= " --dir=/sbin=/sbin";
+				$p .= " --dir=/sbin=/sbin:rw";
+				$p .= " --dir=/parent_etc=/etc:rw";				
 				break;
 			case "env":
 				$p .= "--env=TMPDIR=/tmp --env=LC_ADDRESS=id_ID.UTF-8 --env=LC_NUMERIC=id_ID.UTF-8 --env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
@@ -375,6 +381,7 @@ final class Isolate
 	public function exec(): void
 	{
 		$this->buildIsolateCmd();
+		var_dump($this->isolateCmd);
 		$this->isolateOut = shell_exec($this->isolateCmd);
 		
 		// print "\n\n";
