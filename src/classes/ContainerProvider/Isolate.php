@@ -92,6 +92,16 @@ final class Isolate
 	private $sharenet = true;
 
 	/**
+	 * @var int
+	 */
+	private $maxStack = 3145728;
+
+	/**
+	 * @var int
+	 */
+	private $maxFsize = 314572800;
+
+	/**
 	 * @var string
 	 */
 	private $chdir = "/";
@@ -105,6 +115,11 @@ final class Isolate
 	 * @var string
 	 */
 	private $stdoutFile;
+
+	/**
+	 * @var string
+	 */
+	private $isolateOut = "";
 
 	/**
 	 * @var string
@@ -217,6 +232,38 @@ final class Isolate
 			$g = $g && mkdir("{$this->containerSupportDir}/dockerd")
 		);
 
+		is_dir("{$this->containerDir}/media") or (
+			$g = $g && mkdir("{$this->containerDir}/media")
+		);
+
+		is_dir("{$this->containerDir}/lost+found") or (
+			$g = $g && mkdir("{$this->containerDir}/lost+found")
+		);
+
+		is_dir("{$this->containerDir}/srv") or (
+			$g = $g && mkdir("{$this->containerDir}/srv")
+		);
+
+		is_dir("{$this->containerDir}/mnt") or (
+			$g = $g && mkdir("{$this->containerDir}/mnt")
+		);
+
+		is_dir("{$this->containerDir}/mnt") or (
+			$g = $g && mkdir("{$this->containerDir}/sys")
+		);
+
+		// @readlink("{$this->containerDir}/initrd.img") or
+		// 	shell_exec("ln -sf boot/initrd.img-4.15.0-23-generic {$this->containerDir}/initrd.img");
+
+		// @readlink("{$this->containerDir}/initrd.img.old") or
+		// 	shell_exec("ln -sf boot/initrd.img-4.15.0-22-generic {$this->containerDir}/initrd.img");
+
+		// @readlink("{$this->containerDir}/vmlinuz") or
+		// 	shell_exec("ln -sf boot/vmlinuz-4.15.0-23-generic {$this->containerDir}/vmlinuz");
+
+		// @readlink("{$this->containerDir}/initrd.img.old") or
+		// 	shell_exec("ln -sf boot/vmlinuz-4.15.0-22-generic {$this->containerDir}/initrd.img");
+
 		$scan = scandir("/etc");
 
 		unset(
@@ -231,7 +278,7 @@ final class Isolate
 		foreach ($scan as $file) {
 			if (!@readlink($f = "{$this->containerSupportDir}/etc/{$file}")) {
 				$f = escapeshellarg($f);
-				shell_exec("sudo ln -sf /parent_etc/{$file} {$f}");
+				shell_exec("ln -sf /parent_etc/{$file} {$f}");
 			}
 		}
 
@@ -255,11 +302,40 @@ final class Isolate
 
 		chmod($this->stdoutRealFile, 0755);
 		chmod($this->stderrRealFile, 0755);
-		chmod("{$this->containerSupportDir}/home/u{$this->uid}", 755);
+		chmod("{$this->containerSupportDir}/home/u{$this->uid}", 0755);
 
 		chown($this->stdoutRealFile, 60000);
 		chown($this->stderrRealFile, 60000);
 		chown("{$this->containerSupportDir}/home/u{$this->uid}", 60000);
+
+		file_put_contents("{$this->containerSupportDir}/etc/passwd",
+"root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+systemd-timesync:x:100:102:systemd Time Synchronization,,,:/run/systemd:/bin/false
+systemd-network:x:101:103:systemd Network Management,,,:/run/systemd/netif:/bin/false
+systemd-resolve:x:102:104:systemd Resolver,,,:/run/systemd/resolve:/bin/false
+geoclue:x:103:105::/var/lib/geoclue:/usr/sbin/nologin
+syslog:x:104:108::/home/syslog:/bin/false
+_apt:x:105:65534::/nonexistent:/bin/false
+messagebus:x:106:110::/var/run/dbus:/bin/false
+uuidd:x:107:111::/run/uuidd:/bin/false
+u{$this->uid}:x:{$this->uid}:{$this->uid}:u{$this->uid},,,:/home/u{$this->uid}:/bin/bash
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 
 		return $g;
 	}
@@ -319,6 +395,24 @@ final class Isolate
 	}
 
 	/**
+	 * @param int $n
+	 * @return void
+	 */
+	public function setMaxStack(int $n): void
+	{
+		$this->maxStack = $n;
+	}
+
+	/**
+	 * @param int $n
+	 * @return void
+	 */
+	public function setMaxFsize(int $n): void
+	{
+		$this->maxFsize = $n;
+	}
+
+	/**
 	 * @param string $str
 	 * @return string
 	 */
@@ -353,11 +447,20 @@ final class Isolate
 			case "maxWallTime":
 				$p .= "--wall-time={$this->maxWallTime}";
 				break;
+			case "maxExecutionTime":
+				$p .= "--time={$this->maxExecutionTime}";
+				break;
 			case "extraTime":
-				$p = "--extra-time={$this->extraTime}";
+				$p .= "--extra-time={$this->extraTime}";
 				break;
 			case "sharenet":
-				$p = $this->sharenet ? "--share-net" : "";
+				$p .= $this->sharenet ? "--share-net" : "";
+				break;
+			case "fsize":
+				$p .= "--fsize={$this->maxFsize}";
+				break;
+			case "maxStack":
+				$p .= "--stack={$this->stack}";
 				break;
 			default:
 				break;
@@ -372,7 +475,7 @@ final class Isolate
 	private function buildIsolateCmd(): void
 	{
 		$cmd = escapeshellarg($this->cmd);
-		$this->isolateCmd = "/usr/local/bin/isolate {$this->param("dir")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("extraTime")} {$this->param("sharenet")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
+		$this->isolateCmd = "/usr/local/bin/isolate {$this->param("dir")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("extraTime")} {$this->param("sharenet")} {$this->param("fsize")} {$this->param("maxStack")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
 	}
 
 	/**
@@ -394,6 +497,22 @@ final class Isolate
 	public function getStdout(): string
 	{
 		return (string)(@file_get_contents($this->stdoutRealFile));
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getStderr(): string
+	{
+		return (string)(@file_get_contents($this->stderrRealFile));
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getIsolateOut(): string
+	{
+		return $this->isolateOut;
 	}
 
 	/**

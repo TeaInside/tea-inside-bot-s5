@@ -18,13 +18,13 @@ class FirstTest extends TestCase
 	 */
 	public function testIsolate(): void
 	{
-		$st = new Isolate("myid");
+		$st = new Isolate("a");
 		$this->checkLink($st);
 		$st->setErrToOut();
-		$st->setCmd("echo Hello World!");
+		$st->setCmd("ls");
 		$st->exec();
+		var_dump($st->getStdout());die;
 		$this->assertEquals($st->getStdout(), "Hello World!\n");
-		$this->assertTrue(true);
 	}
 
 	/**
