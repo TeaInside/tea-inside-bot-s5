@@ -2,6 +2,13 @@
 
 namespace ContainerProvider;
 
+/**
+ * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
+ * @license MIT
+ * @version 5.0.0
+ * @package \ContainerProvider
+ */
+
 require BASEPATH."/config/isolate.php";
 
 defined("ISOLATE_BASE_DIR") or die("ISOLATE_BASE_DIR is not defined yet!\n");
@@ -63,6 +70,21 @@ final class Isolate
 	 * @var int
 	 */
 	private $memoryLimit = 524288;
+
+	/**
+	 * @var int
+	 */
+	private $maxWallTime = 60;
+
+	/**
+	 * @var int
+	 */
+	private $maxExecutionTime = 30;
+
+	/**
+	 * @var int
+	 */
+	private $extraTime = 15;
 
 	/**
 	 * @var bool
@@ -238,6 +260,42 @@ final class Isolate
 	}
 
 	/**
+	 * @param int $n
+	 * @return void
+	 */
+	public function setMaxWallTime(int $n): void
+	{
+		$this->maxWallTime = $n;
+	}
+
+	/**
+	 * @param int $n
+	 * @return void
+	 */
+	public function setMaxExecutionTime(int $n): void
+	{
+		$this->maxExecutionTime = $n;
+	}
+
+	/**
+	 * @param int $n
+	 * @return void
+	 */
+	public function setMemoryLimit(int $n): void
+	{
+		$this->memoryLimit = $n;
+	}
+
+	/**
+	 * @param int $n
+	 * @return void
+	 */
+	public function setExtraTime(int $n): void
+	{
+		$this->extraTime = $n;
+	}
+
+	/**
 	 * @param string $str
 	 * @return string
 	 */
@@ -252,7 +310,7 @@ final class Isolate
 				$p .= escapeshellarg("--dir=/isolated_proc={$this->userInfoDir}:rw");
 				break;
 			case "env":
-				$p .= "--env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
+				$p .= "--env=LC_ADDRESS=id_ID.UTF-8 --env=LC_NUMERIC=id_ID.UTF-8 --env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
 				break;
 			case "chdir":
 				$p .= "--chdir=/";
@@ -263,13 +321,20 @@ final class Isolate
 			case "stderr":
 				$p .= "--stderr={$this->stderrFile}";
 				break;
-			case "":
+			case "memoryLimit":
+				$p .= "--mem={$this->memoryLimit}";
+				break;
+			case "maxWallTime":
+				$p .= "--wall-time={$this->maxWallTime}";
+				break;
+			case "extraTime":
+				$param = "--extra-time={$this->extraTime}";
 				break;
 			default:
 				break;
 		}
 
-		return "{$p} ";
+		return "{$p}";
 	}
 
 	/**
@@ -288,9 +353,18 @@ final class Isolate
 	{
 		$this->buildIsolateCmd();
 		$this->isolateOut = shell_exec($this->isolateCmd);
-		print "\n\n";
-		var_dump($this->isolateOut, $this->isolateCmd);
-		print "\n\n";
+		
+		// print "\n\n";
+		// var_dump($this->isolateOut, $this->isolateCmd);
+		// print "\n\n";
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getStdout(): string
+	{
+		return (string)(@file_get_contents($this->stdoutRealFile));
 	}
 
 	/**

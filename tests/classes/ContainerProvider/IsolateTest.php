@@ -22,7 +22,7 @@ class FirstTest extends TestCase
 		$this->checkLink($st);
 		$st->setCmd("echo Hello World");
 		$st->exec();
-		// $this->assertEquals($st->getStdout(), "Hello World");
+		$this->assertEquals($st->getStdout(), "Hello World\n");
 		$this->assertTrue(true);
 	}
 
