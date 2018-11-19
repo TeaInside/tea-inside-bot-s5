@@ -22,4 +22,13 @@ class PhpTest extends TestCase
 		$st = new Php("<?php echo \"Hello World!\";", "a");
 		$this->assertEquals($st->run(), "Hello World!");
 	}
+
+	/**
+	 * @return void
+	 */
+	public function testMemoryLeak(): void
+	{
+		$st = new Php("<?php \$a = \"\"; while(1) \$a .= str_repeat(rand(), 100000);", "a");
+		$this->assertTrue((bool)preg_match("/Cannot allocate memory/", $st->run()));
+	}
 }

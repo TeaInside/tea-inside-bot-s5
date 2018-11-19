@@ -417,6 +417,15 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 	}
 
 	/**
+	 * @param int $n
+	 * @return void
+	 */
+	public function setMaxProcesses(int $n): void
+	{
+		$this->maxProcesses = $n;
+	}
+
+	/**
 	 * @param string $str
 	 * @return string
 	 */

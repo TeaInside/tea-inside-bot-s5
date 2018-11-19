@@ -51,9 +51,10 @@ class Php implements InterpreterInterface
 		file_put_contents("{$csd}/php/{$file}", $this->code);
 		
 		$st->setCmd("php /home/u{$uid}/scripts/php/{$file}");
-		$st->exec();
-
+		$st->setMemoryLimit(104857600);
+		$st->setMaxProcesses(5);
 		$st->setErrToOut();
+		$st->exec();
 		return $st->getStdout();
 	}
 }
