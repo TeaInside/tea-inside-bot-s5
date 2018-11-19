@@ -16,6 +16,9 @@ class FirstTest extends TestCase
 	public function testIsolate()
 	{
 		$st = new Isolate("qweqwe");
+		// $st->setCmd("echo Hello World");
+		// $st->exec();
+		// $this->assertEquals($st->getStdout(), "Hello World");
 		$this->assertTrue(true);
 	}
 }
