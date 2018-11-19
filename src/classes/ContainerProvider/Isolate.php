@@ -167,6 +167,10 @@ final class Isolate
 			$g = $g && mkdir("{$this->containerSupportDir}/etc")
 		);
 
+		is_dir("{$this->containerSupportDir}/parent_dockerd") or (
+			$g = $g && mkdir("{$this->containerSupportDir}/parent_dockerd")
+		);
+
 		$scan = scandir("/etc");
 
 		unset(
@@ -194,8 +198,13 @@ final class Isolate
 			($g = $g && is_dir("{$this->containerSupportDir}/home/ubuntu"))
 		);
 
-		$this->stdoutFile = "{$this->userInfoDir}/stdout";
-		$this->stderrFile = "{$this->userInfoDir}/stderr";
+
+
+		$this->stdoutFile = "{$this->containerSupportDir}/tmp/stdout";
+		$this->stderrFile = "{$this->containerSupportDir}/tmp/stderr";
+
+		file_put_contents($this->stdoutFile, "");
+		file_put_contents($this->stderrFile, "");
 
 		return $g;
 	}
@@ -219,17 +228,19 @@ final class Isolate
 		switch ($str) {
 			case "dir":
 				$p .= escapeshellarg("--dir=/opt={$this->containerSupportDir}/etc:rw");
+				$p .= escapeshellarg("--dir=/parent_dockerd={$this->containerSupportDir}/dockerd:noexec");
+				$p .= escapeshellarg("--dir=/boot={$this->containerSupportDir}/boot:noexec");
 				break;
 			case "env":
 				$p .= "--env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
 				break;
 			case "chdir":
-				$p .= "--chdir=/home/u{$this->uid}";
+				$p .= "--chdir=/";
 				break;
 			case "stdout":
 				$p .= "--stdout={$this->stdoutFile}";
 				break;
-			case "stdout":
+			case "stderr":
 				$p .= "--stderr={$this->stderrFile}";
 				break;
 			case "":
@@ -247,7 +258,7 @@ final class Isolate
 	private function buildIsolateCmd(): void
 	{
 		$cmd = escapeshellarg($this->cmd);
-		$this->isolateCmd = "/usr/local/bin/isolate {$this->param("dir")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stdout")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
+		$this->isolateCmd = "/usr/local/bin/isolate {$this->param("dir")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
 	}
 
 	/**
@@ -257,6 +268,9 @@ final class Isolate
 	{
 		$this->buildIsolateCmd();
 		$this->isolateOut = shell_exec($this->isolateCmd);
+		print "\n\n";
+		var_dump($this->isolateOut, $this->isolateCmd);
+		print "\n\n";
 	}
 
 	/**
