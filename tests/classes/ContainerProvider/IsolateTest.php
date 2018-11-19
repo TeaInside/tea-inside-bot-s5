@@ -24,6 +24,7 @@ class IsolateTest extends TestCase
 		$st->setCmd("echo Hello World!");
 		$st->exec();
 		$this->assertEquals($st->getStdout(), "Hello World!\n");
+		unset($st);
 
 		$st = new Isolate("a");
 		$this->checkLink($st);
@@ -31,6 +32,7 @@ class IsolateTest extends TestCase
 		$st->setCmd("echo Hello World!");
 		$st->exec();
 		$this->assertEquals($st->getStdout(), "Hello World!\n");
+		unset($st);
 	}
 
 	/**
@@ -44,6 +46,7 @@ class IsolateTest extends TestCase
 		$st->setCmd("echo Hello World!");
 		$st->exec();
 		$this->assertEquals($st->getStdout(), "Hello World!\n");
+		unset($st);
 
 		$st = new Isolate("b");
 		$this->checkLink($st);
@@ -51,6 +54,7 @@ class IsolateTest extends TestCase
 		$st->setCmd("echo Hello World!");
 		$st->exec();
 		$this->assertEquals($st->getStdout(), "Hello World!\n");
+		unset($st);
 	}
 
 	/**
@@ -64,8 +68,7 @@ class IsolateTest extends TestCase
 		unset(
 			$scan[0], 
 			$scan[1], 
-			$scan[array_search("passwd", $scan)],
-			$scan[array_search("shadow", $scan)]
+			$scan[array_search("passwd", $scan)]
 		);
 
 		foreach ($scan as $file) {

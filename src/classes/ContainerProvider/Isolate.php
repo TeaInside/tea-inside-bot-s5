@@ -269,8 +269,7 @@ final class Isolate
 		unset(
 			$scan[0], 
 			$scan[1], 
-			$scan[array_search("passwd", $scan)],
-			$scan[array_search("shadow", $scan)]
+			$scan[array_search("passwd", $scan)]
 		);
 
 		$i = 0;
