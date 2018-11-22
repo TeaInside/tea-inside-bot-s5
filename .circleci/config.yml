@@ -3,7 +3,6 @@
 #
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
-
 version: 2
 jobs:
   build:
@@ -14,18 +13,37 @@ jobs:
     steps:
       - checkout
       
+      - run: sudo chmod -R 777 /lib/x86_64-linux-gnu/ /usr/lib/x86_64-linux-gnu/
+
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "composer.json" }}
           - v1-dependencies-
+      
+      - restore_cache:
+          keys:
+          - libcap
 
       - run: sudo apt install -y libcap-dev
+      - run: sudo php .circleci/isolate-install.php
       - run: composer install -vvv --prefer-dist
+      - run: 
 
       - save_cache:
           paths:
             - ./vendor
           key: v1-dependencies-{{ checksum "composer.json" }}
+
+      - save cache:
+          paths:
+            - /lib/x86_64-linux-gnu/libcap.so.2.25
+            - /lib/x86_64-linux-gnu/libcap.so.2
+            - /lib/x86_64-linux-gnu/libcap-ng.so.0
+            - /lib/x86_64-linux-gnu/libcap-ng.so.0.0.0
+            - /usr/lib/x86_64-linux-gnu/libcap.so
+            - /usr/lib/x86_64-linux-gnu/libcap.a
+            - /usr/lib/x86_64-linux-gnu/pkgconfig/libcap.pc
+          key: libcap
 
       - run: php vendor/bin/phpunit --verbose
       - run: php php_syntax_checker.php
