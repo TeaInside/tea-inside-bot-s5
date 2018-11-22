@@ -26,6 +26,12 @@ trait ResponseRoutes
 				return;
 			}
 		}
+
+		if (preg_match("/^<\?php(\s|\n|\t).*$/Usi", $this->d["text"])) {
+			if ($this->exec("Virtualizor", "php")) {
+				return;
+			}
+		}
 	}
 
 	/**

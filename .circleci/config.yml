@@ -19,6 +19,7 @@ jobs:
           - v1-dependencies-{{ checksum "composer.json" }}
           - v1-dependencies-
 
+      - run: sudo apt install -y libcap-dev
       - run: composer install -vvv --prefer-dist
 
       - save_cache:
