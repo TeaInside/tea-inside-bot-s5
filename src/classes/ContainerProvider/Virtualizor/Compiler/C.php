@@ -79,8 +79,8 @@ class C implements CompilerInterface
 		$st->setCmd("gcc -fno-stack-protector /home/u{$uid}/scripts/c/{$file} -o {$this->executableFile}");
 		$st->setMemoryLimit(1048576);
 		$st->setMaxProcesses(10);
-		$st->setMaxWallTime(60);
-		$st->setMaxExecutionTime(15);
+		$st->setMaxWallTime(100);
+		$st->setMaxExecutionTime(100);
 		$st->setErrToOut();
 		$st->exec();
 		$this->compileOutput = (string)$st->getStdout();
@@ -107,8 +107,8 @@ class C implements CompilerInterface
 		$st->setCmd($this->executableFile);
 		$st->setMemoryLimit(524288);
 		$st->setMaxProcesses(5);
-		$st->setMaxWallTime(60);
-		$st->setMaxExecutionTime(15);
+		$st->setMaxWallTime(17);
+		$st->setMaxExecutionTime(17);
 		$st->setErrToOut();
 		$st->exec();
 
