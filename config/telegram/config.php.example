@@ -4,19 +4,15 @@
  * Database configuration.
  */
 define("DB_HOST", "127.0.0.1");
-define("DB_PORT", "3306");
-define("DB_USER", "root");
-define("DB_PASS", "i_am_root_password");
+define("DB_PORT", "9999");
+define("DB_NAME", "bot_telegram_s5");
+define("DB_USER", "std_hd_master_b581743600");
+define("DB_PASS", "nullptrD*^^^^_rd_config_aaa881");
 
 /**
  * Bot token.
  */
 define("BOT_TOKEN", "324526789:AAD_goUUodV-BmyYj_a1WQQM6q2nnr1fqza010p");
-
-define("PUBLIC_PATH", BASEPATH."/public");
-define("STORAGE_PATH", BASEPATH."/storage");
-define("LOG_PATH", BASEPATH."/logs/telegram");
-define("PUBLIC_BASEURL", "https://icetea.teainside.org");
 
 define("SUDOERS", 
 	[
