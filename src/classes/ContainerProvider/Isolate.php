@@ -499,7 +499,7 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 			$this->sharenet = false;
 		}
 		$cmd = escapeshellarg($this->cmd);
-		$this->isolateCmd = "/usr/local/bin/isolate --box-id={$this->boxId} {$this->param("dir")} {$this->param("maxProcesses")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("maxExecutionTime")} {$this->param("extraTime")} {$this->param("sharenet")} {$this->param("fsize")} {$this->param("maxStack")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
+		$this->isolateCmd = "nice -n20 /usr/local/bin/isolate --box-id={$this->boxId} {$this->param("dir")} {$this->param("maxProcesses")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("maxExecutionTime")} {$this->param("extraTime")} {$this->param("sharenet")} {$this->param("fsize")} {$this->param("maxStack")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
 	}
 
 	/**
@@ -507,7 +507,6 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 	 */
 	public function exec(): void
 	{
-		shell_exec("renice -n10 ".getmypid());
 		$this->buildIsolateCmd();
 		$this->isolateOut = shell_exec($this->isolateCmd);
 		var_dump($this->isolateOut);
