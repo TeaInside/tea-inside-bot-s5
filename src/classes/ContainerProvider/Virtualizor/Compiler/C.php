@@ -74,7 +74,7 @@ class C implements CompilerInterface
 		shell_exec("chmod 777 {$csd}/c {$csd}/c/bin");
 
 		$this->executableFile = "/home/u{$uid}/scripts/c/bin/{$hash}";
-		file_exists($this->executableFile) and unlink($this->executableFile);
+		file_exists("{$csd}/c/bin/{$hash}") and unlink("{$csd}/c/bin/{$hash}");
 
 		$st->setCmd("gcc -fno-stack-protector /home/u{$uid}/scripts/c/{$file} -o {$this->executableFile}");
 		$st->setMemoryLimit(1048576);
