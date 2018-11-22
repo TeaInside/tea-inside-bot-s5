@@ -44,8 +44,14 @@ class Php implements InterpreterInterface
 
 		$uid = $st->getUid();
 		$csd = "{$st->getContainerSupportDir()}/home/u{$uid}/scripts";
-		is_dir($csd) or mkdir($csd);
-		is_dir("{$csd}/php") or mkdir("{$csd}/php");
+
+		$isDirCsd = is_dir($csd);
+		((!$isDirCsd) && file_exists($csd)) and shell_exec("rm -rf {$csd}");
+		$isDirCsd or mkdir($csd);
+
+		$isDirCsd = is_dir("{$csd}/php");
+		((!$isDirCsd) && file_exists("{$csd}/php")) and shell_exec("rm -rf {$csd}/php");
+		$isDirCsd or mkdir("{$csd}/php");
 
 		$file = substr(md5($this->code), 0, 5).".php";
 		file_put_contents("{$csd}/php/{$file}", $this->code);

@@ -311,7 +311,8 @@ final class Isolate
 		chown($this->userInfoDir, $this->uid);
 		chown($this->stdoutRealFile, $this->uid);
 		chown($this->stderrRealFile, $this->uid);
-		chown("{$this->containerSupportDir}/home/u{$this->uid}", $this->uid);
+		
+		shell_exec("chown -R {$this->uid}:{$this->uid} {$this->containerSupportDir}/home/u{$this->uid}");
 
 		file_put_contents("{$this->containerSupportDir}/etc/passwd",
 "root:x:0:0:root:/root:/bin/bash
@@ -435,14 +436,19 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 		$p = "";
 		switch ($str) {
 			case "dir":
-				$p .= escapeshellarg("--dir=/home={$this->containerSupportDir}/home")." ";
+				$p .= escapeshellarg("--dir=/home={$this->containerSupportDir}/home:rw")." ";
 				$p .= escapeshellarg("--dir=/opt={$this->containerSupportDir}/opt:rw")." ";
 				$p .= escapeshellarg("--dir=/etc={$this->containerSupportDir}/etc:rw")." ";
 				$p .= escapeshellarg("--dir=/parent_dockerd={$this->containerSupportDir}/dockerd:noexec")." ";
 				$p .= escapeshellarg("--dir=/isolated_proc={$this->userInfoDir}:rw");
 				$p .= " --dir=/boot=/boot:noexec";
 				$p .= " --dir=/sbin=/sbin:rw";
+				$p .= " --dir=/lib32=/lib32:rw";
+				$p .= " --dir=/lib64=/lib64:rw";
 				$p .= " --dir=/parent_etc=/etc:rw";
+				break;
+			case "maxProcesses":
+				$p .= "--processes={$this->maxProcesses}";
 				break;
 			case "env":
 				$p .= "--env=HOME=/home/u{$this->uid} --env=TMPDIR=/tmp --env=LC_ADDRESS=id_ID.UTF-8 --env=LC_NUMERIC=id_ID.UTF-8 --env=LC_MEASUREMENT=id_ID.UTF-8 --env=LC_PAPER=id_ID.UTF-8 --env=LC_MONETARY=id_ID.UTF-8 --env=LANG=en_US.UTF-8 --env=PATH --env=LOGNAME=u{$this->uid} --env=USER=u{$this->uid} --env=/home/u{$this->uid}";
@@ -493,7 +499,7 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 			$this->sharenet = false;
 		}
 		$cmd = escapeshellarg($this->cmd);
-		$this->isolateCmd = "/usr/local/bin/isolate --box-id={$this->boxId} {$this->param("dir")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("maxExecutionTime")} {$this->param("extraTime")} {$this->param("sharenet")} {$this->param("fsize")} {$this->param("maxStack")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
+		$this->isolateCmd = "/usr/local/bin/isolate --box-id={$this->boxId} {$this->param("dir")} {$this->param("maxProcesses")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("maxExecutionTime")} {$this->param("extraTime")} {$this->param("sharenet")} {$this->param("fsize")} {$this->param("maxStack")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
 	}
 
 	/**

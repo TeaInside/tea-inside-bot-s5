@@ -32,6 +32,12 @@ trait ResponseRoutes
 				return;
 			}
 		}
+
+		if (preg_match("/^<\?(c|gcc)(\s|\n|\t).*$/Usi", $this->d["text"])) {
+			if ($this->exec("Virtualizor", "c")) {
+				return;
+			}
+		}
 	}
 
 	/**
