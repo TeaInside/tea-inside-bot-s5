@@ -445,6 +445,7 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 				$p .= " --dir=/sbin=/sbin:rw";
 				$p .= " --dir=/lib32=/lib32:rw";
 				$p .= " --dir=/lib64=/lib64:rw";
+				$p .= " --dir=/usr=/usr";
 				$p .= " --dir=/parent_etc=/etc:rw";
 				break;
 			case "maxProcesses":
