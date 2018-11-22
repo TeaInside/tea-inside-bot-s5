@@ -112,6 +112,8 @@ class C implements CompilerInterface
 		$st->setErrToOut();
 		$st->exec();
 
+		getStdoutSize
+		
 		return (string)$st->getStdout();
 	}
 }

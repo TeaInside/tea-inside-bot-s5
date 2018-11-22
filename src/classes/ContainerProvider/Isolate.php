@@ -500,7 +500,7 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 			$this->sharenet = false;
 		}
 		$cmd = escapeshellarg($this->cmd);
-		$this->isolateCmd = "nice -n20 /usr/local/bin/isolate --box-id={$this->boxId} {$this->param("dir")} {$this->param("maxProcesses")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("maxExecutionTime")} {$this->param("extraTime")} {$this->param("sharenet")} {$this->param("fsize")} {$this->param("maxStack")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
+		$this->isolateCmd = "nice -n30 /usr/local/bin/isolate --box-id={$this->boxId} {$this->param("dir")} {$this->param("maxProcesses")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("maxExecutionTime")} {$this->param("extraTime")} {$this->param("sharenet")} {$this->param("fsize")} {$this->param("maxStack")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
 	}
 
 	/**
@@ -517,11 +517,27 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 	}
 
 	/**
+	 * @return int
+	 */
+	public function getStdoutSize(): int
+	{
+		return filesize($this->stdoutRealFile);
+	}
+
+	/**
+	 * @param int $size
 	 * @return string
 	 */
-	public function getStdout(): string
+	public function getStdout($n = 1024): string
 	{
-		return (string)(@file_get_contents($this->stdoutRealFile));
+		if ($n === -1) {
+			return (string)(@file_get_contents($this->stdoutRealFile));	
+		} else {
+			$handle = fopen($this->stdoutRealFile, "r");
+			$r = fread($handle, $n);
+			fclose($handle);
+			return $r;
+		}
 	}
 
 	/**
