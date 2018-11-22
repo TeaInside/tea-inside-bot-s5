@@ -19,15 +19,11 @@ jobs:
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "composer.json" }}
-          - v1-dependencies-
-      
-      - restore_cache:
-          keys:
-          - libcap
+          - v1-dependencies-      
 
       - run: cp -vf config/isolate.php.example config/isolate.php
       - run: cp -vf config/telegram/config.php.example config/telegram/config.php
-      - run: echo 'define("ISOLATE_INSIDE_DOCKER", true);' >> config/isolate.php
+      - run: echo 'define("ISOLATE_INSIDE_DOCKER", true);' >> tests/config.php
       - run: sudo apt install -y libcap-dev
       - run: sudo php .circleci/isolate-install.php
       - run: composer install -vvv --prefer-dist
@@ -37,17 +33,6 @@ jobs:
           - vendor
           - composer.lock
           key: v1-dependencies-{{ checksum "composer.json" }}
-
-      - save_cache:
-          paths:
-          - /lib/x86_64-linux-gnu/libcap.so.2.25
-          - /lib/x86_64-linux-gnu/libcap.so.2
-          - /lib/x86_64-linux-gnu/libcap-ng.so.0
-          - /lib/x86_64-linux-gnu/libcap-ng.so.0.0.0
-          - /usr/lib/x86_64-linux-gnu/libcap.so
-          - /usr/lib/x86_64-linux-gnu/libcap.a
-          - /usr/lib/x86_64-linux-gnu/pkgconfig/libcap.pc
-          key: libcap
 
       - run: sudo php vendor/bin/phpunit --verbose
       - run: sudo php php_syntax_checker.php
