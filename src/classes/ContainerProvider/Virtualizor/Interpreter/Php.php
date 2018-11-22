@@ -53,6 +53,8 @@ class Php implements InterpreterInterface
 		$st->setCmd("php -d 'opcache.enable=0' /home/u{$uid}/scripts/php/{$file}");
 		$st->setMemoryLimit(524288);
 		$st->setMaxProcesses(5);
+		$st->setMaxWallTime(60);
+		$st->setMaxExecutionTime(15);
 		$st->setErrToOut();
 		$st->exec();
 		return (string)($st->getStdout());
