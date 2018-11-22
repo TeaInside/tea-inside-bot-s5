@@ -19,7 +19,7 @@ $argv[1] = '{
             "type": "supergroup"
         },
         "date": 1542300037,
-        "text": "/help",
+        "text": "<?php echo \'Hello World\';",
         "entities": [
             {
                 "offset": 0,

@@ -55,6 +55,6 @@ class Php implements InterpreterInterface
 		$st->setMaxProcesses(5);
 		$st->setErrToOut();
 		$st->exec();
-		return $st->getStdout();
+		return (string)($st->getStdout());
 	}
 }
