@@ -27,7 +27,6 @@ jobs:
       - run: sudo apt install -y libcap-dev
       - run: sudo php .circleci/isolate-install.php
       - run: composer install -vvv --prefer-dist
-      - run: 
 
       - save_cache:
           paths:
@@ -36,13 +35,13 @@ jobs:
 
       - save cache:
           paths:
-            - /lib/x86_64-linux-gnu/libcap.so.2.25
-            - /lib/x86_64-linux-gnu/libcap.so.2
-            - /lib/x86_64-linux-gnu/libcap-ng.so.0
-            - /lib/x86_64-linux-gnu/libcap-ng.so.0.0.0
-            - /usr/lib/x86_64-linux-gnu/libcap.so
-            - /usr/lib/x86_64-linux-gnu/libcap.a
-            - /usr/lib/x86_64-linux-gnu/pkgconfig/libcap.pc
+          - /lib/x86_64-linux-gnu/libcap.so.2.25
+          - /lib/x86_64-linux-gnu/libcap.so.2
+          - /lib/x86_64-linux-gnu/libcap-ng.so.0
+          - /lib/x86_64-linux-gnu/libcap-ng.so.0.0.0
+          - /usr/lib/x86_64-linux-gnu/libcap.so
+          - /usr/lib/x86_64-linux-gnu/libcap.a
+          - /usr/lib/x86_64-linux-gnu/pkgconfig/libcap.pc
           key: libcap
 
       - run: php vendor/bin/phpunit --verbose
