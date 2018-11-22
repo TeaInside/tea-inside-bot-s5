@@ -13,6 +13,7 @@ jobs:
     steps:
       - checkout
       
+      - run: php_syntax_checker.php
       - run: sudo chmod -R 777 /lib/x86_64-linux-gnu/ /usr/lib/x86_64-linux-gnu/
 
       - restore_cache:
@@ -33,7 +34,8 @@ jobs:
 
       - save_cache:
           paths:
-            - ./vendor
+          - vendor
+          - composer.lock
           key: v1-dependencies-{{ checksum "composer.json" }}
 
       - save_cache:
