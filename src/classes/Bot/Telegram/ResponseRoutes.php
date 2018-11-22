@@ -44,8 +44,8 @@ trait ResponseRoutes
 			}
 		}
 
-		if (preg_match("/^(?:<\?py(?:thon)?3[\s\n\t])(.*)$/Usi", $this->d["text"], $m)) {
-			if ($this->exec("Virtualizor", "python2", [$m[1]])) {
+		if (preg_match("/^(?:<\?py(?:thon)?3?[\s\n\t])(.*)$/Usi", $this->d["text"], $m)) {
+			if ($this->exec("Virtualizor", "python3", [$m[1]])) {
 				return;
 			}
 		}
