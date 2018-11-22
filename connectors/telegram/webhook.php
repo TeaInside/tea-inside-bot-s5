@@ -9,5 +9,5 @@ shell_exec(
 );
 
 shell_exec(
-	"nohup php {$dir}/webhook_worker.php {$input} >> {$dir}/../../logs/telegram/webhook_worker.log 2>&1 &"
+	"nohup php -d memory_limit=512M {$dir}/webhook_worker.php {$input} >> {$dir}/../../logs/telegram/webhook_worker.log 2>&1 &"
 );
