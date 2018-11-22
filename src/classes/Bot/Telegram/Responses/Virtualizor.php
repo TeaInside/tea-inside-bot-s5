@@ -40,7 +40,8 @@ class Virtualizor extends ResponseFoundation
 
 		Exe::sendMessage(
 			[
-				"text" => $st,
+				"text" => "<pre>".htmlspecialchars($st, ENT_QUOTES, "UTF-8")."</pre>",
+				"parse_mode" => "HTML",
 				"chat_id" => $this->d["chat_id"],
 				"reply_to_message_id" => $this->d["msg_id"]
 			]
