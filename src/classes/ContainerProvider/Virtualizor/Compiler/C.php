@@ -106,7 +106,7 @@ class C implements CompilerInterface
 		$st = new Isolate($this->key);
 		$st->setCmd($this->executableFile);
 		$st->setMemoryLimit(524288);
-		$st->setMaxProcesses(5);
+		$st->setMaxProcesses(2);
 		$st->setMaxWallTime(17);
 		$st->setMaxExecutionTime(17);
 		$st->setErrToOut();
