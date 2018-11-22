@@ -51,7 +51,7 @@ class Php implements InterpreterInterface
 		file_put_contents("{$csd}/php/{$file}", $this->code);
 		
 		$st->setCmd("php -d 'opcache.enable=0' /home/u{$uid}/scripts/php/{$file}");
-		$st->setMemoryLimit(104857600);
+		$st->setMemoryLimit(262144);
 		$st->setMaxProcesses(5);
 		$st->setErrToOut();
 		$st->exec();
