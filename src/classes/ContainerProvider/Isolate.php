@@ -9,7 +9,7 @@ namespace ContainerProvider;
  * @package \ContainerProvider
  */
 
-require BASEPATH."/config/isolate.php";
+require_once BASEPATH."/config/isolate.php";
 
 defined("ISOLATE_BASE_DIR") or die("ISOLATE_BASE_DIR is not defined yet!\n");
 defined("ISOLATE_INSIDE_DOCKER") or define("ISOLATE_INSIDE_DOCKER", false);

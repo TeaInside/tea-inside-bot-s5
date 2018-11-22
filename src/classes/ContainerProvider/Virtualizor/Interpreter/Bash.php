@@ -5,13 +5,15 @@ namespace ContainerProvider\Virtualizor\Interpreter;
 use ContainerProvider\Isolate;
 use ContainerProvider\Contracts\InterpreterInterface;
 
+defined("BASH_BINARY") or die("BASH_BINARY is not defined yet!\n");
+
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
  * @license MIT
  * @package \ContainerProvider\Virtualizor\Interpreter
  * @version 5.0.1
  */
-class Php implements InterpreterInterface
+class Bash implements InterpreterInterface
 {
 	/**
 	 * @var string
@@ -41,22 +43,8 @@ class Php implements InterpreterInterface
 	public function run(): string
 	{
 		$st = new Isolate($this->key);
-
-		$uid = $st->getUid();
-		$csd = "{$st->getContainerSupportDir()}/home/u{$uid}/scripts";
-
-		$isDirCsd = is_dir($csd);
-		((!$isDirCsd) && file_exists($csd)) and shell_exec("rm -rf {$csd}");
-		$isDirCsd or mkdir($csd);
-
-		$isDirCsd = is_dir("{$csd}/php");
-		((!$isDirCsd) && file_exists("{$csd}/php")) and shell_exec("rm -rf {$csd}/php");
-		$isDirCsd or mkdir("{$csd}/php");
-
-		$file = substr(md5($this->code), 0, 5).".php";
-		file_put_contents("{$csd}/php/{$file}", $this->code);
-		
-		$st->setCmd(PHP_BINARY." -d 'opcache.enable=0' /home/u{$uid}/scripts/php/{$file}");
+		$code = escapeshellarg($this->code);
+		$st->setCmd(BASH_BINARY." -c {$code}");
 		$st->setMemoryLimit(524288);
 		$st->setMaxProcesses(3);
 		$st->setMaxWallTime(20);

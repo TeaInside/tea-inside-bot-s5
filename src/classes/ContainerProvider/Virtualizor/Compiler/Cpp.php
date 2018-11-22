@@ -5,7 +5,7 @@ namespace ContainerProvider\Virtualizor\Compiler;
 use ContainerProvider\Isolate;
 use ContainerProvider\Contracts\CompilerInterface;
 
-defined("GCC_BINARY") or die("GCC_BINARY is not defined yet!\n");
+defined("CPP_BINARY") or die("CPP_BINARY is not defined yet!\n");
 
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
@@ -13,7 +13,7 @@ defined("GCC_BINARY") or die("GCC_BINARY is not defined yet!\n");
  * @package \ContainerProvider\Virtualizor\Compiler
  * @version 5.0.1
  */
-class C implements CompilerInterface
+class Cpp implements CompilerInterface
 {
 	/**
 	 * @var string
@@ -61,24 +61,24 @@ class C implements CompilerInterface
 		((!$isDirCsd) && file_exists($csd)) and shell_exec("rm -rf {$csd}");
 		$isDirCsd or mkdir($csd);
 
-		$isDirCsd = is_dir("{$csd}/c");
-		((!$isDirCsd) && file_exists("{$csd}/c")) and shell_exec("rm -rf {$csd}/c");
-		$isDirCsd or mkdir("{$csd}/c");
+		$isDirCsd = is_dir("{$csd}/cpp");
+		((!$isDirCsd) && file_exists("{$csd}/cpp")) and shell_exec("rm -rf {$csd}/cpp");
+		$isDirCsd or mkdir("{$csd}/cpp");
 
-		$isDirCsd = is_dir("{$csd}/c/bin");
-		((!$isDirCsd) && file_exists("{$csd}/c/bin")) and shell_exec("rm -rf {$csd}/c/bin");
-		$isDirCsd or mkdir("{$csd}/c/bin");
+		$isDirCsd = is_dir("{$csd}/cpp/bin");
+		((!$isDirCsd) && file_exists("{$csd}/cpp/bin")) and shell_exec("rm -rf {$csd}/cpp/bin");
+		$isDirCsd or mkdir("{$csd}/cpp/bin");
 
 		$hash = substr(md5($this->code), 0, 5);
-		$file = "{$hash}.c";
-		file_put_contents("{$csd}/c/{$file}", $this->code);
+		$file = "{$hash}.cpp";
+		file_put_contents("{$csd}/cpp/{$file}", $this->code);
 
-		shell_exec("chmod 777 {$csd}/c {$csd}/c/bin");
+		shell_exec("chmod 777 {$csd}/cpp {$csd}/cpp/bin");
 
-		$this->executableFile = "/home/u{$uid}/scripts/c/bin/{$hash}";
-		file_exists("{$csd}/c/bin/{$hash}") and unlink("{$csd}/c/bin/{$hash}");
+		$this->executableFile = "/home/u{$uid}/scripts/cpp/bin/{$hash}";
+		file_exists("{$csd}/cpp/bin/{$hash}") and unlink("{$csd}/cpp/bin/{$hash}");
 
-		$st->setCmd(GCC_BINARY." -fno-stack-protector /home/u{$uid}/scripts/c/{$file} -o {$this->executableFile}");
+		$st->setCmd(CPP_BINARY." -fno-stack-protector /home/u{$uid}/scripts/cpp/{$file} -o {$this->executableFile}");
 		$st->setMemoryLimit(1048576);
 		$st->setMaxProcesses(10);
 		$st->setMaxWallTime(100);
@@ -89,7 +89,7 @@ class C implements CompilerInterface
 		
 		unset($st);		
 
-		return file_exists("{$csd}/c/bin/{$hash}");
+		return file_exists("{$csd}/cpp/bin/{$hash}");
 	}
 
 	/**
