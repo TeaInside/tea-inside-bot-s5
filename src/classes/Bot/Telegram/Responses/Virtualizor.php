@@ -54,6 +54,11 @@ class Virtualizor extends ResponseFoundation
 			if ($st === "") {
 				$st = "~";
 			}
+
+			if (strlen($st) >= 3000) {
+				shell_exec("kill -9 ".getmypid());
+			}
+			
 		} else {
 			$error = true;
 			$st = "<b>An error occured during compile time!</b>\n\n<pre>".htmlspecialchars(
