@@ -30,7 +30,9 @@ class Virtualizor extends ResponseFoundation
 	 */
 	public function bash(string $code): bool
 	{
-		$st = new Bash(substr($this->d["text"], 3), $this->d["user_id"]);
+		$code = str_replace(["\xc2\xab", "\xc2\xbb"], ["<<", ">>"], $code);
+
+		$st = new Bash($code, $this->d["user_id"]);
 		$st = $st->run();
 		if ($st === "") {
 			$st = "~";
@@ -53,6 +55,8 @@ class Virtualizor extends ResponseFoundation
 	 */
 	public function php(string $code): bool
 	{
+		$code = str_replace(["\xc2\xab", "\xc2\xbb"], ["<<", ">>"], $code);
+
 		$st = new Php($code, $this->d["user_id"]);
 		$st = $st->run();
 		if ($st === "") {
@@ -76,6 +80,8 @@ class Virtualizor extends ResponseFoundation
 	 */
 	public function python2(string $code): bool
 	{
+		$code = str_replace(["\xc2\xab", "\xc2\xbb"], ["<<", ">>"], $code);
+
 		$st = new Python($code, $this->d["user_id"]);
 		$st->setVersion("2");
 		$st = $st->run();
@@ -100,6 +106,8 @@ class Virtualizor extends ResponseFoundation
 	 */
 	public function python3(string $code): bool
 	{
+		$code = str_replace(["\xc2\xab", "\xc2\xbb"], ["<<", ">>"], $code);
+
 		$st = new Python($code, $this->d["user_id"]);
 		$st->setVersion("3");
 		$st = $st->run();
@@ -124,6 +132,8 @@ class Virtualizor extends ResponseFoundation
 	 */
 	public function c(string $code): bool
 	{
+		$code = str_replace(["\xc2\xab", "\xc2\xbb"], ["<<", ">>"], $code);
+
 		$error = false;
 
 		$st = new C($code, $this->d["user_id"]);
@@ -163,6 +173,8 @@ class Virtualizor extends ResponseFoundation
 	 */
 	public function cpp(string $code): bool
 	{
+		$code = str_replace(["\xc2\xab", "\xc2\xbb"], ["<<", ">>"], $code);
+
 		$error = false;
 
 		$st = new Cpp($code, $this->d["user_id"]);
