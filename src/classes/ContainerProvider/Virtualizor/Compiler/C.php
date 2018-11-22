@@ -76,7 +76,7 @@ class C implements CompilerInterface
 		$this->executableFile = "/home/u{$uid}/scripts/c/bin/{$hash}";
 		file_exists("{$csd}/c/bin/{$hash}") and unlink("{$csd}/c/bin/{$hash}");
 
-		$st->setCmd("gcc -fno-stack-protector /home/u{$uid}/scripts/c/{$file} -o {$this->executableFile}");
+		$st->setCmd("/usr/bin/x86_64-linux-gnu-gcc-6 -fno-stack-protector /home/u{$uid}/scripts/c/{$file} -o {$this->executableFile}");
 		$st->setMemoryLimit(1048576);
 		$st->setMaxProcesses(10);
 		$st->setMaxWallTime(100);
