@@ -111,8 +111,6 @@ class C implements CompilerInterface
 		$st->setMaxExecutionTime(17);
 		$st->setErrToOut();
 		$st->exec();
-
-		getStdoutSize
 		
 		return (string)$st->getStdout();
 	}
