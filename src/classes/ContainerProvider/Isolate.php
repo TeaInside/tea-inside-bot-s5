@@ -12,7 +12,7 @@ namespace ContainerProvider;
 require BASEPATH."/config/isolate.php";
 
 defined("ISOLATE_BASE_DIR") or die("ISOLATE_BASE_DIR is not defined yet!\n");
-defined("ISOLATE_INSIDE_DOCKER" or define("ISOLATE_INSIDE_DOCKER", false);
+defined("ISOLATE_INSIDE_DOCKER") or define("ISOLATE_INSIDE_DOCKER", false);
 
 is_dir(ISOLATE_BASE_DIR) or mkdir(ISOLATE_BASE_DIR);
 is_dir(ISOLATE_BASE_DIR."/info") or mkdir(ISOLATE_BASE_DIR."/info");
