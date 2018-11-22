@@ -1,7 +1,7 @@
 <?php
 
 if (!defined("_ICETEA_INIT")) {
-	var_dump(str_repeat("1000", 100));
+	
 	define("_ICETEA_INIT", 1);
 	
 	/**
