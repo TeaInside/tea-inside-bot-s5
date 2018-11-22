@@ -26,6 +26,7 @@ jobs:
 
       - run: cp -vf config/isolate.php.example config/isolate.php
       - run: cp -vf config/telegram/config.php.example config/telegram/config.php
+      - run: echo 'define("ISOLATE_INSIDE_DOCKER", true);' >> config/isolate.php
       - run: sudo apt install -y libcap-dev
       - run: sudo php .circleci/isolate-install.php
       - run: composer install -vvv --prefer-dist

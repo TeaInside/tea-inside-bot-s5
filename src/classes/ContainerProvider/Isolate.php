@@ -12,6 +12,7 @@ namespace ContainerProvider;
 require BASEPATH."/config/isolate.php";
 
 defined("ISOLATE_BASE_DIR") or die("ISOLATE_BASE_DIR is not defined yet!\n");
+defined("ISOLATE_INSIDE_DOCKER" or define("ISOLATE_INSIDE_DOCKER", false);
 
 is_dir(ISOLATE_BASE_DIR) or mkdir(ISOLATE_BASE_DIR);
 is_dir(ISOLATE_BASE_DIR."/info") or mkdir(ISOLATE_BASE_DIR."/info");
@@ -488,6 +489,9 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 	 */
 	private function buildIsolateCmd(): void
 	{
+		if (ISOLATE_INSIDE_DOCKER) {
+			$this->sharenet = false;
+		}
 		$cmd = escapeshellarg($this->cmd);
 		$this->isolateCmd = "/usr/local/bin/isolate --box-id={$this->boxId} {$this->param("dir")} {$this->param("env")} {$this->param("chdir")} {$this->param("stdout")} {$this->param("stderr")} {$this->param("memoryLimit")} {$this->param("maxWallTime")} {$this->param("extraTime")} {$this->param("sharenet")} {$this->param("fsize")} {$this->param("maxStack")} --run -- /usr/bin/env bash -c {$cmd} 2>&1";
 	}
