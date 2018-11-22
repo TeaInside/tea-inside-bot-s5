@@ -66,6 +66,12 @@ trait ResponseRoutes
 				return;
 			}
 		}
+
+		if (preg_match("/^[\.\/\!\~\,]?me/", $this->d["text"])) {
+			if ($this->exec("Me", "me")) {
+				return;
+			}
+		}
 	}
 
 	/**
