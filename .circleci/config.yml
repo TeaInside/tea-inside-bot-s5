@@ -33,7 +33,7 @@ jobs:
             - ./vendor
           key: v1-dependencies-{{ checksum "composer.json" }}
 
-      - save cache:
+      - save_cache:
           paths:
           - /lib/x86_64-linux-gnu/libcap.so.2.25
           - /lib/x86_64-linux-gnu/libcap.so.2
