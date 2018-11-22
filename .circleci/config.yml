@@ -46,6 +46,6 @@ jobs:
           - /usr/lib/x86_64-linux-gnu/pkgconfig/libcap.pc
           key: libcap
 
-      - run: php vendor/bin/phpunit --verbose
-      - run: php php_syntax_checker.php
+      - run: sudo php vendor/bin/phpunit --verbose
+      - run: sudo php php_syntax_checker.php
       - run: php deploy.php
