@@ -22,7 +22,7 @@ class Ping extends ResponseFoundation
 	public function pingHost(string $host): bool
 	{
 		$host = escapeshellarg($host);
-		$r = htmlspecialchars(shell_exec("ping -c 5 {$host} 2>&1"), ENT_QUOTES, "UTF-8");
+		$r = htmlspecialchars(shell_exec("nice -n30 ping -c 5 {$host} 2>&1"), ENT_QUOTES, "UTF-8");
 
 		Exe::sendMessage(
 			[
