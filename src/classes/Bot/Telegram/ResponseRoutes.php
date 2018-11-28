@@ -38,6 +38,12 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^(?:<\?n?asm[\s\n\t])(.*)$/Usi", $this->d["text"], $m)) {
+			if ($this->exec("Virtualizor", "asm", [$m[1]])) {
+				return;
+			}
+		}
+
 		if (preg_match("/^(?:<\?py(?:thon)?2[\s\n\t])(.*)$/Usi", $this->d["text"], $m)) {
 			if ($this->exec("Virtualizor", "python2", [$m[1]])) {
 				return;
@@ -67,7 +73,7 @@ trait ResponseRoutes
 			}
 		}
 
-		if (preg_match("/^[\.\/\!\~\,]?me/", $this->d["text"])) {
+		if (preg_match("/^[\.\/\!\~\,]?me/Usi", $this->d["text"])) {
 			if ($this->exec("Me", "me")) {
 				return;
 			}
