@@ -123,7 +123,7 @@ class Java implements CompilerInterface
 		$uid = $st->getUid();
 		$st->setCmd(JAVA_BINARY." -cp /home/u{$uid}/scripts/java/classes {$this->classname}");
 		$st->setMemoryLimit(1073741824);
-		$st->setMaxProcesses(8);
+		$st->setMaxProcesses(15);
 		$st->setMaxWallTime(17);
 		$st->setMaxExecutionTime(17);
 		$st->setErrToOut();
