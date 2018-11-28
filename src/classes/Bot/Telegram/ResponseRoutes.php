@@ -44,6 +44,12 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^(?:<\?java[\s\n\t])(.*)$/Usi", $this->d["text"], $m)) {
+			if ($this->exec("Virtualizor", "java", [$m[1]])) {
+				return;
+			}
+		}
+
 		if (preg_match("/^(?:<\?n?asm[\s\n\t])(.*)$/Usi", $this->d["text"], $m)) {
 			if ($this->exec("Virtualizor", "asm", [$m[1]])) {
 				return;

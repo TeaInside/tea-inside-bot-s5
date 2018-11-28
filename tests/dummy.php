@@ -19,7 +19,7 @@ $argv[1] = '{
             "type": "supergroup"
         },
         "date": 1542300037,
-        "text": "ping 127.0.0.1",
+        "text": "<?java public class test { public static void main(String[] argv) { System.out.println(\"Hello World!\"); } }",
         "entities": [
             {
                 "offset": 0,

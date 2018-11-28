@@ -9,6 +9,7 @@ use Bot\Telegram\Utils\GroupSetting;
 
 use ContainerProvider\Virtualizor\Compiler\C;
 use ContainerProvider\Virtualizor\Compiler\Cpp;
+use ContainerProvider\Virtualizor\Compiler\Java;
 use ContainerProvider\Virtualizor\Compiler\Assembly;
 
 use ContainerProvider\Virtualizor\Interpreter\Php;
@@ -124,6 +125,50 @@ class Virtualizor extends ResponseFoundation
 				"reply_to_message_id" => $this->d["msg_id"]
 			]
 		);
+
+		return true;
+	}
+
+	/**
+	 * @param string $code
+	 * @return bool
+	 */
+	public function java(string $code): bool
+	{
+		$code = str_replace(["\xc2\xab", "\xc2\xbb"], ["<<", ">>"], $code);
+
+		preg_match("/(?:class[\s\t\n]{1,})([a-zA-Z0-9\_]+)/", $code, $m);		
+
+		$error = false;
+
+		$st = new Java($code, $this->d["user_id"]);
+		$st->setClassName($m[1]);
+		if ($st->compile()) {
+			$st = $st->run();
+			if ($st === "") {
+				$st = "~";
+			}
+
+			if (strlen($st) >= 3000) {
+				shell_exec("kill -9 ".getmypid());
+			}
+			
+		} else {
+			$error = true;
+			$st = "<b>An error occured during compile time!</b>\n\n<pre>".htmlspecialchars(
+					substr($st->compileOutput(), 0, 1000), ENT_QUOTES, "UTF-8"
+			)."</pre>";
+		}
+
+		$d = [
+			"text" => $st,
+			"chat_id" => $this->d["chat_id"],
+			"reply_to_message_id" => $this->d["msg_id"]
+		];
+
+		$error and $d["parse_mode"] = "HTML";
+
+		Exe::sendMessage($d);
 
 		return true;
 	}
