@@ -3,6 +3,7 @@
 namespace Bot\Telegram;
 
 use Bot\Telegram\Logger\Text;
+use Bot\Telegram\Logger\Image;
 use Bot\Telegram\Contracts\LoggerInterface;
 use Bot\Telegram\Logger\Master\GroupMessage;
 use Bot\Telegram\Logger\Master\PrivateMessage;
@@ -51,7 +52,9 @@ final class Logger
 				case "text":
 					$st = new Text($this->d, $se);
 					break;
-				
+				case "photo":
+					$st = new Image($this->d, $se);
+					break;
 				default:
 					break;
 			}

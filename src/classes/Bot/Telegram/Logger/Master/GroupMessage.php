@@ -231,7 +231,7 @@ class GroupMessage implements MasterLoggerInterface
 	{
 		$exe = json_decode(Exe::getChatAdministrators(["chat_id" => $this->d["chat_id"]])["out"], true);
 
-		$query = "INSERT INTO `group_admin` (`group_id`, `user_id`, `can_change_info`, `can_delete_messages`, `can_invite_users`, `can_restrict_members`, `can_pin_messages`, `can_promote_members`, `created_at`) VALUES ";
+		$query = "INSERT INTO `group_admin` (`group_id`, `user_id`, `status`, `can_change_info`, `can_delete_messages`, `can_invite_users`, `can_restrict_members`, `can_pin_messages`, `can_promote_members`, `created_at`) VALUES ";
 		
 		$key = NULL;
 
@@ -242,10 +242,16 @@ class GroupMessage implements MasterLoggerInterface
 
 
 		foreach ($exe["result"] as $key => $v) {
-			$query .= "(:group_id, :user_id{$key}, :can_change_info{$key}, :can_delete_messages{$key}, :can_invite_users{$key}, :can_restrict_members{$key}, :can_pin_messages{$key}, :can_promote_members{$key}, :created_at),";
+
+			if ($v["status"] === "creator") {
+				$v["can_promote_members"] = $v["can_pin_messages"] = $v["can_restrict_members"] = $v["can_invite_users"] = $v["can_delete_messages"] = $v["can_change_info"] = 1;
+			}
+
+			$query .= "(:group_id, :user_id{$key}, :status{$key}, :can_change_info{$key}, :can_delete_messages{$key}, :can_invite_users{$key}, :can_restrict_members{$key}, :can_pin_messages{$key}, :can_promote_members{$key}, :created_at),";
 			$data = array_merge($data,
 				[
 					":user_id{$key}" => $v["user"]["id"],
+					":status{$key}" => $v["status"],
 					":can_change_info{$key}" => (int)$v["can_change_info"],
 					":can_delete_messages{$key}" => (int)$v["can_delete_messages"],
 					":can_invite_users{$key}" => (int)$v["can_invite_users"],
