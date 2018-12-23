@@ -237,7 +237,35 @@ class Kulgram extends ResponseFoundation
 	 */
 	private function stop(): bool
 	{
+		$hit = function (string $text): bool {
+			$o = Exe::sendMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"reply_to_message_id" => $this->d["msg_id"],
+					"text" => "<pre>".htmlspecialchars($text, ENT_QUOTES, "UTF-8")."</pre>",
+					"parse_mode" => "HTML"
+				]
+			);
+			return true;
+		};
 
+		if ($this->state["status"] === "running") {
+
+			return true;
+		} else {
+			if ($this->state["status"] === "off") {
+				return $hit(Lang::getInstance()->get("Kulgram", "stop.on.off"));
+			} else if ($this->state["status"] === "idle") {
+				return $hit(Lang::getInstance()->get("Kulgram", "init.on.idle"));
+			} else {
+				return $hit(Lang::bind(
+					Lang::getInstance()->get("Kulgram", "unknown_error"),
+					[
+						":fl" => (__FILE__.":".__LINE__)
+					]
+				));
+			}
+		}
 	}
 
 	/**
