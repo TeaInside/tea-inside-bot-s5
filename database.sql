@@ -11,10 +11,11 @@ CREATE TABLE `files` (
   `telegram_file_id` varchar(255) NOT NULL,
   `md5_sum` varchar(32) NOT NULL,
   `sha1_sum` varchar(40) NOT NULL,
-  `absolute_hash` varchar(73) NOT NULL,
+  `absolute_hash` varchar(74) NOT NULL,
   `hit_count` bigint(20) NOT NULL DEFAULT '0',
   `file_type` varchar(32) NOT NULL DEFAULT 'unknown',
-  `description` text CHARACTER SET utf8 NOT NULL,
+  `extension` varchar(32) DEFAULT NULL,
+  `description` text CHARACTER SET utf8,
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -71,6 +72,7 @@ CREATE TABLE `group_admin` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `group_id` bigint(20) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `status` enum('creator','administrator') NOT NULL DEFAULT 'administrator',
   `can_change_info` tinyint(1) NOT NULL,
   `can_delete_messages` tinyint(1) NOT NULL,
   `can_invite_users` tinyint(1) NOT NULL,
@@ -224,4 +226,4 @@ CREATE TABLE `user_warning` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2018-11-18 18:09:39
+-- 2018-12-23 06:51:48
