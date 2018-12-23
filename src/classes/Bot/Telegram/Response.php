@@ -73,9 +73,11 @@ final class Response
 	 */
 	public function run(): void
 	{
-		if ($this->d["event_type"] === "general_message") {
-			$this->generalMessageHandler();
-			return;
+		if (isset($this->d["event_type"])) {
+			if ($this->d["event_type"] === "general_message") {
+				$this->generalMessageHandler();
+				return;
+			}
 		}
 	}
 
