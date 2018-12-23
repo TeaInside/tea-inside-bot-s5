@@ -22,6 +22,21 @@ class Kulgram extends ResponseFoundation
 	protected $d;
 
 	/**
+	 * @var string
+	 */
+	private $stateDir;
+
+	/**
+	 * @var string
+	 */
+	private $stateFile;
+
+	/**
+	 * @var array
+	 */
+	private $state = [];
+
+	/**
 	 * @param \Bot\Telegram\Data $d
 	 *
 	 * Constructor.
@@ -29,7 +44,20 @@ class Kulgram extends ResponseFoundation
 	public function __construct(Data $d)
 	{
 		$this->d = $d;
+		$this->stateDir  = STORAGE_PATH."/kulgram/".str_replace("-", "_", $this->d["chat_id"]);
+		$this->stateFile = "{$this->stateDir}/mem.json";
 
+		is_dir($this->stateDir) or mkdir($this->stateDir);
+		is_dir("{$this->stateDir}/files") or mkdir("{$this->stateDir}/files");
+		is_dir("{$this->stateDir}/archives") or mkdir("{$this->stateDir}/archives");
+
+		if (!file_exists($this->stateFile)) {
+			$this->state = [
+				"status" => "off",
+				"auto_inc" => 0,
+				"sessions" => []
+			];
+		}
 	}
 
 	/**
@@ -38,13 +66,9 @@ class Kulgram extends ResponseFoundation
 	 */
 	public function run(string $rcmd): bool
 	{
-		var_dump($rcmd);
 		$opt = [];
-		$cmd = "";
-		if (preg_match("/^(?:[\s\n])(\S*)(?:[\s\n])/Usi", $rcmd, $m)) {
-			$cmd = $m[1];
-		}
-		$cmd = trim($cmd);
+		$cmd = explode(" ", trim($rcmd), 2);
+		$cmd = trim($cmd[0]);
 
 		if (preg_match_all("/(?:[\s\n]--)([a-z0-9]*)(?:[\s\n]+)(([\"\'](.*[^\\\\])[\"\'])|([a-z0-9\_\-]+)(?:[\s\n]|$))/Usi", $rcmd, $m)) {
 			foreach ($m[2] as $key => $v) {
@@ -64,11 +88,11 @@ class Kulgram extends ResponseFoundation
 			case "help":
 				return $this->intro();
 				break;
-			case "unknown":
-				return $this->unknown();
+			case "init":
+				return $this->init($opt);
 				break;
 			default:
-				$this->unknown();
+				$this->unknown($cmd);
 				break;
 		}
 	}
@@ -92,11 +116,34 @@ class Kulgram extends ResponseFoundation
 	}
 
 	/**
+	 * @param array &$opt
 	 * @return bool
 	 */
-	private function unknown(): bool
+	private function init(array &$opt): bool
 	{
-		$text = htmlspecialchars(Lang::getInstance()->get("Kulgram", "unknown"), ENT_QUOTES, "UTF-8");
+		if ($this->state["status"] === "off") {
+			
+
+			var_dump($opt);die;
+
+			return true;
+		}
+	}
+
+	/**
+	 * @param string $cmd
+	 * @return bool
+	 */
+	private function unknown(string $cmd): bool
+	{
+		$text = htmlspecialchars(
+			Lang::bind(
+				Lang::getInstance()->get("Kulgram", "unknown"),
+				[":cmd" => $cmd]
+			),
+			ENT_QUOTES,
+			"UTF-8"
+		);
 		Exe::sendMessage(
 			[
 				"chat_id" => $this->d["chat_id"],
@@ -105,16 +152,7 @@ class Kulgram extends ResponseFoundation
 				"reply_to_message_id" => $this->d["msg_id"]
 			]
 		);
-		unset($text);
-		return true;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function init(): bool
-	{
-
+		unset($text, $cmd);
 		return true;
 	}
 }

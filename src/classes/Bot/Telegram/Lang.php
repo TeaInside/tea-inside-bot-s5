@@ -47,8 +47,8 @@ final class Lang
 	{
 		$ins = self::getInstance();
 		return str_replace(
-			array_values($rd),
 			array_keys($rd),
+			array_values($rd),
 			str_replace(
 			[
 				"{user_id}",
