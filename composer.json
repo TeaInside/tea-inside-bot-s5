@@ -10,7 +10,9 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {},
+    "require": {
+        "mpdf/mpdf": "^7.1"
+    },
     "require-dev": {
         "phpunit/phpunit": "^7.4"
     },

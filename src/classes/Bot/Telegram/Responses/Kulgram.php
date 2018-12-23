@@ -4,6 +4,7 @@ namespace Bot\Telegram\Responses;
 
 use DB;
 use PDO;
+use Mpdf\Mpdf;
 use Bot\Telegram\Exe;
 use Bot\Telegram\Lang;
 use Bot\Telegram\Data;
@@ -254,24 +255,60 @@ class Kulgram extends ResponseFoundation
 		if ($this->state["status"] === "running") {
 			$pdo = DB::pdo();
 			$st = $pdo->prepare(
-				"SELECT
-				 `b`.`id`,`b`.`first_name`,`b`.`last_name`,`b`.`username`,
-				 `a`.`id`,`a`.`tmsg_id`,`a`.`reply_to_tmsg_id`,`a`.`msg_type`,
-				 `a`.`text`,`a`.`text_entities`,`is_edited_message`,`a`.`created_at`,
-				 `c`.`telegram_file_id`,`c`.`md5_sum`,`c`.`sha1_sum`,`c`.`file_type`,
-				 `c`.`extension`
-				FROM `group_messages` AS `a` 
-				INNER JOIN `users` AS `b` ON `b`.`id` = `a`.`user_id`
-				LEFT JOIN `files` AS `c` ON `a`.`file` = `c`.`id`
-				WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
+"SELECT
+ `b`.`id`,`b`.`first_name`,`b`.`last_name`,`b`.`username`,
+ `a`.`id`,`a`.`tmsg_id`,`a`.`reply_to_tmsg_id`,`a`.`msg_type`,
+ `a`.`text`,`a`.`text_entities`,`is_edited_message`,`a`.`created_at`,
+ `c`.`telegram_file_id`,`c`.`md5_sum`,`c`.`sha1_sum`,`c`.`file_type`,
+ `c`.`extension`
+FROM `group_messages` AS `a` 
+INNER JOIN `users` AS `b` ON `b`.`id` = `a`.`user_id`
+LEFT JOIN `files` AS `c` ON `a`.`file` = `c`.`id`
+WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
+			);
+			$st->execute(
+				[
+					":_start" => date("Y-m-d H:i:s", $this->state["session"]["started_at"]),
+					":_end" => date("Y-m-d H:i:s"),
+				]
 			);
 
+			while ($r = $st->fetch(PDO::FETCH_ASSOC)) {
+				$name = htmlspecialchars(
+					$r["first_name"].(isset($r["last_name"]) ? " ".$r["last_name"] : "").
+					(isset($r["username"]) ? " (@{$r["username"]})" : ""), ENT_QUOTES, "UTF-8"
+				);
+				$text = str_replace("\n", "<br>", htmlspecialchars($r["text"]));
+				if ($r["type"] == "photo") {
+					$mpdf->WriteHTML("<b>{$name}</b><br>{$text}<br>");
+					$mpdf->WriteHTML(
+						"<img src=\"data:image/jpg;base64,".base64_encode(
+							file_get_contents(
+								STORAGE_PATH."/files/telegram/{$r["absolute_hash"]}.jpg"
+							)
+						)."\">"
+					);
+					$mpdf->WriteHTML("<br><br>");
+				} elseif ($r["type"] === "text") {
+					$mpdf->WriteHTML("<b>{$name}</b><br>{$text}<br>");
+				}
+			}
+			ob_start();
+			$mpdf->Output();
+			$content = ob_get_clean();
+			file_put_contents(
+				"{$this->stateDir}/archives/{$this->state["auto_inc"]}.pdf",
+				$content
+			);
+			$this->state["status"] = "off";
+			unset($this->state["session"], $content, $, $mpdf);
+			$this->writeState();
 			return true;
 		} else {
 			if ($this->state["status"] === "off") {
 				return $hit(Lang::getInstance()->get("Kulgram", "stop.on.off"));
 			} else if ($this->state["status"] === "idle") {
-				return $hit(Lang::getInstance()->get("Kulgram", "init.on.idle"));
+				return $hit(Lang::getInstance()->get("Kulgram", "stop.on.idle"));
 			} else {
 				return $hit(Lang::bind(
 					Lang::getInstance()->get("Kulgram", "unknown_error"),
