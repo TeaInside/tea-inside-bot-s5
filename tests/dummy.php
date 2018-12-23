@@ -3,7 +3,7 @@
 $argv[1] = '{
     "update_id": 345133577,
     "message": {
-        "message_id": 123100,
+        "message_id": 123098,
         "from": {
             "id": 243692601,
             "is_bot": false,
@@ -18,38 +18,12 @@ $argv[1] = '{
             "username": "KodingTeh",
             "type": "supergroup"
         },
-        "date": 1545553753,
-        "reply_to_message": {
-            "message_id": 123098,
-            "from": {
-                "id": 243692601,
-                "is_bot": false,
-                "first_name": "Ammar",
-                "last_name": "Faizi",
-                "username": "ammarfaizi2",
-                "language_code": "en"
-            },
-            "chat": {
-                "id": -1001162202776,
-                "title": "Koding Teh",
-                "username": "KodingTeh",
-                "type": "supergroup"
-            },
-            "date": 1545553737,
-            "text": "/kulgram",
-            "entities": [
-                {
-                    "offset": 0,
-                    "length": 8,
-                    "type": "bot_command"
-                }
-            ]
-        },
-        "text": "/debug",
+        "date": 1545553737,
+        "text": "/kulgram",
         "entities": [
             {
                 "offset": 0,
-                "length": 6,
+                "length": 8,
                 "type": "bot_command"
             }
         ]

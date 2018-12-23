@@ -4,6 +4,7 @@ namespace Bot\Telegram\Responses;
 
 use Bot\Telegram\Exe;
 use Bot\Telegram\Lang;
+use Bot\Telegram\Data;
 use Bot\Telegram\ResponseFoundation;
 use Bot\Telegram\Utils\GroupSetting;
 
@@ -37,6 +38,7 @@ class Kulgram extends ResponseFoundation
 	 */
 	public function run(string $rcmd): bool
 	{
+		var_dump($rcmd);
 		$opt = [];
 		$cmd = "";
 		if (preg_match("/^(?:[\s\n])(\S*)(?:[\s\n])/Usi", $rcmd, $m)) {
