@@ -59,10 +59,12 @@ final class Logger
 					break;
 			}
 
-			$se = $this->invokeLogger($se);
-			$st->setMasterLogger($se);
-			$st = $this->invokeLogger($st);
-			unset($st, $se);
+			if (isset($se, $st)) {
+				$se = $this->invokeLogger($se);
+				$st->setMasterLogger($se);
+				$st = $this->invokeLogger($st);
+				unset($st, $se);
+			}
 		}
 	}
 

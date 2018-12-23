@@ -97,7 +97,8 @@ final class Data implements ArrayAccess, JsonSerializable
 			return;
 		} elseif (isset($this->in["message"]["photo"])) {
 			$this["msg_type"] = "photo";
-			$this["text"] = $this->in["message"]["caption"];
+			$this["text"] = isset($this->in["message"]["caption"]) ?
+				$this->in["message"]["caption"] : null;
 			$this["photo"] = $this->in["message"]["photo"];
 			$this["entities"] = isset($this->in["message"]["entities"]) ? 
 				$this->in["message"]["entities"] : NULL;

@@ -68,8 +68,7 @@ class Image implements ContentLoggerInterface
 	{
 
 		$photo = $this->d["photo"][count($this->d["photo"]) - 1];
-		
-
+		$r[0] = null;
 		$st = $this->pdo->prepare("SELECT `id` FROM `files` WHERE `telegram_file_id` = :telegram_file_id LIMIT 1;");
 		$st->execute([":telegram_file_id" => $photo["file_id"]]);
 		if ($r = $st->fetch(PDO::FETCH_NUM)) {
@@ -114,6 +113,7 @@ class Image implements ContentLoggerInterface
 					":created_at" => date("Y-m-d H:i:s")
 				]
 			);
+			$r[0] = $this->pdo->lastInsertId();
 			unset($bin, $ch, $o, $photo, $ext, $sha1, $md5);
 		}
 
@@ -131,7 +131,7 @@ class Image implements ContentLoggerInterface
 				":text_entities" => (isset($this->d["entities"]) ?
 					json_encode($this->d["entities"]) : NULL
 				),
-				":file" => NULL,
+				":file" => $r[0],
 				":is_edited_message" => 0,
 				":tmsg_datetime" => date("Y-m-d H:i:s", $this->d["date"]),
 				":created_at" => $this->m->now

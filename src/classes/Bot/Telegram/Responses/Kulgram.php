@@ -2,6 +2,8 @@
 
 namespace Bot\Telegram\Responses;
 
+use DB;
+use PDO;
 use Bot\Telegram\Exe;
 use Bot\Telegram\Lang;
 use Bot\Telegram\Data;
@@ -250,6 +252,19 @@ class Kulgram extends ResponseFoundation
 		};
 
 		if ($this->state["status"] === "running") {
+			$pdo = DB::pdo();
+			$st = $pdo->prepare(
+				"SELECT
+				 `b`.`id`,`b`.`first_name`,`b`.`last_name`,`b`.`username`,
+				 `a`.`id`,`a`.`tmsg_id`,`a`.`reply_to_tmsg_id`,`a`.`msg_type`,
+				 `a`.`text`,`a`.`text_entities`,`is_edited_message`,`a`.`created_at`,
+				 `c`.`telegram_file_id`,`c`.`md5_sum`,`c`.`sha1_sum`,`c`.`file_type`,
+				 `c`.`extension`
+				FROM `group_messages` AS `a` 
+				INNER JOIN `users` AS `b` ON `b`.`id` = `a`.`user_id`
+				LEFT JOIN `files` AS `c` ON `a`.`file` = `c`.`id`
+				WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
+			);
 
 			return true;
 		} else {
