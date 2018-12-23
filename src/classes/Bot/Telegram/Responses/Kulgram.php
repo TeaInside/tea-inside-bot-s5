@@ -102,6 +102,12 @@ class Kulgram extends ResponseFoundation
 			case "start":
 				return $this->start();
 				break;
+			case "cancel":
+				return $this->cancel();
+				break;
+			case "stop":
+				return $this->stop();
+				break;
 			default:
 				$this->unknown($cmd);
 				break;
@@ -124,6 +130,49 @@ class Kulgram extends ResponseFoundation
 		);
 		unset($text);
 		return true;
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function cancel(): bool
+	{
+		$hit = function (string $text): bool {
+			$o = Exe::sendMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"reply_to_message_id" => $this->d["msg_id"],
+					"text" => "<pre>".htmlspecialchars($text, ENT_QUOTES, "UTF-8")."</pre>",
+					"parse_mode" => "HTML"
+				]
+			);
+			return true;
+		};
+
+		if ($this->state["status"] === "idle") {
+
+			$this->state["status"] = "off";
+			$this->state["sessions"] = [];
+			$this->writeState();
+			
+			$hit(Lang::getInstance()->get("Kulgram", "cancel.ok"));
+			unset($hit);
+
+			return true;
+		} else {
+			if ($this->state["status"] === "off") {
+				return $hit(Lang::getInstance()->get("Kulgram", "cancel.on.off"));
+			} else if ($this->state["status"] === "running") {
+				return $hit(Lang::getInstance()->get("Kulgram", "cancel.on.running"));
+			} else {
+				return $hit(Lang::bind(
+					Lang::getInstance()->get("Kulgram", "unknown_error"),
+					[
+						":fl" => (__FILE__.":".__LINE__)
+					]
+				));
+			}
+		}
 	}
 
 	/**
@@ -181,6 +230,14 @@ class Kulgram extends ResponseFoundation
 				));
 			}
 		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function stop(): bool
+	{
+
 	}
 
 	/**
