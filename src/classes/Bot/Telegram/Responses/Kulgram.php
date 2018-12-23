@@ -57,6 +57,15 @@ class Kulgram extends ResponseFoundation
 				"auto_inc" => 0,
 				"sessions" => []
 			];
+		} else {
+			$this->state = json_decode(file_get_contents($this->stateFile), true);
+			if (!isset($this->state["status"], $this->state["auto_inc"], $this->state["sessions"])) {
+				$this->state = [
+					"status" => "off",
+					"auto_inc" => 0,
+					"sessions" => []
+				];
+			}
 		}
 	}
 
@@ -69,8 +78,7 @@ class Kulgram extends ResponseFoundation
 		$opt = [];
 		$cmd = explode(" ", trim($rcmd), 2);
 		$cmd = trim($cmd[0]);
-
-		if (preg_match_all("/(?:[\s\n]--)([a-z0-9]*)(?:[\s\n]+)(([\"\'](.*[^\\\\])[\"\'])|([a-z0-9\_\-]+)(?:[\s\n]|$))/Usi", $rcmd, $m)) {
+		if (preg_match_all("/\-{2}([^\\s\\n]+)(?:\\s+|\\n+|\=)((?:\\\"|\\')(.*[^\\\\])(?:\\\"|\\')|[^\\s\\n]+)(?:[\\s\\n]|$)/Usi", $rcmd, $m)) {
 			foreach ($m[2] as $key => $v) {
 				$c = strlen($v) - 1;
 				$v = (
@@ -121,13 +129,67 @@ class Kulgram extends ResponseFoundation
 	 */
 	private function init(array &$opt): bool
 	{
-		if ($this->state["status"] === "off") {
-			
 
-			var_dump($opt);die;
+		if ($this->state["status"] === "off") {
+			$hit = function (string $text): bool {
+				$o = Exe::sendMessage(
+					[
+						"chat_id" => $this->d["chat_id"],
+						"reply_to_message_id" => $this->d["msg_id"],
+						"text" => "<pre>".htmlspecialchars($text, ENT_QUOTES, "UTF-8")."</pre>",
+						"parse_mode" => "HTML"
+					]
+				);
+				return true;
+			};
+
+			if (count($opt) === 0) {
+				return $hit(Lang::getInstance()->get("Kulgram", "init.usage"));
+			}
+
+			if (!isset($opt["title"])) {
+				return $hit(Lang::getInstance()->get("Kulgram", "init.error_no_title"));
+			}
+
+			if (!isset($opt["author"])) {
+				return $hit(Lang::getInstance()->get("Kulgram", "init.error_no_author"));
+			}
+
+			$this->state["status"] = "idle";
+			$this->state["sessions"] = [
+				"title" => $opt["title"],
+				"auhtor" => $opt["author"],
+				"started_at" => time()
+			];
+			$this->writeState();
+
+			$hit(Lang::getInstance()->get("Kulgram", "init.ok"));
+			unset($hit);
+
+			$text = 
+				"<b>Kulgram {$this->state["auto_inc"]}</b>\n\n<b>Title : </b>".
+				htmlspecialchars($opt["title"]).
+				"\n<b>Author : </b>".
+				htmlspecialchars($opt["author"]).
+				"\n<b>Init Date : </b> ".date("c");
+			Exe::sendMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"text" => $text,
+					"parse_mode" => "HTML"
+				]
+			);
 
 			return true;
 		}
+	}
+
+	/**
+	 * @return void
+	 */
+	private function writeState(): void
+	{
+		file_put_contents($this->stateFile, json_encode($this->state, JSON_UNESCAPED_SLASHES));
 	}
 
 	/**

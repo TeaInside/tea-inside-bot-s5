@@ -19,7 +19,7 @@ $argv[1] = '{
             "type": "supergroup"
         },
         "date": 1545553737,
-        "text": "/kulgram init",
+        "text": "/kulgram init --author @ammarfaizi2 --title test",
         "entities": [
             {
                 "offset": 0,
