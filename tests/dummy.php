@@ -3,7 +3,7 @@
 $argv[1] = '{
     "update_id": 345133577,
     "message": {
-        "message_id": 123098,
+        "message_id": 123090,
         "from": {
             "id": 243692601,
             "is_bot": false,
@@ -19,7 +19,7 @@ $argv[1] = '{
             "type": "supergroup"
         },
         "date": 1545553737,
-        "text": "/kulgram",
+        "text": "/kulgram qweqwe",
         "entities": [
             {
                 "offset": 0,

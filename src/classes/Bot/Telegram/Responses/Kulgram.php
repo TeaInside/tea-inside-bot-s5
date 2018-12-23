@@ -42,8 +42,9 @@ class Kulgram extends ResponseFoundation
 		$opt = [];
 		$cmd = "";
 		if (preg_match("/^(?:[\s\n])(\S*)(?:[\s\n])/Usi", $rcmd, $m)) {
-			$cmd = trim($m[1]);
+			$cmd = $m[1];
 		}
+		$cmd = trim($cmd);
 
 		if (preg_match_all("/(?:[\s\n]--)([a-z0-9]*)(?:[\s\n]+)(([\"\'](.*[^\\\\])[\"\'])|([a-z0-9\_\-]+)(?:[\s\n]|$))/Usi", $rcmd, $m)) {
 			foreach ($m[2] as $key => $v) {
@@ -60,13 +61,52 @@ class Kulgram extends ResponseFoundation
 
 		switch ($cmd) {
 			case "":
-				$this->intro();
+			case "help":
+				return $this->intro();
 				break;
-			
+			case "unknown":
+				return $this->unknown();
+				break;
 			default:
 				$this->unknown();
 				break;
 		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function intro(): bool
+	{
+		$text = htmlspecialchars(Lang::getInstance()->get("Kulgram", "intro"), ENT_QUOTES, "UTF-8");
+		Exe::sendMessage(
+			[
+				"chat_id" => $this->d["chat_id"],
+				"text" => "<pre>{$text}</pre>",
+				"parse_mode" => "HTML",
+				"reply_to_message_id" => $this->d["msg_id"]
+			]
+		);
+		unset($text);
+		return true;
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function unknown(): bool
+	{
+		$text = htmlspecialchars(Lang::getInstance()->get("Kulgram", "unknown"), ENT_QUOTES, "UTF-8");
+		Exe::sendMessage(
+			[
+				"chat_id" => $this->d["chat_id"],
+				"text" => "<pre>{$text}</pre>",
+				"parse_mode" => "HTML",
+				"reply_to_message_id" => $this->d["msg_id"]
+			]
+		);
+		unset($text);
+		return true;
 	}
 
 	/**
