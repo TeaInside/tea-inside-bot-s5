@@ -40,16 +40,15 @@ final class Lang
 	/**
 	 * @throws \Exception\LangException
 	 * @param string $str
-	 * @param array  $r1
-	 * @param array  $r2
+	 * @param array  $rd
 	 * @return string
 	 */
-	public static function bind(string $str, $r1 = [], $r2 = []): string
+	public static function bind(string $str, $rd = []): string
 	{
 		$ins = self::getInstance();
 		return str_replace(
-			$r1,
-			$r2,
+			array_keys($rd),
+			array_values($rd),
 			str_replace(
 			[
 				"{user_id}",

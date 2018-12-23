@@ -33,6 +33,12 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^(?:[\.\/\!\~\,]kulgram)(.*)$/", $this->d["text"], $m)) {
+			if ($this->exec("Kulgram", "run", [$m[1]])) {
+				return;
+			}
+		}
+
 
 		/**
 		 * Virtualizor
