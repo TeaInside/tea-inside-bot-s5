@@ -28,6 +28,10 @@ class Kulgram
 		"cancel.on.off" => "An error occured: There is no session record to be cancelled.",
 		"stop.on.off" => "An error occured: There is no running session to be stopped.",
 		"stop.on.idle" => "An error occured: There is no running session to be stopped. You may cancel the idle session by using /kulgram cancel.",
+		"stop.p1" => "Executing data query...",
+		"stop.p2" => "Stopping system record...",
+		"stop.p3" => "Building PDF data...",
+		"stop.ok" => "OK",
 		"unknown_error" => "An error occured: Unknown error :fl"
 	];
 }

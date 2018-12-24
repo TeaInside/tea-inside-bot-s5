@@ -252,6 +252,15 @@ class Kulgram extends ResponseFoundation
 			return true;
 		};
 
+		Exe::sendMessage(
+			[
+				"chat_id" => $this->d["chat_id"],
+				"text" => htmlspecialchars(Lang::getInstance()->get("Kulgram", "stop.p1"), ENT_QUOTES, "UTF-8"),
+				"reply_to_message_id" => $this->d["msg_id"],
+				"parse_mode" => "HTML"
+			]
+		);
+
 		if ($this->state["status"] === "running") {
 			$pdo = DB::pdo();
 			$st = $pdo->prepare(
@@ -273,6 +282,15 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 				]
 			);
 
+			Exe::sendMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"text" => htmlspecialchars(Lang::getInstance()->get("Kulgram", "stop.p2"), ENT_QUOTES, "UTF-8"),
+					"reply_to_message_id" => $this->d["msg_id"],
+					"parse_mode" => "HTML"
+				]
+			);
+
 			is_dir(STORAGE_PATH."/tmp_dir") or mkdir(STORAGE_PATH."/tmp_dir");
 			if (!file_exists(STORAGE_PATH."/tmp_dir/.gitignore")) {
 				file_put_contents(STORAGE_PATH."/tmp_dir/.gitignore", "*");
@@ -282,6 +300,16 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 				[
 					"tempDir" => STORAGE_PATH."/tmp_dir",
 					"mode" => "utf-8"
+				]
+			);
+
+
+			Exe::sendMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"text" => htmlspecialchars(Lang::getInstance()->get("Kulgram", "stop.p3"), ENT_QUOTES, "UTF-8"),
+					"reply_to_message_id" => $this->d["msg_id"],
+					"parse_mode" => "HTML"
 				]
 			);
 
