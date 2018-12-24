@@ -62,7 +62,7 @@ class Kulgram extends ResponseFoundation
 			];
 		} else {
 			$this->state = json_decode(file_get_contents($this->stateFile), true);
-			if (!isset($this->state["status"], $this->state["auto_inc"], $this->state["session"])) {
+			if (!isset($this->state["status"], $this->state["auto_inc"])) {
 				$this->state = [
 					"status" => "off",
 					"auto_inc" => 0,
