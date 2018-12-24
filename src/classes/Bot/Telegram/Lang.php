@@ -43,7 +43,7 @@ final class Lang
 	 * @param array  $rd
 	 * @return string
 	 */
-	public static function bind(string $str, $rd = []): string
+	public static function bind(string $str, array $rd = []): string
 	{
 		$ins = self::getInstance();
 		return str_replace(

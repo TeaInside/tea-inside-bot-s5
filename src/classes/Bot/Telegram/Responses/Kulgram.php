@@ -58,15 +58,15 @@ class Kulgram extends ResponseFoundation
 			$this->state = [
 				"status" => "off",
 				"auto_inc" => 0,
-				"sessions" => []
+				"session" => []
 			];
 		} else {
 			$this->state = json_decode(file_get_contents($this->stateFile), true);
-			if (!isset($this->state["status"], $this->state["auto_inc"], $this->state["sessions"])) {
+			if (!isset($this->state["status"], $this->state["auto_inc"], $this->state["session"])) {
 				$this->state = [
 					"status" => "off",
 					"auto_inc" => 0,
-					"sessions" => []
+					"session" => []
 				];
 			}
 		}
@@ -155,7 +155,7 @@ class Kulgram extends ResponseFoundation
 		if ($this->state["status"] === "idle") {
 
 			$this->state["status"] = "off";
-			$this->state["sessions"] = [];
+			$this->state["session"] = [];
 			$this->writeState();
 			
 			$hit(Lang::getInstance()->get("Kulgram", "cancel.ok"));
@@ -198,14 +198,14 @@ class Kulgram extends ResponseFoundation
 		if ($this->state["status"] === "idle") {
 
 			$this->state["status"] = "running";
-			$this->state["sessions"]["started_at"] = time();
+			$this->state["session"]["started_at"] = time();
 			$this->writeState();
 
 			$text = 
 				"<b>Kulgram {$this->state["auto_inc"]}</b>\n\n<b>Title : </b>".
-				htmlspecialchars($this->state["sessions"]["title"]).
+				htmlspecialchars($this->state["session"]["title"]).
 				"\n<b>Author : </b>".
-				htmlspecialchars($this->state["sessions"]["author"]).
+				htmlspecialchars($this->state["session"]["author"]).
 				"\n<b>Init Date : </b> ".date("c");
 			Exe::sendMessage(
 				[
@@ -349,11 +349,11 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 				[
 					"chat_id" => $this->d["chat_id"],
 					"text" => htmlspecialchars(Lang::bind(
-						Lang::getInstance()->get("Kulgram", "stop.ok"), ENT_QUOTES, "UTF-8",
+						Lang::getInstance()->get("Kulgram", "stop.ok"),
 						[
 							":pdf_link" => "https://teainside-bot-s5-2.teainside.org/kulgram/{$groupIdd}/archives/{$num}.pdf"
 						]
-					)),
+					), ENT_QUOTES, "UTF-8"),
 					"reply_to_message_id" => $this->d["msg_id"],
 					"parse_mode" => "HTML"
 				]
@@ -408,9 +408,9 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 			}
 
 			$this->state["status"] = "idle";
-			$this->state["sessions"] = [
+			$this->state["session"] = [
 				"title" => $opt["title"],
-				"auhtor" => $opt["author"],
+				"author" => $opt["author"],
 				"initialized_at" => time(),
 				"started_at" => null
 			];
