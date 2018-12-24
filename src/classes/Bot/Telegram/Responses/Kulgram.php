@@ -319,10 +319,6 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 				)."</h1><br>"
 			);
 
-			var_dump("<h1>".htmlspecialchars(
-					"{$this->state["session"]["title"]} by {$this->state["session"]["author"]}"
-				)."</h1><br>");
-
 			while ($r = $st->fetch(PDO::FETCH_ASSOC)) {
 				$name = htmlspecialchars(
 					$r["first_name"].(isset($r["last_name"]) ? " ".$r["last_name"] : "").
@@ -350,14 +346,12 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 				"{$this->stateDir}/archives/{$this->state["auto_inc"]}.pdf",
 				$content
 			);
-			var_dump($this->state);
 			$groupIdd = str_replace("-", "_", $this->d["chat_id"]);
 			$num = $this->state["auto_inc"]++;
 			$this->state["status"] = "off";
 			$this->state["session"] = [];
 			unset($content, $mpdf);
 			$this->writeState();
-			var_dump($this->state);
 			Exe::sendMessage(
 				[
 					"chat_id" => $this->d["chat_id"],
