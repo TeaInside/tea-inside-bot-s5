@@ -273,6 +273,18 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 				]
 			);
 
+			is_dir(STORAGE_PATH."/tmp_dir") or mkdir(STORAGE_PATH."/tmp_dir");
+			if (!file_exists(STORAGE_PATH."/tmp_dir/.gitignore")) {
+				file_put_contents(STORAGE_PATH."/tmp_dir/.gitignore", "*");
+			}
+
+			$mpdf = new Mpdf(
+				[
+					"tempDir" => STORAGE_PATH."/tmp_dir",
+					"mode" => "utf-8"
+				]
+			);
+
 			while ($r = $st->fetch(PDO::FETCH_ASSOC)) {
 				$name = htmlspecialchars(
 					$r["first_name"].(isset($r["last_name"]) ? " ".$r["last_name"] : "").
