@@ -269,7 +269,7 @@ class Kulgram extends ResponseFoundation
  `a`.`id`,`a`.`tmsg_id`,`a`.`reply_to_tmsg_id`,`a`.`msg_type`,
  `a`.`text`,`a`.`text_entities`,`is_edited_message`,`a`.`created_at`,
  `c`.`telegram_file_id`,`c`.`md5_sum`,`c`.`sha1_sum`,`c`.`file_type`,
- `c`.`extension`
+ `c`.`extension`,`c`.`absolute_hash`
 FROM `group_messages` AS `a` 
 INNER JOIN `users` AS `b` ON `b`.`id` = `a`.`user_id`
 LEFT JOIN `files` AS `c` ON `a`.`file` = `c`.`id`
