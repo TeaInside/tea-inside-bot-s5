@@ -350,7 +350,8 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 			$groupIdd = str_replace("-", "_", $this->d["chat_id"]);
 			$num = $this->state["auto_inc"]++;
 			$this->state["status"] = "off";
-			unset($this->state["session"], $content, $mpdf);
+			$this->state["session"] = [];
+			unset($content, $mpdf);
 			$this->writeState();
 			var_dump($this->state);
 			Exe::sendMessage(
