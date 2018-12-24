@@ -344,13 +344,15 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 			$content = ob_get_clean();
 			file_put_contents(
 				"{$this->stateDir}/archives/{$this->state["auto_inc"]}.pdf",
-				$contentz
+				$content
 			);
+			var_dump($this->state);
 			$groupIdd = str_replace("-", "_", $this->d["chat_id"]);
 			$num = $this->state["auto_inc"]++;
 			$this->state["status"] = "off";
 			unset($this->state["session"], $content, $mpdf);
 			$this->writeState();
+			var_dump($this->state);
 			Exe::sendMessage(
 				[
 					"chat_id" => $this->d["chat_id"],
