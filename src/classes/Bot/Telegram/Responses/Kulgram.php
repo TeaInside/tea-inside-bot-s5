@@ -266,7 +266,7 @@ class Kulgram extends ResponseFoundation
 			$pdo = DB::pdo();
 			$st = $pdo->prepare(
 "SELECT
- `b`.`id`,`b`.`first_name`,`b`.`last_name`,`b`.`username`,
+ `b`.`id` AS `user_id`,`b`.`first_name`,`b`.`last_name`,`b`.`username`,
  `a`.`id`,`a`.`tmsg_id`,`a`.`reply_to_tmsg_id`,`a`.`msg_type`,
  `a`.`text`,`a`.`text_entities`,`is_edited_message`,`a`.`created_at`,
  `c`.`telegram_file_id`,`c`.`md5_sum`,`c`.`sha1_sum`,`c`.`file_type`,
@@ -314,13 +314,33 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 				]
 			);
 
+			$handle = fopen("{$this->stateDir}/archives/{$this->state["auto_inc"]}.json", "w");
+			flock($handle, LOCK_EX);
+
 			$mpdf->WriteHTML(
 				"<h1>".htmlspecialchars(
 					"{$this->state["session"]["title"]} by {$this->state["session"]["author"]}"
 				)."</h1><br>"
 			);
-
+			fwrite($handle, 
+				"{\"group_id\":".json_encode($this->d["chat_id"], 64).
+				",\"created_at\":".((int)$this->state["session"]["started_at"]).
+				",\"author\":".json_encode($this->state["session"]["author"], 64).
+				",\"title\":".json_encode($this->state["session"]["title"], 64).",\"data\":["
+			);
 			while ($r = $st->fetch(PDO::FETCH_ASSOC)) {
+				
+				$fd = [
+					"date" => $r["created_at"],
+					"user_id" => $r["user_id"],
+					"msg_type" => $r["msg_type"],
+					"first_name" => $r["first_name"],
+					"last_name" => $r["last_name"],
+					"username" => $r["username"],
+					"text" => $r["text"],
+					"files" => []
+				];
+
 				$name = htmlspecialchars(
 					$r["first_name"].(isset($r["last_name"]) ? " ".$r["last_name"] : "").
 					(isset($r["username"]) ? " (@{$r["username"]})" : ""), ENT_QUOTES, "UTF-8"
@@ -329,17 +349,32 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 				if ($r["msg_type"] == "photo") {
 					$mpdf->WriteHTML("<b>{$name}</b><br>{$text}<br>");
 					$mpdf->WriteHTML(
-						"<img src=\"data:image/jpg;base64,".base64_encode(
-							file_get_contents(
-								STORAGE_PATH."/files/telegram/{$r["absolute_hash"]}.jpg"
+						"<img src=\"data:image/jpg;base64,".(
+							$b64 = base64_encode(
+								file_get_contents(
+									STORAGE_PATH."/files/telegram/{$r["absolute_hash"]}.{$r["extension"]}"
+								)
 							)
 						)."\">"
 					);
 					$mpdf->WriteHTML("<br><br>");
+
+					$fd["files"][] = [
+						"md5" => $r["md5_sum"],
+						"sha1" => $r["sha1_sum"],
+						"ext" => $r["extension"],
+						"data" => $b64
+					];
+
 				} elseif ($r["msg_type"] === "text") {
 					$mpdf->WriteHTML("<b>{$name}</b><br>{$text}<br>");
 				}
+
+
+				fwrite($handle, json_encode($fd, 64));
 			}
+			fwrite($handle, "]}");
+			fclose($handle);
 			ob_start();
 			$mpdf->Output();
 			$content = ob_get_clean();
