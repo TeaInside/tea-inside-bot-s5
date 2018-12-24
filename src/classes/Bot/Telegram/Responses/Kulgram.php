@@ -79,6 +79,7 @@ class Kulgram extends ResponseFoundation
 	public function run(string $rcmd): bool
 	{
 		$opt = [];
+		$rcmd = str_replace("\xe2\x80\x94", "--", $rcmd);
 		$cmd = explode(" ", trim($rcmd), 2);
 		$cmd = trim($cmd[0]);
 		if (preg_match_all("/\-{2}([^\\s\\n]+)(?:\\s+|\\n+|\=)((?:\\\"|\\')(.*[^\\\\])(?:\\\"|\\')|[^\\s\\n]+)(?:[\\s\\n]|$)/Usi", $rcmd, $m)) {
