@@ -315,10 +315,10 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 
 			$mpdf->WriteHTML(
 				"<h1>".htmlspecialchars(
-					$this->info["session"]["title"]." by ".$this->info["session"]["author"]
+					"{$this->state["session"]["title"]} by {$this->state["session"]["author"]}"
 				)."</h1><br>"
 			);
-			
+
 			while ($r = $st->fetch(PDO::FETCH_ASSOC)) {
 				$name = htmlspecialchars(
 					$r["first_name"].(isset($r["last_name"]) ? " ".$r["last_name"] : "").
@@ -344,7 +344,7 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 			$content = ob_get_clean();
 			file_put_contents(
 				"{$this->stateDir}/archives/{$this->state["auto_inc"]}.pdf",
-				$content
+				$contentz
 			);
 			$groupIdd = str_replace("-", "_", $this->d["chat_id"]);
 			$num = $this->state["auto_inc"]++;
