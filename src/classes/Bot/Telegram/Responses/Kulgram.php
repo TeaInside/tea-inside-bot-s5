@@ -394,7 +394,8 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 					"text" => htmlspecialchars(Lang::bind(
 						Lang::getInstance()->get("Kulgram", "stop.ok"),
 						[
-							":pdf_link" => "https://teainside-bot-s5-2.teainside.org/kulgram/{$groupIdd}/archives/{$num}.pdf"
+							":pdf_link" => PUBLIC_URL."/kulgram/{$groupIdd}/archives/{$num}.pdf",
+							":json_link" => PUBLIC_URL."/kulgram/{$groupIdd}/archives/{$num}.json"
 						]
 					), ENT_QUOTES, "UTF-8"),
 					"reply_to_message_id" => $this->d["msg_id"],

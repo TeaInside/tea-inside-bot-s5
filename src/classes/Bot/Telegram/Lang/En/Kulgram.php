@@ -31,7 +31,7 @@ class Kulgram
 		"stop.p1" => "Executing data query...",
 		"stop.p2" => "Stopping system record...",
 		"stop.p3" => "Building PDF data...",
-		"stop.ok" => "Kulgram session record has been stopped!\n\n:pdf_link",
+		"stop.ok" => "Kulgram session record has been stopped!\n\n:pdf_link\n\n:json_link",
 		"unknown_error" => "An error occured: Unknown error :fl"
 	];
 }
