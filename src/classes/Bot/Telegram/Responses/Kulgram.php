@@ -340,14 +340,20 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 				"{$this->stateDir}/archives/{$this->state["auto_inc"]}.pdf",
 				$content
 			);
-			$this->state["auto_inc"]++;
+			$groupIdd = str_replace("-", "_", $this->d["chat_id"]);
+			$num = $this->state["auto_inc"]++;
 			$this->state["status"] = "off";
 			unset($this->state["session"], $content, $mpdf);
 			$this->writeState();
 			Exe::sendMessage(
 				[
 					"chat_id" => $this->d["chat_id"],
-					"text" => htmlspecialchars(Lang::getInstance()->get("Kulgram", "stop.ok"), ENT_QUOTES, "UTF-8"),
+					"text" => htmlspecialchars(Lang::bind(
+						Lang::getInstance()->get("Kulgram", "stop.ok"), ENT_QUOTES, "UTF-8",
+						[
+							":pdf_link" => "https://teainside-bot-s5-2.teainside.org/kulgram/{$groupIdd}/archives/{$num}.pdf"
+						]
+					)),
 					"reply_to_message_id" => $this->d["msg_id"],
 					"parse_mode" => "HTML"
 				]
