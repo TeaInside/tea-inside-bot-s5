@@ -36,6 +36,10 @@ final class Logger
 	 */
 	public function run(): void
 	{
+		if (!isset($this->d["event_type"])) {
+			return;
+		}
+
 		if ($this->d["event_type"] === "general_message") {
 			
 			switch ($this->d["chat_type"]) {

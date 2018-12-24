@@ -26,6 +26,8 @@ class Kulgram
 		"cancel.ok" => "The kulgram session has been cancelled!",
 		"cancel.on.running" => "An error occured: The kulgram session cannot be cancelled because it is being ran, you can stop the session instead.",
 		"cancel.on.off" => "An error occured: There is no session record to be cancelled.",
+		"stop.on.off" => "An error occured: There is no running session to be stopped.",
+		"stop.on.idle" => "An error occured: There is no running session to be stopped. You may cancel the idle session by using /kulgram cancel.",
 		"unknown_error" => "An error occured: Unknown error :fl"
 	];
 }

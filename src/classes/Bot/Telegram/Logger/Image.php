@@ -116,7 +116,7 @@ class Image implements ContentLoggerInterface
 			$r[0] = $this->pdo->lastInsertId();
 			unset($bin, $ch, $o, $photo, $ext, $sha1, $md5);
 		}
-		var_dump($r[0]);
+
 		$this->pdo->prepare(
 			"INSERT INTO `group_messages` (`group_id`, `user_id`, `tmsg_id`, `reply_to_tmsg_id`, `msg_type`, `text`, `text_entities`, `file`, `is_edited_message`, `tmsg_datetime`, `created_at`) VALUES (:group_id, :user_id, :tmsg_id, :reply_to_tmsg_id, :msg_type, :_text, :text_entities, :file, :is_edited_message, :tmsg_datetime, :created_at);"
 		)->execute(

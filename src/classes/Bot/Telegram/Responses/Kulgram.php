@@ -301,8 +301,16 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 				$content
 			);
 			$this->state["status"] = "off";
-			unset($this->state["session"], $content, $, $mpdf);
+			unset($this->state["session"], $content, $mpdf);
 			$this->writeState();
+			Exe::sendMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"text" => htmlspecialchars(Lang::getInstance()->get("Kulgram", "stop.ok"), ENT_QUOTES, "UTF-8"),
+					"reply_to_message_id" => $this->d["msg_id"],
+					"parse_mode" => "HTML"
+				]
+			);
 			return true;
 		} else {
 			if ($this->state["status"] === "off") {
