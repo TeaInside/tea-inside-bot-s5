@@ -319,7 +319,7 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 					(isset($r["username"]) ? " (@{$r["username"]})" : ""), ENT_QUOTES, "UTF-8"
 				);
 				$text = str_replace("\n", "<br>", htmlspecialchars($r["text"]));
-				if ($r["type"] == "photo") {
+				if ($r["msg_type"] == "photo") {
 					$mpdf->WriteHTML("<b>{$name}</b><br>{$text}<br>");
 					$mpdf->WriteHTML(
 						"<img src=\"data:image/jpg;base64,".base64_encode(
@@ -329,7 +329,7 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 						)."\">"
 					);
 					$mpdf->WriteHTML("<br><br>");
-				} elseif ($r["type"] === "text") {
+				} elseif ($r["msg_type"] === "text") {
 					$mpdf->WriteHTML("<b>{$name}</b><br>{$text}<br>");
 				}
 			}
@@ -340,6 +340,7 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 				"{$this->stateDir}/archives/{$this->state["auto_inc"]}.pdf",
 				$content
 			);
+			$this->state["auto_inc"]++;
 			$this->state["status"] = "off";
 			unset($this->state["session"], $content, $mpdf);
 			$this->writeState();
