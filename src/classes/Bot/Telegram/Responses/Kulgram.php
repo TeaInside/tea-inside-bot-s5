@@ -261,8 +261,15 @@ class Kulgram extends ResponseFoundation
 				"parse_mode" => "HTML"
 			]
 		);
-
 		if ($this->state["status"] === "running") {
+
+			$this->fp = fopen("/tmp/__telegram_lock_".str_replace("-", "_", $this->d["chat_id"]).".lock", "w");
+			if (is_resource($this->fp)) {
+				while ((!flock($this->fp, LOCK_EX | LOCK_NB, $eWouldBlock)) || $eWouldBlock) {
+					usleep(100000);
+				}
+			}
+
 			$pdo = DB::pdo();
 			$st = $pdo->prepare(
 "SELECT
@@ -402,6 +409,8 @@ WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
 					"parse_mode" => "HTML"
 				]
 			);
+			fclose($this->fp);
+			$this->fp = null;
 			return true;
 		} else {
 			if ($this->state["status"] === "off") {
