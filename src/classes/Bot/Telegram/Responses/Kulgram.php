@@ -281,12 +281,14 @@ class Kulgram extends ResponseFoundation
 FROM `group_messages` AS `a` 
 INNER JOIN `users` AS `b` ON `b`.`id` = `a`.`user_id`
 LEFT JOIN `files` AS `c` ON `a`.`file` = `c`.`id`
-WHERE `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end;"
+WHERE `a`.`group_id` = :group_id AND `a`.`created_at` >= :_start AND `a`.`created_at` <= :_end
+ORDER BY `a`.`tmsg_id` ASC;"
 			);
 			$st->execute(
 				[
 					":_start" => date("Y-m-d H:i:s", $this->state["session"]["started_at"]),
 					":_end" => date("Y-m-d H:i:s"),
+					":group_id" => $this->d["group_id"]
 				]
 			);
 
