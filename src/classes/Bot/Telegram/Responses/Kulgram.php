@@ -113,7 +113,7 @@ class Kulgram extends ResponseFoundation
 				return $this->stop();
 				break;
 			default:
-				$this->unknown($cmd);
+				return $this->unknown($cmd);
 				break;
 		}
 	}

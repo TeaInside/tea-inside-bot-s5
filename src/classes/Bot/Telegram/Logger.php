@@ -22,6 +22,11 @@ final class Logger
 	private $d;
 
 	/**
+	 * @var resources
+	 */
+	private $fp;
+
+	/**
 	 * @param string $json
 	 *
 	 * Constructor.
@@ -29,6 +34,25 @@ final class Logger
 	public function __construct(string $json)
 	{
 		$this->d = new Data($json);
+
+		if (isset($this->d["chat_id"])) {
+			$this->fp = fopen("/tmp/__telegram_lock_".str_replace("-", "_", $this->d["chat_id"]).".lock", "w");
+			if (is_resource($this->fp)) {
+				while ((!flock($this->fp, LOCK_EX | LOCK_NB, $eWouldBlock)) || $eWouldBlock) {
+					usleep(80000);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Destructor.
+	 */
+	public function __destruct()
+	{
+		if (is_resource($this->fp)) {
+			fclose($this->fp);
+		}
 	}
 
 	/**
