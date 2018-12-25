@@ -288,7 +288,7 @@ ORDER BY `a`.`tmsg_id` ASC;"
 				[
 					":_start" => date("Y-m-d H:i:s", $this->state["session"]["started_at"]),
 					":_end" => date("Y-m-d H:i:s"),
-					":group_id" => $this->d["group_id"]
+					":group_id" => $this->d["chat_id"]
 				]
 			);
 
