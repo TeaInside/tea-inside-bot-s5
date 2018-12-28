@@ -39,13 +39,13 @@ trait ResponseRoutes
 			}
 		}
 
-		if (preg_match("/^(\!|\/|\~|\.)?t(l|r)($|[\s\n])/Usi", $d["text"])) {
+		if (preg_match("/^(\!|\/|\~|\.)?t(l|r)($|[\s\n])/Usi", $this->d["text"])) {
 			if ($this->exec("Translate", "googleTranslate")) {
 				return;
 			}
 		}
 
-		if (preg_match("/^(\!|\/|\~|\.)?(tlr|trl)($|[\s\n])/Usi", $d["text"])) {
+		if (preg_match("/^(\!|\/|\~|\.)?(tlr|trl)($|[\s\n])/Usi", $this->d["text"])) {
 			if ($this->exec("Translate", "googleTranslatetoRepliedMessage")) {
 				return;
 			}
