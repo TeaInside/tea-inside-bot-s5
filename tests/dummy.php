@@ -19,7 +19,7 @@ $argv[1] = '{
             "type": "supergroup"
         },
         "date": 1545553737,
-        "text": "/kulgram start",
+        "text": "/tr en id hello world",
         "entities": [
             {
                 "offset": 0,
