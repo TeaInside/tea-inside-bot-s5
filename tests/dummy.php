@@ -19,7 +19,7 @@ $argv[1] = '{
             "type": "supergroup"
         },
         "date": 1545553737,
-        "text": "/tr",
+        "text": "<?c\n#include <stdio.h>\nint main(){printf(\"test\");}",
         "entities": [
             {
                 "offset": 0,
