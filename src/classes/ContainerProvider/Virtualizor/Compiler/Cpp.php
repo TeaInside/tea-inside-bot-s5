@@ -81,7 +81,7 @@ class Cpp implements CompilerInterface
 
 		$st->setCmd(CPP_BINARY." -fno-stack-protector /home/u{$uid}/scripts/cpp/{$file} -o {$this->executableFile}");
 		$st->setMemoryLimit(1048576);
-		$st->setMaxProcesses(10);
+		$st->setMaxProcesses(5);
 		$st->setMaxWallTime(100);
 		$st->setMaxExecutionTime(100);
 		$st->setErrToOut();
@@ -115,7 +115,7 @@ class Cpp implements CompilerInterface
 		$st = new Isolate($this->key);
 		$st->setCmd($this->executableFile);
 		$st->setMemoryLimit(524288);
-		$st->setMaxProcesses(5);
+		$st->setMaxProcesses(3);
 		$st->setMaxWallTime(17);
 		$st->setMaxExecutionTime(17);
 		$st->setErrToOut();
