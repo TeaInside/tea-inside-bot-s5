@@ -23,7 +23,7 @@ final class DB
 	private function __construct()
 	{
 		$this->pdo = new PDO(
-			"mysql:host=".DB_HOST.";port=".DB_PORT.";dbname=".DB_NAME,
+			"mysql:host=".DB_HOST.";port=".DB_PORT.";dbname=".DB_NAME.";charset=utf8mb4",
 			DB_USER,
 			DB_PASS,
 			[
