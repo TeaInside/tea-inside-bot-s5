@@ -55,7 +55,8 @@ class Cpp implements CompilerInterface
 		$st = new Isolate($this->key);
 
 		$uid = $st->getUid();
-		$csd = "{$st->getContainerSupportDir()}/home/u{$uid}/scripts";
+		$spt = $st->getContainerSupportDir();
+		$csd = "{$spt}/home/u{$uid}/scripts";
 		
 		$isDirCsd = is_dir($csd);
 		((!$isDirCsd) && file_exists($csd)) and shell_exec("rm -rf {$csd}");
@@ -88,7 +89,7 @@ class Cpp implements CompilerInterface
 		// $this->compileOutput = (string)$st->getStdout();
 
 		$this->compileOutput = shell_exec(
-			$cmd = CPP_BINARY." -fno-stack-protector {$csd}/cpp/{$file} -o {$csd}{$this->executableFile} 2>&1"
+			$cmd = CPP_BINARY." -fno-stack-protector {$csd}/cpp/{$file} -o {$spt}{$this->executableFile} 2>&1"
 		);
 
 		var_dump($cmd);
