@@ -79,20 +79,20 @@ class C implements CompilerInterface
 		$this->executableFile = "/home/u{$uid}/scripts/c/bin/{$hash}";
 		file_exists("{$csd}/c/bin/{$hash}") and unlink("{$csd}/c/bin/{$hash}");
 
-		// $st->setCmd(GCC_BINARY." -fno-stack-protector /home/u{$uid}/scripts/c/{$file} -o {$this->executableFile}");
-		// $st->setMemoryLimit(1048576);
-		// $st->setMaxProcesses(10);
-		// $st->setMaxWallTime(100);
-		// $st->setMaxExecutionTime(100);
-		// $st->setErrToOut();
-		// $st->exec();
-		// $this->compileOutput = (string)$st->getStdout();
+		$st->setCmd(GCC_BINARY." -fno-stack-protector /home/u{$uid}/scripts/c/{$file} -o {$this->executableFile}");
+		$st->setMemoryLimit(1048576);
+		$st->setMaxProcesses(10);
+		$st->setMaxWallTime(100);
+		$st->setMaxExecutionTime(100);
+		$st->setErrToOut();
+		$st->exec();
+		$this->compileOutput = (string)$st->getStdout();
 
-		$this->compileOutput = shell_exec(
-			$cmd = GCC_BINARY." -fno-stack-protector {$csd}/c/{$file} -o {$spt}{$this->executableFile} 2>&1"
-		);
+		// $this->compileOutput = shell_exec(
+		// 	$cmd = GCC_BINARY." -fno-stack-protector {$csd}/c/{$file} -o {$spt}{$this->executableFile} 2>&1"
+		// );
 
-		var_dump($cmd);
+		// var_dump($cmd);
 		
 		unset($st);		
 

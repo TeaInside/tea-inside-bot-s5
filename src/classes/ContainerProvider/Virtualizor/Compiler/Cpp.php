@@ -79,20 +79,20 @@ class Cpp implements CompilerInterface
 		$this->executableFile = "/home/u{$uid}/scripts/cpp/bin/{$hash}";
 		file_exists("{$csd}/cpp/bin/{$hash}") and unlink("{$csd}/cpp/bin/{$hash}");
 
-		// $st->setCmd(CPP_BINARY." -fno-stack-protector /home/u{$uid}/scripts/cpp/{$file} -o {$this->executableFile}");
-		// $st->setMemoryLimit(1048576);
-		// $st->setMaxProcesses(10);
-		// $st->setMaxWallTime(100);
-		// $st->setMaxExecutionTime(100);
-		// $st->setErrToOut();
-		// $st->exec();
-		// $this->compileOutput = (string)$st->getStdout();
+		$st->setCmd(CPP_BINARY." -fno-stack-protector /home/u{$uid}/scripts/cpp/{$file} -o {$this->executableFile}");
+		$st->setMemoryLimit(1048576);
+		$st->setMaxProcesses(10);
+		$st->setMaxWallTime(100);
+		$st->setMaxExecutionTime(100);
+		$st->setErrToOut();
+		$st->exec();
+		$this->compileOutput = (string)$st->getStdout();
 
-		$this->compileOutput = shell_exec(
-			$cmd = CPP_BINARY." -fno-stack-protector {$csd}/cpp/{$file} -o {$spt}{$this->executableFile} 2>&1"
-		);
+		// $this->compileOutput = shell_exec(
+		// 	$cmd = CPP_BINARY." -fno-stack-protector {$csd}/cpp/{$file} -o {$spt}{$this->executableFile} 2>&1"
+		// );
 
-		var_dump($cmd);
+		// var_dump($cmd);
 		
 		unset($st);
 
