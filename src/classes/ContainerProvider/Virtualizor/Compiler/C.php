@@ -88,10 +88,10 @@ class C implements CompilerInterface
 		// $this->compileOutput = (string)$st->getStdout();
 
 		$this->compileOutput = shell_exec(
-			GCC_BINARY." -fno-stack-protector {$csd}/home/u{$uid}/scripts/cpp/{$file} -o {$csd}{$this->executableFile} 2>&1"
+			$cmd = GCC_BINARY." -fno-stack-protector {$csd}/home/u{$uid}/scripts/cpp/{$file} -o {$csd}{$this->executableFile} 2>&1"
 		);
 		
-		unset($st);
+		var_dump($cmd);
 		
 		unset($st);		
 
