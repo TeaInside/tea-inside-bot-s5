@@ -528,7 +528,7 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 	 * @param int $size
 	 * @return string
 	 */
-	public function getStdout($n = 1024): string
+	public function getStdout($n = 2048): string
 	{
 		if ($n === -1) {
 			return (string)(@file_get_contents($this->stdoutRealFile));	
