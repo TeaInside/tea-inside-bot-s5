@@ -380,9 +380,9 @@ ORDER BY `a`.`tmsg_id` ASC;"
 				}
 
 
-				fwrite($handle, json_encode($fd, 64));
+				fwrite($handle, json_encode($fd, 64).",");
 			}
-			fwrite($handle, "]}");
+			fwrite($handle, ",{}]}");
 			fclose($handle);
 			ob_start();
 			$mpdf->Output();
