@@ -510,10 +510,10 @@ nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin");
 	{
 		$this->buildIsolateCmd();
 		$this->isolateOut = shell_exec($this->isolateCmd);
-		var_dump($this->isolateOut);
-		print "\n\n";
-		var_dump($this->isolateOut, $this->isolateCmd);
-		print "\n\n";
+		// var_dump($this->isolateOut);
+		// print "\n\n";
+		// var_dump($this->isolateOut, $this->isolateCmd);
+		// print "\n\n";
 	}
 
 	/**
