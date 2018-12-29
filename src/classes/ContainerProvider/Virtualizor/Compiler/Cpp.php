@@ -87,12 +87,6 @@ class Cpp implements CompilerInterface
 		$st->setErrToOut();
 		$st->exec();
 		$this->compileOutput = (string)$st->getStdout();
-
-		// $this->compileOutput = shell_exec(
-		// 	$cmd = CPP_BINARY." -fno-stack-protector {$csd}/cpp/{$file} -o {$spt}{$this->executableFile} 2>&1"
-		// );
-
-		// var_dump($cmd);
 		
 		unset($st);
 
