@@ -30,7 +30,6 @@ final class DB
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 			]
 		);
-		$this->pdo->exec("SET NAMES utf8;");
 	}
 
 	/**
