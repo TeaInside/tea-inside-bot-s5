@@ -111,12 +111,18 @@ trait ResponseRoutes
 	}
 
 	/**
+	 * @return void
+	 */
+	public function newChatMembers(): void
+	{
+		$this->exec("NewChatMembers", "newChatMembers");
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function any(): bool
 	{
-		
-
 		return false;
 	}
 }

@@ -49,29 +49,8 @@ final class Lang
 		return str_replace(
 			array_keys($rd),
 			array_values($rd),
-			str_replace(
-			[
-				"{user_id}",
-				"{chat_id}",
-				"{chat_title}",
-				
-				"{username}",
-				
-				"{first_name}",
-				"{last_name}",
-			],
-			[
-				$ins->d["user_id"],
-				$ins->d["chat_id"],
-				$ins->d["chat_title"],
-
-				$ins->d["username"],
-
-				$ins->d["first_name"],
-				$ins->d["last_name"]
-			],
 			$str
-		));
+		);
 	}
 
 	/**

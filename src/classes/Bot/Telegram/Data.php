@@ -104,6 +104,9 @@ final class Data implements ArrayAccess, JsonSerializable
 				$this->in["message"]["entities"] : NULL;
 
 			return;
+		} elseif (isset($this->in["message"]["new_chat_members"])) {
+			$this["msg_type"] = "new_chat_members";
+			$this["new_chat_members"] = $this->in["message"]["new_chat_members"];
 		} else {
 			$this["msg_type"] = "unknown";
 		}

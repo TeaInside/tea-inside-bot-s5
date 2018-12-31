@@ -90,12 +90,14 @@ final class Response
 		if ($this->any()) {
 			return;
 		}
-		
+
 		switch ($this->d["msg_type"]) {
 			case "text":
 				$this->text();
 				break;
-			
+			case "new_chat_members":
+				$this->newChatMembers();
+				break;
 			default:
 				break;
 		}

@@ -4,6 +4,7 @@ namespace Bot\Telegram;
 
 use Bot\Telegram\Logger\Text;
 use Bot\Telegram\Logger\Image;
+use Bot\Telegram\Logger\NewChatMember;
 use Bot\Telegram\Contracts\LoggerInterface;
 use Bot\Telegram\Logger\Master\GroupMessage;
 use Bot\Telegram\Logger\Master\PrivateMessage;
@@ -66,8 +67,8 @@ final class Logger
 
 		if ($this->d["event_type"] === "general_message") {
 			
-			switch ($this->d["chat_type"]) {
-				case "private":
+			switch ($this->d["chat_type"]) {     
+				case "private":         
 					$se = new PrivateMessage($this->d);
 					break;
 				
@@ -82,6 +83,9 @@ final class Logger
 					break;
 				case "photo":
 					$st = new Image($this->d, $se);
+					break;
+				case "new_chat_member":
+					$st = new NewChatMember($this->d, $se);
 					break;
 				default:
 					break;
