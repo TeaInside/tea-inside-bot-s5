@@ -11,13 +11,13 @@ DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `telegram_file_id` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `md5_sum` varchar(32) CHARACTER SET latin1 NOT NULL,
-  `sha1_sum` varchar(40) CHARACTER SET latin1 NOT NULL,
-  `absolute_hash` varchar(74) CHARACTER SET latin1 NOT NULL,
+  `md5_sum` char(32) CHARACTER SET latin1 NOT NULL,
+  `sha1_sum` char(40) CHARACTER SET latin1 NOT NULL,
+  `absolute_hash` char(74) CHARACTER SET latin1 NOT NULL,
   `hit_count` bigint(20) NOT NULL DEFAULT '0',
   `file_type` varchar(32) CHARACTER SET latin1 NOT NULL DEFAULT 'unknown',
   `extension` varchar(32) CHARACTER SET latin1 DEFAULT NULL,
-  `description` text CHARACTER SET utf8,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -33,7 +33,7 @@ CREATE TABLE `files` (
 DROP TABLE IF EXISTS `groups`;
 CREATE TABLE `groups` (
   `id` bigint(20) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `username` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   `link` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   `photo` bigint(20) DEFAULT NULL,
@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS `groups_history`;
 CREATE TABLE `groups_history` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `group_id` bigint(20) DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `username` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   `link` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   `photo` bigint(20) DEFAULT NULL,
@@ -95,9 +95,9 @@ CREATE TABLE `group_messages` (
   `user_id` int(11) DEFAULT NULL,
   `tmsg_id` bigint(20) NOT NULL,
   `reply_to_tmsg_id` bigint(20) DEFAULT NULL,
-  `msg_type` varchar(32) CHARACTER SET latin1 NOT NULL,
-  `text` text,
-  `text_entities` text,
+  `msg_type` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `text_entities` text CHARACTER SET latin1 COLLATE latin1_general_ci,
   `file` bigint(20) DEFAULT NULL,
   `is_edited_message` tinyint(1) NOT NULL DEFAULT '0',
   `tmsg_datetime` datetime NOT NULL,
@@ -118,13 +118,7 @@ DROP TABLE IF EXISTS `group_settings`;
 CREATE TABLE `group_settings` (
   `group_id` bigint(20) NOT NULL,
   `max_warns` int(11) NOT NULL DEFAULT '3',
-  `welcome_message` text CHARACTER SET latin1,
-  `cmd_global` tinyint(1) DEFAULT '0',
-  `cmd_start` tinyint(1) DEFAULT '0',
-  `cmd_help` tinyint(1) DEFAULT '0',
-  `cmd_debug` tinyint(1) DEFAULT '0',
-  `cmd_shell` tinyint(1) DEFAULT '0',
-  `ai_chat` tinyint(1) DEFAULT '0',
+  `welcome_message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   KEY `group_id` (`group_id`),
@@ -139,8 +133,8 @@ CREATE TABLE `private_messages` (
   `tmsg_id` bigint(20) NOT NULL,
   `reply_to_tmsg_id` bigint(20) DEFAULT NULL,
   `msg_type` varchar(32) CHARACTER SET latin1 NOT NULL DEFAULT 'unknown',
-  `text` text,
-  `text_entities` text,
+  `text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `text_entities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `file` bigint(20) DEFAULT NULL,
   `is_edited_message` tinyint(1) NOT NULL DEFAULT '0',
   `tmsg_datetime` datetime NOT NULL,
@@ -169,9 +163,9 @@ CREATE TABLE `sudoers` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
+  `username` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
+  `first_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_bot` tinyint(1) DEFAULT '0',
   `photo` bigint(20) DEFAULT NULL,
   `private_message_count` bigint(20) DEFAULT '0',
@@ -193,8 +187,8 @@ CREATE TABLE `users_history` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `username` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `photo` bigint(20) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -214,7 +208,7 @@ CREATE TABLE `user_warning` (
   `group_id` bigint(20) NOT NULL,
   `user_id` int(11) NOT NULL,
   `warned_by` int(11) DEFAULT NULL,
-  `reason` text CHARACTER SET utf8,
+  `reason` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `deleted_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
   KEY `group_id` (`group_id`),
@@ -226,4 +220,4 @@ CREATE TABLE `user_warning` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
--- 2018-12-29 06:41:10
+-- 2019-01-01 15:25:26
