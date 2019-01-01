@@ -51,6 +51,13 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^(?:\!|\/|\~|\.)?(?:fb[\s\n]+)([^\s\n]+)$/Usi", $this->d["text"], $m)) {
+
+			if ($this->exec("Fb", "fb", [trim($m[1])])) {
+				return;
+			}
+		}
+
 
 		/**
 		 * Virtualizor

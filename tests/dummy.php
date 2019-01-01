@@ -1,9 +1,9 @@
 <?php
 
 $argv[1] = '{
-    "update_id": 762569090,
+    "update_id": 345141889,
     "message": {
-        "message_id": 127252,
+        "message_id": 17413,
         "from": {
             "id": 243692601,
             "is_bot": false,
@@ -13,36 +13,17 @@ $argv[1] = '{
             "language_code": "en"
         },
         "chat": {
-            "id": -1001162202776,
-            "title": "Koding Teh",
-            "username": "KodingTeh",
+            "id": -1001128970273,
+            "title": "Private Cloud",
             "type": "supergroup"
         },
-        "date": 1546224360,
-        "new_chat_participant": {
-            "id": 243692601,
-            "is_bot": false,
-            "first_name": "Ammar",
-            "last_name": "Faizi",
-            "username": "ammarfaizi2",
-            "language_code": "en"
-        },
-        "new_chat_member": {
-            "id": 243692601,
-            "is_bot": false,
-            "first_name": "Ammar",
-            "last_name": "Faizi",
-            "username": "ammarfaizi2",
-            "language_code": "en"
-        },
-        "new_chat_members": [
+        "date": 1546223916,
+        "text": "/fb peterjkambey",
+        "entities": [
             {
-                "id": 243692601,
-                "is_bot": false,
-                "first_name": "Ammar",
-                "last_name": "Faizi",
-                "username": "ammarfaizi2",
-                "language_code": "en"
+                "offset": 0,
+                "length": 6,
+                "type": "bot_command"
             }
         ]
     }
