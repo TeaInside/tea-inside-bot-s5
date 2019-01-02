@@ -55,7 +55,7 @@ class Whatanime extends ResponseFoundation
 			$st = new WA($bin);
 
 			if ($out = $st->getFirst()) {
-
+$file = $out["file"];
 foreach ($out as &$q) {
 	if (is_string($q)) {
 		$q = htmlspecialchars($q, ENT_QUOTES, "UTF-8");
@@ -97,7 +97,12 @@ $text =
 					[
 						"chat_id" => $this->d["chat_id"],
 						"video" => $st->getVideo()."?std=me",
-						"caption" => $out["file"],
+						"caption" => 
+"{$file}
+
+Start Pos: {$out["start"]}
+End pos : {$out["end"]}
+",
 						"reply_to_message_id" => $this->d["reply_to_message"]["message_id"],
 					]
 				);
