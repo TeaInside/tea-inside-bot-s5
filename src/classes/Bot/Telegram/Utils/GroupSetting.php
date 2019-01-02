@@ -43,16 +43,35 @@ final class GroupSetting
 	public static function &get(int $groupId): array
 	{
 		$ins = self::getInstance();
-		if (!isset($ins->container[$groupId])) {
+		if (!isset($ins->container[$groupId]["info"])) {
 			$st = $ins->pdo->prepare("SELECT * FROM `group_settings` WHERE `group_id` = :group_id LIMIT 1;");
 			$st->execute([":group_id" => $groupId]);
 			if ($st = $st->fetch(PDO::FETCH_ASSOC)) {
-				$ins->container[$groupId] = $st;
+				$ins->container[$groupId]["info"] = $st;
 			} else {
-				$ins->container[$groupId] = [];
+				$ins->container[$groupId]["info"] = [];
 			}
 		}
-		return $ins->container[$groupId];
+		return $ins->container[$groupId]["info"];
+	}
+
+	/**
+	 * @param int $groupId
+	 * @return array
+	 */
+	public static function &getAdmin(int $groupId): array
+	{
+		$ins = self::getInstance();
+		if (!isset($ins->container[$groupId]["admin"])) {
+			$st = $ins->pdo->prepare("SELECT * FROM `group_admin` WHERE `group_id` = :group_id LIMIT 1;");
+			$st->execute([":group_id" => $groupId]);
+			if ($st = $st->fetchAll(PDO::FETCH_ASSOC)) {
+				$ins->container[$groupId]["admin"] = $st;
+			} else {
+				$ins->container[$groupId]["admin"] = [];
+			}
+		}
+		return $ins->container[$groupId]["admin"];
 	}
 
 	/**
