@@ -101,33 +101,44 @@ final class WhatAnime
 	 */
 	private function onlineSearch(): void
 	{
-		$ch = curl_init("https://trace.moe/search");
-		$context = http_build_query(["data" => "data:image/jpeg;base64,{$this->file}"]);
-		curl_setopt_array($ch,
-			[
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_COOKIEJAR	=> $this->cookieFile,
-				CURLOPT_COOKIEFILE	=> $this->cookieFile,
-				CURLOPT_POST		=> true,
-				CURLOPT_POSTFIELDS	=> $context,
-				CURLOPT_REFERER		=> "https://trace.moe/",
-				CURLOPT_USERAGENT	=> "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:56.0) Gecko/20100101 Firefox/56.0",
-				CURLOPT_HTTPHEADER	=> [
-					"Host: trace.moe",
-					"X-Requested-With: XMLHttpRequest",
-					"Content-Length: ".strlen($context),
-					"Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
-					"Accept: application/json, text/javascript, */*; q=0.01"
-				],
-				CURLOPT_CONNECTTIMEOUT	=> 600,
-				CURLOPT_TIMEOUT			=> 600
-			]
-		);
-		$out = curl_exec($ch);
-		if ($errno = curl_errno($ch)) {
-			throw new Exception("Curl Error ({$errno}): ".curl_error($ch), 1);
+		$docs = [
+			"docs" => []
+		];
+		for ($i=0; $i <= 2; $i++) { 
+			$ch = curl_init("https://trace.moe/search");
+			$context = http_build_query([
+				"trial" => $i,
+				"filter" => "",
+				"data" => "data:image/jpeg;base64,{$this->file}"
+			]);
+			curl_setopt_array($ch,
+				[
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_COOKIEJAR	=> $this->cookieFile,
+					CURLOPT_COOKIEFILE	=> $this->cookieFile,
+					CURLOPT_POST		=> true,
+					CURLOPT_POSTFIELDS	=> $context,
+					CURLOPT_REFERER		=> "https://trace.moe/",
+					CURLOPT_USERAGENT	=> "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:56.0) Gecko/20100101 Firefox/56.0",
+					CURLOPT_HTTPHEADER	=> [
+						"Host: trace.moe",
+						"X-Requested-With: XMLHttpRequest",
+						"Content-Length: ".strlen($context),
+						"Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+						"Accept: application/json, text/javascript, */*; q=0.01"
+					],
+					CURLOPT_CONNECTTIMEOUT	=> 600,
+					CURLOPT_TIMEOUT			=> 600
+				]
+			);
+			$out = json_decode(curl_exec($ch), true);
+			if ($errno = curl_errno($ch)) {
+				throw new Exception("Curl Error ({$errno}): ".curl_error($ch), 1);
+			}
+			$docs["docs"] = array_merge($docs["docs"], $out["docs"]);
+			curl_close($ch);
 		}
-		file_put_contents($this->cacheFile, $out);
+		file_put_contents($this->cacheFile, json_encode($docs, JSON_UNESCAPED_SLASHES));
 		$this->cacheMap[$this->hash] = time() + (3600 * 24 * 14);
 		file_put_contents($this->cacheMapFile, json_encode($this->cacheMap, JSON_UNESCAPED_SLASHES));
 	}
@@ -155,13 +166,15 @@ final class WhatAnime
 		}
 
 		$cache = $this->getCache();
-
-		if (isset($cache['docs'][0])) {
-			$this->generateVideoUrl($cache['docs'][0]);
-			return $cache['docs'][0];
+		$state = ["diff" => 100];
+		foreach ($cache["docs"] as $v) {
+			if ($v["diff"] < $state["diff"]) {
+				$state = $v;
+			}
 		}
 
-		return false;
+		$this->generateVideoUrl($state);
+		return $state["diff"] < 100 ? $state : false;
 	}
 
 	/**
@@ -171,9 +184,9 @@ final class WhatAnime
 	private function generateVideoUrl(array $d): void
 	{
 		$this->d = $d;
-		$d["season"] = isset($d["season"]) ? $d["season"] : "";
-		$d["anime"] = isset($d["anime"]) ? $d["anime"] : "";
-		$this->videoUrl = "https://trace.moe/{$d['season']}/{$d['anime']}/{$d['file']}?start={$d['start']}&end={$d['end']}&token={$d['token']}";
+		$this->videoUrl = "https://trace.moe/{$d["anilist_id"]}/{$d["file"]}?start={$d['start']}&end={$d['end']}&token={$d['token']}";
+
+		var_dump($this->videoUrl);
 	}
 
 	/**
@@ -188,7 +201,7 @@ final class WhatAnime
 		if (! is_dir(WHATANIME_DIR."/video")) {
 			throw new Exception("Cannot create directory ".WHATANIME_DIR."/video", 1);
 		}
-		$extension = explode(".", $this->d['file']);
+		$extension = explode(".", $this->d["file"]);
 		$this->videoFile = WHATANIME_DIR."/video/".($videoFile = $this->hash.".".strtolower($extension[count($extension) - 1]));
 		unset($this->file);
 
@@ -203,7 +216,8 @@ final class WhatAnime
 					CURLOPT_COOKIEFILE	=> $this->cookieFile,
 					CURLOPT_USERAGENT	=> "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:56.0) Gecko/20100101 Firefox/56.0",
 					CURLOPT_HTTPHEADER	=> [
-						"Accept: video/webm,video/ogg,video/*;q=0.9,application/ogg;q=0.7,audio/*;q=0.6,*/*;q=0.5"
+						"Accept: video/webm,video/ogg,video/*;q=0.9,application/ogg;q=0.7,audio/*;q=0.6,*/*;q=0.5",
+						"Range: bytes=0-"
 					],
 					CURLOPT_REFERER		=> "https://trace.moe/"
 				]
