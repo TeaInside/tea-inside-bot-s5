@@ -13,7 +13,7 @@ class Welcome
 {
 	public static $l = [
 		"ok" => "Welcome message has been successfully saved!",
-		"error" => "<b>An error occured:</b> Invalid welcome message\n\nTelegram response: :error",
+		"error" => "<b>An error occured:</b> Invalid welcome message\n\nTelegram response:\n:error",
 		"unknown_error" => "Internal error"
 	];
 }
