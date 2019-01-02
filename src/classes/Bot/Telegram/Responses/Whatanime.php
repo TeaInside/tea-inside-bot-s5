@@ -78,7 +78,8 @@ class Whatanime extends ResponseFoundation
 					[
 						"chat_id" => $this->d["chat_id"],
 						"video" => $st->getVideo()."?std=me",
-						"caption" => $out["file"]
+						"caption" => $out["file"],
+						"reply_to_message_id" => $this->d["reply_to_message"]["message_id"],
 					]
 				);
 			} else {
