@@ -68,16 +68,17 @@ class Welcome extends ResponseFoundation
 						"parse_mode" => "HTML"
 					]
 				);
-			}
-
-			Exe::sendMessage(
+			} else {
+				$o = json_encode($o, 128);
+				Exe::sendMessage(
 					[
 						"chat_id" => $this->d["chat_id"],
 						"reply_to_message_id" => $this->d["msg_id"],
-						"text" => Lang::getInstance()->get("Welcome", "unknown_error"),
+						"text" => Lang::getInstance()->get("Welcome", "unknown_error")."\n\n{$o}",
 						"parse_mode" => "HTML"
 					]
 				);
+			}
 		}
 
 		return true;
