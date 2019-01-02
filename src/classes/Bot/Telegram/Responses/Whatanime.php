@@ -71,6 +71,7 @@ $text =
 <b>Similarity ".(100 - $out["diff"])." %</b>
 
 [Anime Info]
+<b>Anilist ID: </b> {$out["anilist_id"]}
 <b>Title Native :</b> {$out["title_native"]}
 <b>Title Chinese :</b> {$out["title_chinese"]}
 <b>Title English :</b> {$out["title_english"]}
