@@ -59,6 +59,10 @@ class Whatanime extends ResponseFoundation
 foreach ($out as &$q) {
 	if (is_string($q)) {
 		$q = htmlspecialchars($q, ENT_QUOTES, "UTF-8");
+
+		if (empty($q)) {
+			$q = "unknown";
+		}
 	}
 }
 unset($q);
