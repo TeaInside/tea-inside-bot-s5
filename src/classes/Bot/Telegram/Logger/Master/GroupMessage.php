@@ -39,6 +39,7 @@ class GroupMessage implements MasterLoggerInterface
 	public function __construct(Data $d)
 	{
 		$this->pdo = DB::pdo();
+		$this->now = date("Y-m-d H:i:s");
 		$this->d = $d;
 	}
 
@@ -67,8 +68,6 @@ class GroupMessage implements MasterLoggerInterface
 		 * e:
 		 * 	call updateUser() -> {end of __invoke}
 		 */
-
-		$this->now = date("Y-m-d H:i:s");
 
 		$st = $this->pdo->prepare(
 			"SELECT `id`,`name`,`username`,`link`,`photo`,`msg_count` FROM `groups` WHERE `id` = :group_id LIMIT 1;"
