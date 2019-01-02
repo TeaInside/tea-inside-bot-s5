@@ -106,7 +106,7 @@ $total = abs($e - $s);
 
 Start pos: {$out["start"]}
 End pos : {$out["end"]}
-Total duration: {$total}
+Total duration: {$total} seconds
 ",
 						"reply_to_message_id" => $this->d["reply_to_message"]["message_id"],
 					]
