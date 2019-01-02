@@ -21,6 +21,29 @@ class Promote extends ResponseFoundation
 	 */
 	public function promote(): bool
 	{
+		$isAdmin = true;
+		if (!in_array($this->d["user_id"], SUDOERS)) {
+			$admins = GroupSetting::getAdmin($this->d["chat_id"]);
+			$isAdmin = false;
+			foreach ($admins as &$admin) {
+				if ($admin["user_id"] == $this->d["user_id"]) {
+					$isAdmin = (bool)$admin["can_promote_members"];
+					break;
+				}
+			}
+			unset($admins, $admin);
+		}
+		
+		if (!$isAdmin) {
+			Exe::sendMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"reply_to_message_id" => $this->d["msg_id"],
+					"text" => Lang::getInstance()->get("Welcome", "reject")
+				]
+			);
+			return true;
+		}
 
 		if (isset($this->d["reply_to_message"]["from"]["id"])) {
 			$o = json_decode(Exe::promoteChatMember(

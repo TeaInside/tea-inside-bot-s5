@@ -24,19 +24,19 @@ class Welcome extends ResponseFoundation
 	public function setWelcome(string $welcomeMessage): bool
 	{
 
-		$admins = GroupSetting::getAdmin($this->d["chat_id"]);
-
-		$isAdmin = false;
-
-		foreach ($admins as &$admin) {
-			if ($admin["user_id"] == $this->d["user_id"]) {
-				$isAdmin = true;
-				break;
+		$isAdmin = true;
+		if (!in_array($this->d["user_id"], SUDOERS)) {
+			$admins = GroupSetting::getAdmin($this->d["chat_id"]);
+			$isAdmin = false;
+			foreach ($admins as &$admin) {
+				if ($admin["user_id"] == $this->d["user_id"]) {
+					$isAdmin = true;
+					break;
+				}
 			}
+			unset($admins, $admin);
 		}
-
-		unset($admins, $admin);
-
+		
 		if (!$isAdmin) {
 			Exe::sendMessage(
 				[
