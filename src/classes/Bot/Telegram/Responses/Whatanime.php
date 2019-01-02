@@ -92,7 +92,8 @@ $text =
 						"parse_mode" => "HTML"
 					]
 				);
-
+$out["start"] = date("H:i:s", 1546275600+((int)floor($out["start"])));
+$out["end"] = date("H:i:s", 1546275600+((int)floor($out["end"])));
 				Exe::sendVideo(
 					[
 						"chat_id" => $this->d["chat_id"],
@@ -100,7 +101,7 @@ $text =
 						"caption" => 
 "{$file}
 
-Start Pos: {$out["start"]}
+Start pos: {$out["start"]}
 End pos : {$out["end"]}
 ",
 						"reply_to_message_id" => $this->d["reply_to_message"]["message_id"],
