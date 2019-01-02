@@ -55,15 +55,30 @@ class Whatanime extends ResponseFoundation
 			$st = new WA($bin);
 
 			if ($out = $st->getFirst()) {
-				$text = "<b>Result</b>\n\n";
 
-				foreach ($out as $key => &$v) {
-					$key = ucwords(str_replace("_", " ", $key));
-					if (is_bool($v)) {
-						$v = $v ? "true" : "false";
-					}
-					$text .= "<b>".htmlspecialchars($key).": </b>".htmlspecialchars($v)."\n";
-				}
+foreach ($out as &$q) {
+	if (is_string($q)) {
+		$q = htmlspecialchars($q, ENT_QUOTES, "UTF-8");
+	}
+}
+unset($q);
+$text = 
+"[Query Result]
+<b>Similarity ".(100 - $out["diff"])."%</b>
+
+[Anime Info]
+<b>Title Native :</b> {$out["title_native"]}
+<b>Title Chinese :</b> {$out["title_chinese"]}
+<b>Title English :</b> {$out["title_english"]}
+<b>Title Romanji :</b> {$out["title_romaji"]}
+
+<b>Episode: </b> {$out["episode"]}
+<b>Tokenthumb: </b> {$out["tokenthumb"]}
+
+<b>Found in file :</b> /var/app/tea_anime/std_index/{$out["file"]}
+
+<b>Is it a 18+ anime? ".($out["is_adult"] ? "Yes, it is!" : "No")."</b>e
+";
 
 				Exe::editMessageText(
 					[
