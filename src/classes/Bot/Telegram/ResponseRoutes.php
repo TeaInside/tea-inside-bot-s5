@@ -59,21 +59,18 @@ trait ResponseRoutes
 		}
 
 		if (preg_match("/^(?:\!|\/|\~|\.)?(?:welcome[\s\n]+)(.+)$/Usi", $this->d["text"], $m)) {
-
 			if ($this->exec("Welcome", "setWelcome", [trim($m[1])])) {
 				return;
 			}
 		}
 
 		if (preg_match("/^(?:\!|\/|\~|\.)?promote/Usi", $this->d["text"])) {
-
 			if ($this->exec("Promote", "promote")) {
 				return;
 			}
 		}
 
 		if (preg_match("/^(?:\!|\/|\~|\.)?debug/Usi", $this->d["text"])) {
-
 			if ($this->exec("Debug", "debug")) {
 				return;
 			}
