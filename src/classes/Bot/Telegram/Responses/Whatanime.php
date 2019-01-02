@@ -79,6 +79,7 @@ $text =
 
 <b>Episode: </b> {$out["episode"]}
 <b>Tokenthumb: </b> {$out["tokenthumb"]}
+<b>Token: </b> {$out["token"]}
 
 <b>Found in file :</b> <code>/var/app/tea_anime/std_index/{$out["file"]}</code>
 
@@ -98,20 +99,38 @@ $out["end"] = date("H:i:s", 1546275600+($e = (int)floor($out["end"])));
 
 $total = abs($e - $s);
 
-				Exe::sendVideo(
-					[
-						"chat_id" => $this->d["chat_id"],
-						"video" => $st->getVideo()."?std=me",
-						"caption" => 
+				
+				$pid = pcntl_fork();
+
+				if (!$pid) {
+					Exe::sendVideo(
+						[
+							"chat_id" => $this->d["chat_id"],
+							"video" => $st->getVideo()."?std=me",
+							"caption" => 
 "{$file}
 
 Start pos: {$out["start"]}
 End pos : {$out["end"]}
 Total duration: {$total} seconds
 ",
-						"reply_to_message_id" => $this->d["reply_to_message"]["message_id"],
-					]
-				);
+							"reply_to_message_id" => $this->d["reply_to_message"]["message_id"],
+						]
+					);
+					exit(0);
+				} else {
+					$status = null;
+					while (pcntl_waitpid($pid, $status, WNOHANG) !== -1) {
+						Exe::sendChatAction(
+							[
+								"chat_id" => $this->d["chat_id"],
+								"action" => "upload_video"
+							]
+						);
+						sleep(1);
+					}
+				}
+				
 			} else {
 				Exe::editMessageText(
 					[
