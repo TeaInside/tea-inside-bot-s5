@@ -74,10 +74,11 @@ class Whatanime extends ResponseFoundation
 					]
 				);
 
-				Exe::sendMessage(
+				Exe::sendVideo(
 					[
 						"chat_id" => $this->d["chat_id"],
-						"text" => $st->getVideo()
+						"video" => $st->getVideo()."?std=me",
+						"caption" => $out["file"]
 					]
 				);
 			} else {
