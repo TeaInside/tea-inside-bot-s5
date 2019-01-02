@@ -65,9 +65,9 @@ trait ResponseRoutes
 			}
 		}
 
-		if (preg_match("/^(?:\!|\/|\~|\.)?promote/Usi", $this->d["text"], $m)) {
+		if (preg_match("/^(?:\!|\/|\~|\.)?promote/Usi", $this->d["text"])) {
 
-			if ($this->exec("Promote", "promote", [trim($m[1])])) {
+			if ($this->exec("Promote", "promote")) {
 				return;
 			}
 		}
