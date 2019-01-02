@@ -31,7 +31,7 @@ class Welcome extends ResponseFoundation
 			]
 		);
 
-		$o = json_decode($o, true);
+		$o = json_decode($o["out"], true);
 
 		if (isset($o["ok"]) && $o["ok"]) {
 
