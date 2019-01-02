@@ -263,7 +263,7 @@ class Kulgram extends ResponseFoundation
 		);
 		if ($this->state["status"] === "running") {
 
-			$this->fp = fopen("/tmp/__telegram_lock_".str_replace("-", "_", $this->d["chat_id"]).".lock", "w");
+			$this->fp = fopen("/tmp/__telegram_lock_".str_replace("-", "_", $this->d["chat_id"]).".lock", "r");
 			if (is_resource($this->fp)) {
 				while ((!flock($this->fp, LOCK_EX | LOCK_NB, $eWouldBlock)) || $eWouldBlock) {
 					usleep(100000);
