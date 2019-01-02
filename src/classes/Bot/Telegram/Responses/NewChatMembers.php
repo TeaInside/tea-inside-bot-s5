@@ -37,7 +37,7 @@ class NewChatMembers extends ResponseFoundation
 				Exe::sendMessage(
 					[
 						"chat_id" => $this->d["chat_id"],
-						"text" => Lang::bind($g, $rd),
+						"text" => Lang::bind($g["welcome_message"], $rd),
 						"reply_to_message_id" => $this->d["msg_id"],
 						"parse_mode" => "HTML"
 					]
