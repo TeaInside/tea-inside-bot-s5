@@ -76,6 +76,12 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^[\.\/\!\~\,]?whatanime/Usi", $this->d["text"])) {
+			if ($this->exec("Whatanime", "whatanime")) {
+				return;
+			}
+		}
+
 
 		/**
 		 * Virtualizor

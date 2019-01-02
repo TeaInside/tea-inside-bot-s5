@@ -98,6 +98,11 @@ final class Response
 			case "new_chat_members":
 				$this->newChatMembers();
 				break;
+			case "photo":
+				if (!empty($this->d["text"])) {
+					$this->text();
+				}
+				break;
 			default:
 				break;
 		}
