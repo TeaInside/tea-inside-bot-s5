@@ -92,8 +92,11 @@ $text =
 						"parse_mode" => "HTML"
 					]
 				);
-$out["start"] = date("H:i:s", 1546275600+((int)floor($out["start"])));
-$out["end"] = date("H:i:s", 1546275600+((int)floor($out["end"])));
+$out["start"] = date("H:i:s", 1546275600+($s = (int)floor($out["start"])));
+$out["end"] = date("H:i:s", 1546275600+($e = (int)floor($out["end"])));
+
+$total = abs($e - $s);
+
 				Exe::sendVideo(
 					[
 						"chat_id" => $this->d["chat_id"],
@@ -103,6 +106,7 @@ $out["end"] = date("H:i:s", 1546275600+((int)floor($out["end"])));
 
 Start pos: {$out["start"]}
 End pos : {$out["end"]}
+Total duration: {$total}
 ",
 						"reply_to_message_id" => $this->d["reply_to_message"]["message_id"],
 					]
