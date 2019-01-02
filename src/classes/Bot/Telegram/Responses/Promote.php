@@ -58,19 +58,38 @@ class Promote extends ResponseFoundation
 					]
 				);	
 			} else {
-				Exe::sendMessage(
-					[
-						"chat_id" => $this->d["chat_id"],
-						"text" => Lang::bind(
-							Lang::getInstance()->get("Promote", "promote.error"),
-							[
-								":error_message" => json_encode($o, 128)
-							]
-						),
-						"reply_to_message_id" => $this->d["msg_id"],
-						"parse_mode" => "HTML"
-					]
-				);	
+
+				if (isset($o["error_code"], $o["description"])) {
+					Exe::sendMessage(
+						[
+							"chat_id" => $this->d["chat_id"],
+							"text" => Lang::bind(
+								Lang::getInstance()->get("Promote", "promote.error"),
+								[
+									":error_message" => "<pre>".
+									htmlspecialchars("{$o["error_code"]} {$o["description"]}", ENT_QUOTES, "UTF-8")
+									."</pre>"
+								]
+							),
+							"reply_to_message_id" => $this->d["msg_id"],
+							"parse_mode" => "HTML"
+						]
+					);	
+				} else {
+					Exe::sendMessage(
+						[
+							"chat_id" => $this->d["chat_id"],
+							"text" => Lang::bind(
+								Lang::getInstance()->get("Promote", "promote.error"),
+								[
+									":error_message" => "<b>Unknown Error</b>"
+								]
+							),
+							"reply_to_message_id" => $this->d["msg_id"],
+							"parse_mode" => "HTML"
+						]
+					);	
+				}
 			}
 
 			$st = new GroupMessage($this->d);
