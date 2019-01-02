@@ -1,3 +1,13 @@
 <?php
 
 define("ISOLATE_BASE_DIR", STORAGE_PATH."/container/isolate");
+
+define("GCC_BINARY", "/usr/bin/x86_64-linux-gnu-gcc-7");
+define("CPP_BINARY", " /usr/bin/x86_64-linux-gnu-g++-7");
+define("BASH_BINARY", "/bin/bash");
+define("PYTHON2_BINARY", "/usr/bin/python2.7");
+define("PYTHON3_BINARY", "/usr/bin/python3.5");
+define("NASM_BINARY", "/usr/local/bin/nasm");
+define("LD_BINARY", "/usr/bin/ld");
+define("JAVA_BINARY", "/usr/lib/jvm/java-11-openjdk-amd64/bin/java");
+define("JAVAC_BINARY", "/usr/lib/jvm/java-11-openjdk-amd64/bin/javac");
