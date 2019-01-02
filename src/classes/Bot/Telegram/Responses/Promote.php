@@ -42,10 +42,9 @@ class Promote extends ResponseFoundation
 					"text" => Lang::getInstance()->get("Welcome", "reject")
 				]
 			);
-			return true;
 		}
 
-		if (isset($this->d["reply_to_message"]["from"]["id"])) {
+		if ($isAdmin && isset($this->d["reply_to_message"]["from"]["id"])) {
 			$o = json_decode(Exe::promoteChatMember(
 				[
 					"chat_id" => $this->d["chat_id"],
@@ -114,11 +113,11 @@ class Promote extends ResponseFoundation
 					);	
 				}
 			}
-
-			$st = new GroupMessage($this->d);
-			$st->adminFetcher(true);
-			unset($st);
 		}
+
+		$st = new GroupMessage($this->d);
+		$st->adminFetcher(true);
+		unset($st);
 
 		return true;
 	}
