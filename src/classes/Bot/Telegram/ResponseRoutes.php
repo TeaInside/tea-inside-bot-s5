@@ -72,6 +72,13 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^(?:\!|\/|\~|\.)?debug/Usi", $this->d["text"])) {
+
+			if ($this->exec("Debug", "debug")) {
+				return;
+			}
+		}
+
 
 		/**
 		 * Virtualizor
