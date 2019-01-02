@@ -20,27 +20,29 @@ class NewChatMembers extends ResponseFoundation
 	 */
 	public function newChatMembers(): bool
 	{
-		$g = GroupSetting::get($this->d["chat_id"])["welcome_message"];
+		$g = GroupSetting::get($this->d["chat_id"]);
 
-		foreach ($this->d["new_chat_members"] as $key => $u) {
+		if ($g["welcome_message"]) {
+			foreach ($this->d["new_chat_members"] as $key => $u) {
 
-			$rd = [
-				"{first_name}" => htmlspecialchars($u["first_name"]),
-				"{last_name}" => htmlspecialchars((isset($u["last_name"]) ? $u["last_name"] : "")),
-				"{full_name}" => htmlspecialchars($u["first_name"].(isset($u["last_name"]) ? " {$u["last_name"]}" : "")),
-				"{username}" => htmlspecialchars((isset($u["username"]) ? $u["username"] : "")),
-				"{user_link}" => "<a href=\"tg://user?id={$u["id"]}\">".htmlspecialchars($u["first_name"].(isset($u["last_name"]) ? " {$u["last_name"]}" : ""))."</a>",
-				"{chat_title}" => htmlspecialchars($this->d["chat_title"])
-			];
+				$rd = [
+					"{first_name}" => htmlspecialchars($u["first_name"]),
+					"{last_name}" => htmlspecialchars((isset($u["last_name"]) ? $u["last_name"] : "")),
+					"{full_name}" => htmlspecialchars($u["first_name"].(isset($u["last_name"]) ? " {$u["last_name"]}" : "")),
+					"{username}" => htmlspecialchars((isset($u["username"]) ? $u["username"] : "")),
+					"{user_link}" => "<a href=\"tg://user?id={$u["id"]}\">".htmlspecialchars($u["first_name"].(isset($u["last_name"]) ? " {$u["last_name"]}" : ""))."</a>",
+					"{chat_title}" => htmlspecialchars($this->d["chat_title"])
+				];
 
-			Exe::sendMessage(
-				[
-					"chat_id" => $this->d["chat_id"],
-					"text" => Lang::bind($g, $rd),
-					"reply_to_message_id" => $this->d["msg_id"],
-					"parse_mode" => "HTML"
-				]
-			);
+				Exe::sendMessage(
+					[
+						"chat_id" => $this->d["chat_id"],
+						"text" => Lang::bind($g, $rd),
+						"reply_to_message_id" => $this->d["msg_id"],
+						"parse_mode" => "HTML"
+					]
+				);
+			}
 		}
 
 		return true;
