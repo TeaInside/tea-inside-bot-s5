@@ -227,7 +227,7 @@ class GroupMessage implements MasterLoggerInterface
 	 * @param bool $reset
 	 * @return void
 	 */
-	private function adminFetcher($reset = false): void
+	public function adminFetcher($reset = false): void
 	{
 		$exe = json_decode(Exe::getChatAdministrators(["chat_id" => $this->d["chat_id"]])["out"], true);
 
