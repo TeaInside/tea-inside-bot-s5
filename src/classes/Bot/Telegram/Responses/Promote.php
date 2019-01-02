@@ -13,7 +13,7 @@ use Bot\Telegram\Utils\GroupSetting;
  * @version 5.0.0
  * @package \Bot\Telegram\Responses
  */
-class Ping extends ResponseFoundation
+class Promote extends ResponseFoundation
 {
 	/**
 	 * @return bool
