@@ -65,6 +65,13 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^(?:\!|\/|\~|\.)?promote/Usi", $this->d["text"], $m)) {
+
+			if ($this->exec("Promote", "promote", [trim($m[1])])) {
+				return;
+			}
+		}
+
 
 		/**
 		 * Virtualizor
