@@ -6,6 +6,7 @@ use DB;
 use PDO;
 use Bot\Telegram\Exe;
 use Bot\Telegram\Lang;
+use Bot\Telegram\Utils\GroupSetting;
 use Bot\Telegram\ResponseFoundation;
 
 /**
@@ -22,6 +23,31 @@ class Welcome extends ResponseFoundation
 	 */
 	public function setWelcome(string $welcomeMessage): bool
 	{
+
+		$admins = GroupSetting::getAdmin($this->d["chat_id"]);
+
+		$isAdmin = false;
+
+		foreach ($admins as &$admin) {
+			if ($admin["user_id"] === $this->d["user_id"]) {
+				$isAdmin = true;
+				break;
+			}
+		}
+
+		unset($admins, $admin);
+
+		if (!$isAdmin) {
+			Exe::sendMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"reply_to_message_id" => $this->d["msg_id"],
+					"text" => Lang::getInstance()->get("Welcome", "reject")
+				]
+			);
+			return true;
+		}
+
 		$o = Exe::sendMessage(
 			[
 				"chat_id" => $this->d["chat_id"],
