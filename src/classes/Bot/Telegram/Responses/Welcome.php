@@ -53,6 +53,13 @@ class Welcome extends ResponseFoundation
 				]
 			);
 
+			Exe::deleteMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"message_id" => $o["result"]["message_id"]
+				]
+			);
+
 		} else {
 			if (isset($o["error_code"], $o["description"])) {
 				Exe::sendMessage(
