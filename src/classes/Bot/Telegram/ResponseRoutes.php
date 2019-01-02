@@ -58,6 +58,13 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^(?:\!|\/|\~|\.)?(?:welcome[\s\n]+)(.+)$/Usi", $this->d["text"], $m)) {
+
+			if ($this->exec("Welcome", "setWelcome", [trim($m[1])])) {
+				return;
+			}
+		}
+
 
 		/**
 		 * Virtualizor
