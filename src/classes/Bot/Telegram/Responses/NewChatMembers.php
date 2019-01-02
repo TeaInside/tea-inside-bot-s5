@@ -23,6 +23,9 @@ class NewChatMembers extends ResponseFoundation
 		$g = GroupSetting::get($this->d["chat_id"]);
 
 		if (isset($g["welcome_message"]) && $g["welcome_message"]) {
+
+			var_dump($g);
+
 			foreach ($this->d["new_chat_members"] as $key => $u) {
 
 				$rd = [

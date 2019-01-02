@@ -270,6 +270,8 @@ class Kulgram extends ResponseFoundation
 				}
 			}
 
+			sleep(5);
+
 			$pdo = DB::pdo();
 			$st = $pdo->prepare(
 "SELECT
