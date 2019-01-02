@@ -30,7 +30,7 @@ class Welcome extends ResponseFoundation
 
 		foreach ($admins as &$admin) {
 			var_dump($admins);
-			if ($admin["user_id"] === $this->d["user_id"]) {
+			if ($admin["user_id"] == $this->d["user_id"]) {
 				$isAdmin = true;
 				break;
 			}
