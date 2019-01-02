@@ -24,8 +24,6 @@ class NewChatMembers extends ResponseFoundation
 
 		if (isset($g["welcome_message"]) && $g["welcome_message"]) {
 
-			var_dump($g);
-
 			foreach ($this->d["new_chat_members"] as $key => $u) {
 
 				$rd = [
