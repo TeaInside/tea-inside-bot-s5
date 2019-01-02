@@ -55,7 +55,7 @@ class Whatanime extends ResponseFoundation
 			$st = new WA($bin);
 
 			if ($out = $st->getFirst()) {
-				$text = "<b>Result:</b>\n\n";
+				$text = "<b>Result</b>\n\n";
 
 				foreach ($out as $key => &$v) {
 					$key = ucwords(str_replace("_", " ", $key));
@@ -71,6 +71,13 @@ class Whatanime extends ResponseFoundation
 						"message_id" => $o["result"]["message_id"],
 						"text" => $text,
 						"parse_mode" => "HTML"
+					]
+				);
+
+				Exe::sendMessage(
+					[
+						"chat_id" => $this->d["chat_id"],
+						"text" => $st->getVideo()
 					]
 				);
 			} else {
