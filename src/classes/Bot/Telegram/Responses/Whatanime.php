@@ -68,7 +68,7 @@ foreach ($out as &$q) {
 unset($q);
 $text = 
 "[Query Result]
-<b>Similarity ".(100 - $out["diff"])."%</b>
+<b>Similarity ".(100 - $out["diff"])." %</b>
 
 [Anime Info]
 <b>Title Native :</b> {$out["title_native"]}
@@ -79,7 +79,7 @@ $text =
 <b>Episode: </b> {$out["episode"]}
 <b>Tokenthumb: </b> {$out["tokenthumb"]}
 
-<b>Found in file :</b> /var/app/tea_anime/std_index/{$out["file"]}
+<b>Found in file :</b> <code>/var/app/tea_anime/std_index/{$out["file"]}</code>
 
 <b>Is it a 18+ anime? ".($out["is_adult"] ? "Yes, it is!" : "No")."</b>e
 ";
