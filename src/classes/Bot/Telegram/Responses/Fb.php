@@ -75,7 +75,7 @@ class Fb extends ResponseFoundation
 			unset($cr);
 		} else {
 			Exe::sendMessage(
-				[1
+				[
 					"chat_id" => $this->d["chat_id"],
 					"reply_to_message_id" => $this->d["msg_id"],
 					"text" => "Couldn't fetch {$username}'s facebook photo."
