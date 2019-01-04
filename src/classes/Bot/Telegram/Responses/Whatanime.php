@@ -71,15 +71,15 @@ $text =
 <b>Similarity ".(100 - $out["diff"])." %</b>
 
 [Anime Info]
-<b>Anilist ID: </b> {$out["anilist_id"]}
-<b>Title Native :</b> {$out["title_native"]}
-<b>Title Chinese :</b> {$out["title_chinese"]}
-<b>Title English :</b> {$out["title_english"]}
-<b>Title Romanji :</b> {$out["title_romaji"]}
+<b>Anilist ID: </b> <code>{$out["anilist_id"]}</code>
+<b>Title Native :</b> <code>{$out["title_native"]}</code>
+<b>Title Chinese :</b> <code>{$out["title_chinese"]}</code>
+<b>Title English :</b> <code>{$out["title_english"]}</code>
+<b>Title Romanji :</b> <code>{$out["title_romaji"]}</code>
 
-<b>Episode: </b> {$out["episode"]}
-<b>Tokenthumb: </b> {$out["tokenthumb"]}
-<b>Token: </b> {$out["token"]}
+<b>Episode :</b> <code>{$out["episode"]}</code>
+<b>Token :</b> <code>{$out["token"]}</code>
+<b>Tokenthumb :</b> <code>{$out["tokenthumb"]}</code>
 
 <b>Found in file :</b> <code>/var/app/tea_anime/std_index/{$out["file"]}</code>
 
