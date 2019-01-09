@@ -11,7 +11,7 @@ use Bot\Telegram\ResponseFoundation;
  * @version 5.0.0
  * @package \Bot\Telegram\Responses
  */
-class Me extends ResponseFoundation
+class Admin extends ResponseFoundation
 {
 	/**
 	 * @param string $reason

@@ -158,6 +158,18 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^[\.\/\!\~\,]?chd_init$/Usi", $this->d["text"])) {
+			if ($this->exec("ChitChat", "init")) {
+				return;
+			}
+		}
+
+		if (preg_match("/^[\.\/\!\~\,]?chd_stop$/Usi", $this->d["text"])) {
+			if ($this->exec("ChitChat", "stop")) {
+				return;
+			}
+		}
+
 		$groupId = str_replace("-", "_", $this->d["chat_id"]);
 		if (file_exists(STORAGE_PATH."/groupcache/chitchat/{$groupId}.state")) {
 			if (isset($this->d["text"]) && (!empty($this->d["text"]))) {
