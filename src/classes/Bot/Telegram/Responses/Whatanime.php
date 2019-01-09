@@ -83,8 +83,7 @@ $text =
 
 <b>Found in file :</b> <code>/var/app/tea_anime/std_index/{$out["file"]}</code>
 
-<b>Is this an anime for adult only? ".($out["is_adult"] ? "Yes, it is!" : "No")."</b>
-";
+<b>Is this an anime for adult only? ".($out["is_adult"] ? "Yes, it is!" : "No")."</b>";
 
 				Exe::editMessageText(
 					[
