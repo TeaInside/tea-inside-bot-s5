@@ -159,7 +159,7 @@ trait ResponseRoutes
 		}
 
 		$groupId = str_replace("-", "_", $this->d["chat_id"]);
-		if (!file_exists(STORAGE_PATH."/groupcache/chitchat/{$groupId}.state")) {
+		if (file_exists(STORAGE_PATH."/groupcache/chitchat/{$groupId}.state")) {
 			if (isset($this->d["text"]) && (!empty($this->d["text"]))) {
 				$st = trim(tea_ai_chat($this->d["text"], $this->d["first_name"], $this->d["first_name"]));
 				if ($st !== "") {
