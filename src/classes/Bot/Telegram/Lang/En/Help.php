@@ -23,7 +23,7 @@ class Help
 <b>Group Commands:</b>
 /welcome <code>&lt;text_html&gt;</code>\t Set welcome message.
 /promote\tReply to someone's message to promote him to be an admin.
-
+/kulgram\tRecord a kulgram.
 
 <b>Virtualizor Commands:</b>
 [Starts with]
@@ -33,8 +33,7 @@ class Help
 <code>&lt;?py2</code>\tPython 2 script.
 <code>&lt;?c</code>\tC script.
 <code>&lt;?c++</code>\tC++ script.
-<code>&lt;?cpp</code>\tC++ script.
-",
+<code>&lt;?cpp</code>\tC++ script.",
 
 		"group" => "Help command can only be used in private!"
 	];

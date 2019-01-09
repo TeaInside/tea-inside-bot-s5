@@ -25,11 +25,6 @@ class Help extends ResponseFoundation
 		if ($this->d["chat_type"] === "private") {
 			$r = $lang->get("Help", "private");
 		} else {
-
-			if (GroupSetting::get($this->d["chat_id"])["cmd_help"] == 0) {
-				return false;
-			}
-
 			$r = $lang->get("Help", "group");
 		}
 

@@ -32,6 +32,7 @@ class Kulgram
 		"stop.p2" => "Stopping system record...",
 		"stop.p3" => "Building PDF data...",
 		"stop.ok" => "Kulgram session record has been stopped!\n\n:pdf_link\n\n:json_link",
-		"unknown_error" => "An error occured: Unknown error :fl"
+		"unknown_error" => "An error occured: Unknown error :fl",
+		"private_response" => "This command can only be used in group chat."
 	];
 }

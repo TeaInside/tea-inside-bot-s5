@@ -78,6 +78,18 @@ class Kulgram extends ResponseFoundation
 	 */
 	public function run(string $rcmd): bool
 	{
+
+		if ($this->d["chat_type"] === "private") {
+			Exe::sendMessage(
+				[
+					"text" => Lang::getInstance()->get("Kulgram", "private_response"),
+					"chat_id" => $this->d["chat_id"],
+					"reply_to_message_id" => $this->d["msg_id"]
+				]
+			);
+			return true;
+		}
+
 		$opt = [];
 		$rcmd = str_replace("\xe2\x80\x94", "--", $rcmd);
 		$cmd = explode(" ", trim($rcmd), 2);

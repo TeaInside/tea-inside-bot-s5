@@ -13,6 +13,7 @@ class Promote
 {
 	public static $l = [
 		"promote.ok" => ":ulink has been promoted to be an administrator!",
-		"promote.error" => "<b>An error occured!</b>\n\n:error_message"
+		"promote.error" => "<b>An error occured!</b>\n\n:error_message",
+		"private_response" => "This command can only be used in group chat."
 	];
 }

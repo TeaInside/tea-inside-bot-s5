@@ -15,6 +15,7 @@ class Welcome
 		"ok" => "Welcome message has been successfully saved!",
 		"error" => "<b>An error occured:</b> Invalid welcome message\n\nTelegram response:\n:error",
 		"unknown_error" => "Internal error",
-		"reject" => "You do not have permission to use this command!"
+		"reject" => "You do not have permission to use this command!",
+		"private_response" => "This command can only be used in group chat."
 	];
 }

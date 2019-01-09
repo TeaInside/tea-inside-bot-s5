@@ -21,6 +21,17 @@ class Promote extends ResponseFoundation
 	 */
 	public function promote(): bool
 	{
+		if ($this->d["chat_type"] === "private") {
+			Exe::sendMessage(
+				[
+					"text" => Lang::getInstance()->get("Promote", "private_response"),
+					"chat_id" => $this->d["chat_id"],
+					"reply_to_message_id" => $this->d["msg_id"]
+				]
+			);
+			return true;
+		}
+
 		$isAdmin = true;
 		if (!in_array($this->d["user_id"], SUDOERS)) {
 			$admins = GroupSetting::getAdmin($this->d["chat_id"]);

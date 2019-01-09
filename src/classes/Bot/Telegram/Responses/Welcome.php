@@ -22,6 +22,17 @@ class Welcome extends ResponseFoundation
 	 */
 	public function deleteWelcome(): bool
 	{
+		if ($this->d["chat_type"] === "private") {
+			Exe::sendMessage(
+				[
+					"text" => Lang::getInstance()->get("Welcome", "private_response"),
+					"chat_id" => $this->d["chat_id"],
+					"reply_to_message_id" => $this->d["msg_id"]
+				]
+			);
+			return true;
+		}
+
 		DB::pdo()
 			->prepare("UPDATE `group_settings` SET `welcome_message` = NULL WHERE `group_id` = :group_id LIMIT 1")
 			->execute([":group_id" => $this->d["chat_id"]]);
@@ -43,6 +54,16 @@ class Welcome extends ResponseFoundation
 	 */
 	public function setWelcome(string $welcomeMessage): bool
 	{
+		if ($this->d["chat_type"] === "private") {
+			Exe::sendMessage(
+				[
+					"text" => Lang::getInstance()->get("Welcome", "private_response"),
+					"chat_id" => $this->d["chat_id"],
+					"reply_to_message_id" => $this->d["msg_id"]
+				]
+			);
+			return true;
+		}
 
 		$isAdmin = true;
 		if (!in_array($this->d["user_id"], SUDOERS)) {
