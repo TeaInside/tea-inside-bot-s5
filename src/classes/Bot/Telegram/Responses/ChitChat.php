@@ -12,7 +12,7 @@ use Bot\Telegram\ResponseFoundation;
  * @version 5.0.0
  * @package \Bot\Telegram\Responses
  */
-class Me extends ResponseFoundation
+class ChitChat extends ResponseFoundation
 {
 	/**
 	 * @return bool
