@@ -3,6 +3,7 @@
 namespace Bot\Telegram\Responses;
 
 use Bot\Telegram\Exe;
+use Bot\Telegram\Lang;
 use Bot\Telegram\ResponseFoundation;
 
 /**
@@ -45,5 +46,7 @@ class TextUtils extends ResponseFoundation
 				]
 			);
 		}
+
+		return true;
 	}
 }
