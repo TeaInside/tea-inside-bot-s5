@@ -88,6 +88,12 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^(?:\!|\/|\~|\.)(?:t?html[\s\n]+)(.+)$/Usi", $this->d["text"])) {
+			if ($this->exec("TextUtils", "thtml", [trim($m[1])])) {
+				return;
+			}
+		}
+
 
 		/**
 		 * Virtualizor
