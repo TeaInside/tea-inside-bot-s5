@@ -157,6 +157,20 @@ trait ResponseRoutes
 				return;
 			}
 		}
+
+		$groupId = str_replace("-", "_", $this->d["chat_id"]);
+		if (!file_exists(STORAGE_PATH."/groupcache/chitchat/{$groupId}.state")) {
+			$st = trim(tea_ai_chat($txt, $name, $name));
+			if ($st !== "") {
+				Exe::sendMessage(
+					[
+						"text" => $st,
+						"chat_id" => $this->d["chat_id"],
+						"reply_to_message_id" => $this->d["msg_id"]
+					]
+				);
+			}
+		}
 	}
 
 	/**
