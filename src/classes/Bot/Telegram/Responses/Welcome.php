@@ -33,6 +33,30 @@ class Welcome extends ResponseFoundation
 			return true;
 		}
 
+		$isAdmin = true;
+		if (!in_array($this->d["user_id"], SUDOERS)) {
+			$admins = GroupSetting::getAdmin($this->d["chat_id"]);
+			$isAdmin = false;
+			foreach ($admins as &$admin) {
+				if ($admin["user_id"] == $this->d["user_id"]) {
+					$isAdmin = true;
+					break;
+				}
+			}
+			unset($admins, $admin);
+		}
+		
+		if (!$isAdmin) {
+			Exe::sendMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"reply_to_message_id" => $this->d["msg_id"],
+					"text" => Lang::getInstance()->get("Welcome", "reject")
+				]
+			);
+			return true;
+		}
+
 		DB::pdo()
 			->prepare("UPDATE `group_settings` SET `welcome_message` = NULL WHERE `group_id` = :group_id LIMIT 1")
 			->execute([":group_id" => $this->d["chat_id"]]);
