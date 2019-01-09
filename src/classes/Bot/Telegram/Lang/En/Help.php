@@ -13,8 +13,28 @@ class Help
 {
 	public static $l = [
 		"private" => 
-"<b>Commands:</b>
-/sh <code>[command arg...]</code>\tExecute shell command",
+"<b>Global Commands:</b>
+/sh <code>[command arg...]</code>\tExecute linux shell command.
+/tr &lt;from> &lt;to> &lt;string&gt\tTranslate a text.
+/fb &lt;fb_username&gt;|&lt;fb_userid&gt;\tGet facebook profile photo.
+/debug\tShow telegram JSON debug message.
+/whatanime\t(Reply to photo only) Search anime name by screenshot.
+
+<b>Group Commands:</b>
+/welcome <code>&lt;text_html&gt;</code>\t Set welcome message.
+/promote\tReply to someone's message to promote him to be an admin.
+
+
+<b>Virtualizor Commands:</b>
+[Starts with]
+<code>&lt;?php</code>\tPHP script.
+<code>&lt;?py</code>\tPython 3 script.
+<code>&lt;?py3</code>\tPython 3 script.
+<code>&lt;?py2</code>\tPython 2 script.
+<code>&lt;?c</code>\tC script.
+<code>&lt;?c++</code>\tC++ script.
+<code>&lt;?cpp</code>\tC++ script.
+",
 
 		"group" => "Help command can only be used in private!"
 	];
