@@ -9,7 +9,7 @@ namespace Bot\Telegram\Lang\En;
  * @since 2.0.1
  * @package \Bot\Telegram\Lang\Id
  */
-class Welcome
+class TextUtils
 {
 	public static $l = [
 		"error" => "<b>An error occured!</b>\n\nTelegram response:\n:error",
