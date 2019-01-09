@@ -160,16 +160,18 @@ trait ResponseRoutes
 
 		$groupId = str_replace("-", "_", $this->d["chat_id"]);
 		if (!file_exists(STORAGE_PATH."/groupcache/chitchat/{$groupId}.state")) {
-			$st = trim(tea_ai_chat($txt, $name, $name));
-			if ($st !== "") {
-				Exe::sendMessage(
-					[
-						"text" => $st,
-						"chat_id" => $this->d["chat_id"],
-						"reply_to_message_id" => $this->d["msg_id"]
-					]
-				);
-			}
+			if (isset($this->d["text"]) && (!empty($this->d["text"]))) {
+				$st = trim(tea_ai_chat($this->d["text"], $this->d["first_name"], $this->d["first_name"]));
+				if ($st !== "") {
+					Exe::sendMessage(
+						[
+							"text" => $st,
+							"chat_id" => $this->d["chat_id"],
+							"reply_to_message_id" => $this->d["msg_id"]
+						]
+					);
+				}
+			}			
 		}
 	}
 
