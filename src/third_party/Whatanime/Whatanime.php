@@ -185,8 +185,6 @@ final class WhatAnime
 	{
 		$this->d = $d;
 		$this->videoUrl = "https://trace.moe/{$d["anilist_id"]}/{$d["file"]}?start={$d['start']}&end={$d['end']}&token={$d['token']}";
-
-		var_dump($this->videoUrl);
 	}
 
 	/**
