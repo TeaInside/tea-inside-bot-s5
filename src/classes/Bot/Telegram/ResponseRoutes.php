@@ -64,7 +64,7 @@ trait ResponseRoutes
 			}
 		}
 
-		if (preg_match("/^(?:\!|\/|\~|\.)(?:del(ete)?_welcome[\s\n]+)/Usi", $this->d["text"])) {
+		if (preg_match("/^(?:\!|\/|\~|\.)(?:del(ete)?_welcome)/Usi", $this->d["text"])) {
 			if ($this->exec("Welcome", "deleteWelcome")) {
 				return;
 			}
