@@ -18,6 +18,26 @@ use Bot\Telegram\ResponseFoundation;
 class Welcome extends ResponseFoundation
 {
 	/**
+	 * @return bool
+	 */
+	public function deleteWelcome(): bool
+	{
+		DB::pdo()
+			->prepare("UPDATE `group_settings` SET `welcome_message` = NULL WHERE `group_id` = :group_id LIMIT 1")
+			->execute([":group_id" => $this->d["chat_id"]]);
+		
+		Exe::sendMessage(
+			[
+				"chat_id" => $this->d["chat_id"],
+				"text" => "Welcome message has been deleted!",
+				"reply_to_message_id" => $this->d["msg_id"]
+			]
+		);
+
+		return true;
+	}
+
+	/**
 	 * @param string $welcomeMessage
 	 * @return bool
 	 */
