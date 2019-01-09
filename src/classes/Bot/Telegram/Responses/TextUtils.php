@@ -2,6 +2,7 @@
 
 namespace Bot\Telegram\Responses;
 
+use Bot\Telegram\Exe;
 use Bot\Telegram\ResponseFoundation;
 
 /**
