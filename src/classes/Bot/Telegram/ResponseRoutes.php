@@ -94,6 +94,12 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^(?:\!|\/|\~|\.)(report(?:[\s\n]+)?)(.+)$/Usi", $this->d["text"], $m)) {
+			if ($this->exec("Admin", "report", [trim($m[1])])) {
+				return;
+			}
+		}
+
 
 		/**
 		 * Virtualizor
