@@ -171,7 +171,7 @@ trait ResponseRoutes
 						]
 					);
 				}
-			}			
+			}
 		}
 	}
 
