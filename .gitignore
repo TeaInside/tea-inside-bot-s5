@@ -16,3 +16,5 @@
 
 /peda-session-*.txt
 /.gdb_history
+
+/public/google_translate_data/
