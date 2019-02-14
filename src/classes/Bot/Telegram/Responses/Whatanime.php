@@ -103,23 +103,21 @@ $total = abs($e - $s);
 
 				if (!$pid) {
 
-					$vu = $st->getVideo();
 					$o = Exe::sendVideo(
 						[
 							"chat_id" => $this->d["chat_id"],
-							"video" => "{$vu}?std=me",
+							"video" => "{$st->getVideo()}?std=me",
 							"caption" => 
 "{$file}
 
 Start pos: {$out["start"]}
-End pos : {$out["end"]}
+End pos: {$out["end"]}
 Total duration: {$total} seconds
 ",
 							"reply_to_message_id" => $this->d["reply_to_message"]["message_id"],
 						]
 					);
 
-					var_dump($vu, $o["out"]);
 					exit(0);
 				} else {
 					$status = null;
