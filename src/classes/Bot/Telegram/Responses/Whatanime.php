@@ -102,10 +102,12 @@ $total = abs($e - $s);
 				$pid = pcntl_fork();
 
 				if (!$pid) {
-					Exe::sendVideo(
+
+					$vu = $st->getVideo();
+					$o = Exe::sendVideo(
 						[
 							"chat_id" => $this->d["chat_id"],
-							"video" => $st->getVideo()."?std=me",
+							"video" => "{$vu}?std=me",
 							"caption" => 
 "{$file}
 
@@ -116,6 +118,8 @@ Total duration: {$total} seconds
 							"reply_to_message_id" => $this->d["reply_to_message"]["message_id"],
 						]
 					);
+
+					var_dump($vu, $o["out"]);
 					exit(0);
 				} else {
 					$status = null;
