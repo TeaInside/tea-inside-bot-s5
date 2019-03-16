@@ -294,8 +294,10 @@ final class Isolate
 			$g = $g && mkdir("{$this->containerSupportDir}/home/u{$this->uid}/scripts")
 		);
 
-		$this->stdoutFile = "/isolated_proc/stdout";
-		$this->stderrFile = "/isolated_proc/stderr";
+		$ppid = getmypid();
+
+		$this->stdoutFile = "/isolated_proc/stdout_{$ppid}";
+		$this->stderrFile = "/isolated_proc/stderr_{$ppid}";
 
 		$this->stdoutRealFile = "{$this->userInfoDir}/stdout";
 		$this->stderrRealFile = "{$this->userInfoDir}/stderr";
