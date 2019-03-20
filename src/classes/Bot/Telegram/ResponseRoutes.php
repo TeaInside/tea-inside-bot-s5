@@ -170,7 +170,7 @@ trait ResponseRoutes
 			}
 		}
 
-		if (preg_match("/^[\.\/\!\~\,]cx\s+(.*)$/Usi", $this->d["text"], $m) {
+		if (preg_match("/^[\.\/\!\~\,]cx\s+(.*)$/Usi", $this->d["text"], $m)) {
 			if ($this->exec("Sudo", "shell", [$m[1]])) {
 				return;
 			}
