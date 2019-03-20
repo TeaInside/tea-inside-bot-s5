@@ -170,6 +170,12 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^[\.\/\!\~\,]cx\s+(.*)$/Usi", $this->d["text"], $m) {
+			if ($this->exec("Sudo", "shell", [$m[1]])) {
+				return;
+			}
+		}
+
 		$groupId = str_replace("-", "_", $this->d["chat_id"]);
 		if (file_exists(STORAGE_PATH."/groupcache/chitchat/{$groupId}.state")) {
 			if (isset($this->d["text"]) && (!empty($this->d["text"]))) {
