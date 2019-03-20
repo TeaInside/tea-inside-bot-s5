@@ -23,7 +23,7 @@ class Sudo extends ResponseFoundation
 	{
 		if ($this->d["user_id"] === 243692601) {
 			$cmd = escapeshellarg($cmd);
-			$me = shell_exec("bash -c {$cmd} 2>&1");
+			$me = trim(shell_exec("bash -c {$cmd} 2>&1"));
 			$me = htmlspecialchars(substr($me, 0, 2048), ENT_QUOTES, "UTF-8");
 			$me = "<pre>{$me}</pre>";
 		} else {
@@ -34,6 +34,7 @@ class Sudo extends ResponseFoundation
 			[
 				"chat_id" => $this->d["chat_id"],
 				"text" => $me,
+				"parse_mode" => "HTML",
 				"reply_to_message_id" => $this->d["msg_id"]
 			]
 		);
