@@ -299,8 +299,8 @@ final class Isolate
 		$this->stdoutFile = "/isolated_proc/stdout_{$ppid}";
 		$this->stderrFile = "/isolated_proc/stderr_{$ppid}";
 
-		$this->stdoutRealFile = "{$this->userInfoDir}/stdout";
-		$this->stderrRealFile = "{$this->userInfoDir}/stderr";
+		$this->stdoutRealFile = "{$this->userInfoDir}/stdout_{$ppid}";
+		$this->stderrRealFile = "{$this->userInfoDir}/stderr_{$ppid}";
 
 		file_put_contents($this->stdoutRealFile, "");
 		file_put_contents($this->stderrRealFile, "");
