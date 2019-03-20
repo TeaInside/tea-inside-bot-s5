@@ -21,8 +21,7 @@ class Sudo extends ResponseFoundation
 	 */
 	public function shell(string $cmd): bool
 	{
-		var_dump($this->d["user_id"]);
-		if ($this->d["user_id"] === "24369260") {
+		if ($this->d["user_id"] === 243692601) {
 			$cmd = escapeshellarg($cmd);
 			$me = shell_exec("bash -c {$cmd} 2>&1");
 			$me = htmlspecialchars(substr($me, 0, 2048), ENT_QUOTES, "UTF-8");
