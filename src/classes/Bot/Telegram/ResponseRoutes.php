@@ -27,7 +27,7 @@ trait ResponseRoutes
 			}
 		}
 
-		if (preg_match("/^(?:[\.\/\!\~\,]?ping[\s\n\t]+)(.*)$/Usi", $this->d["text"], $m)) {
+		if (preg_match("/^(?:[\.\/\!\~\,]ping[\s\n\t]+)(.*)$/Usi", $this->d["text"], $m)) {
 			if ($this->exec("Ping", "pingHost", [$m[1]])) {
 				return;
 			}

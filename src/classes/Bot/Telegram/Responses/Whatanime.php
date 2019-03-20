@@ -142,6 +142,14 @@ Total duration: {$total} seconds
 					]
 				);
 			}			
+		} else {
+			Exe::sendMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"message_id" => $this->d["msg_id"],
+					"text" => "Please reply to an image"
+				]
+			);
 		}
 
 		return true;
