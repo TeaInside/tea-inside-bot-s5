@@ -22,6 +22,7 @@ class Help
 
 <b>Group Commands:</b>
 /welcome <code>&lt;text_html&gt;</code>\t Set welcome message.
+/delete_welcome\t Delete welcome welcome message.
 /promote\tReply to someone's message to promote him to be an admin.
 /kulgram\tRecord a kulgram.
 
