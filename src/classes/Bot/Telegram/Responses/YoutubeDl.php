@@ -4,6 +4,7 @@ namespace Bot\Telegram\Responses;
 
 use Bot\Telegram\Exe;
 use Bot\Telegram\Data;
+use Bot\Telegram\Lang;
 use Bot\Telegram\ResponseFoundation;
 
 /**
@@ -24,6 +25,8 @@ class YoutubeDl extends ResponseFoundation
 	{
 		parent::__construct($d);
 		is_dir("/var/cache/youtube-dl") or mkdir("/var/cache/youtube-dl");
+		is_dir(STORAGE_PATH."/youtube-dl") or mkdir(STORAGE_PATH."/youtube-dl");
+		is_dir(STORAGE_PATH."/youtube-dl/mp3") or mkdir(STORAGE_PATH."/youtube-dl/mp3");
 	}
 
 
@@ -38,11 +41,19 @@ class YoutubeDl extends ResponseFoundation
 		$ytdl = escapeshellarg(shell_exec("which youtube-dl"));
 		$python = escapeshellarg(shell_exec("which python"));
 
+		$fd = [
+			["pipe", "r"],
+			["pipe", "w"],
+			["file", "php://stdout", "w"]
+		];
+
+		$pipes = null;
+
 		$me = proc_open(
 			"exec {$python} {$ytdl} -f 18 --extract-audio --audio-format mp3 {$ytid} --cache-dir /var/cache/youtube-dl",
 			$fd,
 			$pipes,
-			$this->chdir
+			STORAGE_PATH."/youtube-dl/mp3"
 		);
 
 		$lang = Lang::getInstance();
