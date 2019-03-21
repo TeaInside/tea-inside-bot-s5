@@ -38,8 +38,8 @@ class YoutubeDl extends ResponseFoundation
 	{
 
 		$ytid = escapeshellarg($ytid);
-		$ytdl = escapeshellarg(shell_exec("which youtube-dl"));
-		$python = escapeshellarg(shell_exec("which python"));
+		$ytdl = escapeshellarg(trim(shell_exec("which youtube-dl")));
+		$python = escapeshellarg(trim(shell_exec("which python")));
 
 		$fd = [
 			["pipe", "r"],
