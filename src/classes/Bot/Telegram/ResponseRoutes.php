@@ -2,6 +2,8 @@
 
 namespace Bot\Telegram;
 
+use Exception;
+
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
  * @license MIT
@@ -177,7 +179,11 @@ trait ResponseRoutes
 		}
 
 		if (preg_match("/^[\.\/\!\~\,]ytmp3\s+(.*)$/", $this->d["text"], $m)) {
-			if ($this->exec("YoutubeDl", "mp3", [$m[1]])) {
+			try {
+				if ($this->exec("YoutubeDl", "mp3", [$m[1]])) {
+					return;
+				}	
+			} catch (Exception $e) {
 				return;
 			}
 		}

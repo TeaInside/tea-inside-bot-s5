@@ -16,5 +16,6 @@ class YoutubeDl
 		"download_success" => "Download success!",
 		"uploading" => "Uploading audio to telegram...",
 		"error_download" => "Couldn't download the file!",
+		"locked" => "youtube-dl is locked for this user (sys_wait)"
 	];
 }

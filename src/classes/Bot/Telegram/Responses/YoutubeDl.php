@@ -3,6 +3,7 @@
 namespace Bot\Telegram\Responses;
 
 use CurlFile;
+use Exception;
 use Bot\Telegram\Exe;
 use Bot\Telegram\Data;
 use Bot\Telegram\Lang;
@@ -18,6 +19,16 @@ class YoutubeDl extends ResponseFoundation
 {
 
 	/**
+	 * @var string
+	 */
+	private $lock_file;
+
+	/**
+	 * @var Bot\Telegram\Lang
+	 */
+	private $lang;
+
+	/**
 	 * @param \Bot\Telegram\Data $d
 	 *
 	 * Constructor.
@@ -28,8 +39,38 @@ class YoutubeDl extends ResponseFoundation
 		is_dir("/var/cache/youtube-dl") or mkdir("/var/cache/youtube-dl");
 		is_dir(STORAGE_PATH."/youtube-dl") or mkdir(STORAGE_PATH."/youtube-dl");
 		is_dir(STORAGE_PATH."/youtube-dl/mp3") or mkdir(STORAGE_PATH."/youtube-dl/mp3");
+		is_dir(STORAGE_PATH."/youtube-dl/lock") or mkdir(STORAGE_PATH."/youtube-dl/lock");
+		$this->lock_file = STORAGE_PATH."/youtube-dl/lock/{$this->d["user_id"]}";
+		$this->lang = Lang::getInstance();
 	}
 
+	/**
+	 * @throws \Exception
+	 * @return void
+	 */
+	private function lockd(): void
+	{
+		if (file_exists($this->lock_file)) {
+			Exe::sendMessage(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"reply_to_message_id" => $this->d["msg_id"],
+					"text" => $this->lang->get("YoutubeDl", "locked")
+				]
+			);
+			throw new Exception("youtube-dl is locked for this user {$this->d["user_id"]}");
+		} else {
+			file_put_contents($this->lock_file, time());
+		}
+	}
+
+	/**
+	 * Destructor.
+	 */
+	public function __destruct()
+	{
+		unlink($this->lock_file);
+	}
 
 	/**
 	 * @param string $ytid
@@ -37,8 +78,8 @@ class YoutubeDl extends ResponseFoundation
 	 */
 	public function mp3(string $ytid): bool
 	{
-
-		$lang = Lang::getInstance();
+		$this->lockd();
+		
 		$ytid = escapeshellarg($ytid);
 		$ytdl = escapeshellarg(trim(shell_exec("which youtube-dl")));
 		$python = escapeshellarg(trim(shell_exec("which python")));
@@ -53,7 +94,7 @@ class YoutubeDl extends ResponseFoundation
 
 		$o = Exe::sendMessage(
 			[
-				"text" => $lang->get("YoutubeDl", "processing"),
+				"text" => $this->lang->get("YoutubeDl", "processing"),
 				"reply_to_message_id" => $this->d["msg_id"],
 				"chat_id" => $this->d["chat_id"]
 			]
@@ -73,7 +114,7 @@ class YoutubeDl extends ResponseFoundation
 				[
 					"chat_id" => $this->d["chat_id"],
 					"message_id" => $o["result"]["message_id"],
-					"text" => $lang->get("YoutubeDl", "download_success")
+					"text" => $this->lang->get("YoutubeDl", "download_success")
 				]
 			);
 
@@ -81,7 +122,7 @@ class YoutubeDl extends ResponseFoundation
 				[
 					"chat_id" => $this->d["chat_id"],
 					"message_id" => $o["result"]["message_id"],
-					"text" => $lang->get("YoutubeDl", "uploading")
+					"text" => $this->lang->get("YoutubeDl", "uploading")
 				]
 			);
 
@@ -106,7 +147,7 @@ class YoutubeDl extends ResponseFoundation
 			proc_close($me);
 			Exe::sendMessage(
 				[
-					"text" => $lang->get("YoutubeDl", "error_download"),
+					"text" => $this->lang->get("YoutubeDl", "error_download"),
 					"reply_to_message_id" => $this->d["msg_id"],
 					"chat_id" => $this->d["chat_id"]
 				]
