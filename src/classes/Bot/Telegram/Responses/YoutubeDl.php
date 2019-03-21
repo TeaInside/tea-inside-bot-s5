@@ -50,7 +50,7 @@ class YoutubeDl extends ResponseFoundation
 
 		$pipes = null;
 
-		Exe::sendMessage(
+		$o = Exe::sendMessage(
 			[
 				"text" => $lang->get("YoutubeDl", "processing"),
 				"reply_to_message_id" => $this->d["msg_id"],
@@ -67,13 +67,40 @@ class YoutubeDl extends ResponseFoundation
 
 		if (preg_match("/\[ffmpeg\] Destination: (.*.mp3)/Usi", stream_get_contents($pipes[1]), $m)) {
 			proc_close($me);
-			Exe::sendMessage(
+			$o = json_decode($o["out"], true);
+			Exe::editMessageText(
 				[
-					"text" => $m[1],
-					"reply_to_message_id" => $this->d["msg_id"],
-					"chat_id" => $this->d["chat_id"]
+					"chat_id" => $this->d["chat_id"],
+					"message_id" => $o["result"]["message_id"],
+					"text" => $lang->get("YoutubeDl", "download_success")
 				]
 			);
+
+			Exe::editMessageText(
+				[
+					"chat_id" => $this->d["chat_id"],
+					"message_id" => $o["result"]["message_id"],
+					"text" => $lang->get("YoutubeDl", "uploading")
+				]
+			);
+
+			$ch = curl_init("https://api.telegram.org/bot".BOT_TOKEN."/sendAudio");
+			curl_setopt_array($ch, 
+				[
+					CURLOPT_POST => true,
+					CURLOPT_POSTFIELDS => [
+						"chat_id" => $this->d["chat_id"],
+						"reply_to_message_id" => $this->d["msg_id"],
+						"caption" => $m[1],
+						"audio" => new CurlFile(STORAGE_PATH."/youtube-dl/mp3/{$m[1]}")
+					],
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_SSL_VERIFYHOST => false,
+					CURLOPT_SSL_VERIFYPEER => false
+				]
+			);
+			$st = curl_exec($ch);
+			curl_close($ch);
 		} else {
 			proc_close($me);
 			Exe::sendMessage(

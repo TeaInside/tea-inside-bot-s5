@@ -13,6 +13,8 @@ class YoutubeDl
 {
 	public static $l = [
 		"processing" => "Processing request...",
+		"download_success" => "Download success!",
+		"uploading" => "Uploading audio to telegram...",
 		"error_download" => "Couldn't download the file!",
 	];
 }
