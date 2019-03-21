@@ -176,6 +176,12 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^[\.\/\!\~\,]ytmp3\s+(.*)$/", $this->d["text"], $m)) {
+			if ($this->exec("YoutubeDl", "mp3", [$m[1]])) {
+				return;
+			}
+		}
+
 		$groupId = str_replace("-", "_", $this->d["chat_id"]);
 		if (file_exists(STORAGE_PATH."/groupcache/chitchat/{$groupId}.state")) {
 			if (isset($this->d["text"]) && (!empty($this->d["text"]))) {
