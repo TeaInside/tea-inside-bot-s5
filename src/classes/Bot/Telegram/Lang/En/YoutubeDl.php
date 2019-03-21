@@ -12,6 +12,7 @@ namespace Bot\Telegram\Lang\En;
 class YoutubeDl
 {
 	public static $l = [
+		"proccessing" => "Processing request...",
 		"error_download" => "Couldn't download the file!",
 	];
 }

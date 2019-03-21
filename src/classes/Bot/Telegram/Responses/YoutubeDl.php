@@ -37,6 +37,7 @@ class YoutubeDl extends ResponseFoundation
 	public function mp3(string $ytid): bool
 	{
 
+		$lang = Lang::getInstance();
 		$ytid = escapeshellarg($ytid);
 		$ytdl = escapeshellarg(trim(shell_exec("which youtube-dl")));
 		$python = escapeshellarg(trim(shell_exec("which python")));
@@ -49,14 +50,20 @@ class YoutubeDl extends ResponseFoundation
 
 		$pipes = null;
 
+		Exe::sendMessage(
+			[
+				"text" => $lang->get("YoutubeDl", "processing"),
+				"reply_to_message_id" => $this->d["msg_id"],
+				"chat_id" => $this->d["chat_id"]
+			]
+		);
+
 		$me = proc_open(
 			"exec {$python} {$ytdl} -f 18 --extract-audio --audio-format mp3 {$ytid} --cache-dir /var/cache/youtube-dl",
 			$fd,
 			$pipes,
 			STORAGE_PATH."/youtube-dl/mp3"
 		);
-
-		$lang = Lang::getInstance();
 
 		if (preg_match("/\[ffmpeg\] Destination: (.*.mp3)/Usi", stream_get_contents($pipes[1]), $m)) {
 			proc_close($me);
