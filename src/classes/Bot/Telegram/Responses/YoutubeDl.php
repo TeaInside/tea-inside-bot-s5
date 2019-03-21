@@ -69,7 +69,7 @@ class YoutubeDl extends ResponseFoundation
 	 */
 	public function __destruct()
 	{
-		unlink($this->lock_file);
+		file_exists($this->lock_file) and unlink($this->lock_file);
 	}
 
 	/**
@@ -104,7 +104,12 @@ class YoutubeDl extends ResponseFoundation
 			"exec {$python} {$ytdl} -f 18 --extract-audio --audio-format mp3 {$ytid} --cache-dir /var/cache/youtube-dl",
 			$fd,
 			$pipes,
-			STORAGE_PATH."/youtube-dl/mp3"
+			STORAGE_PATH."/youtube-dl/mp3",
+			[
+				"LC_ALL" => "en_US.UTF-8",
+				"LC_CTYPE" => "en_US.UTF-8",
+				"LANG" => "en_US.UTF-8"
+			]
 		);
 
 		if (preg_match("/\[ffmpeg\] Destination: (.*.mp3)/Usi", stream_get_contents($pipes[1]), $m)) {
