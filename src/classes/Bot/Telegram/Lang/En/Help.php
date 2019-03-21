@@ -19,7 +19,7 @@ class Help
 /fb &lt;fb_username&gt;|&lt;fb_userid&gt;\tGet facebook profile photo.
 /debug\tShow telegram JSON debug message.
 /whatanime\t(Reply to photo only) Search anime name by screenshot.
-/ytmp3 &lt;youtube_url|youtube_video_id&gt; Download youtube video as mp3\t
+/ytmp3 &lt;youtube_url|youtube_video_id&gt; Download youtube video as mp3.
 
 <b>Group Commands:</b>
 /welcome <code>&lt;text_html&gt;</code>\t Set welcome message.
