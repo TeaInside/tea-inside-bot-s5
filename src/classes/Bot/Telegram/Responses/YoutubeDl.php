@@ -2,6 +2,7 @@
 
 namespace Bot\Telegram\Responses;
 
+use CurlFile;
 use Bot\Telegram\Exe;
 use Bot\Telegram\Data;
 use Bot\Telegram\Lang;
