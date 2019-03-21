@@ -73,13 +73,29 @@ class YoutubeDl extends ResponseFoundation
 	}
 
 	/**
+	 * @return void
+	 */
+	private function sanitize(string &$input): void
+	{
+		if (preg_match("/(?:v\=)(.*)(\&|$)?/", $input, $m)) {
+			$input = $m[1];
+			return;
+		}
+
+		// Not a youtube URL which has `v` parameter.
+		if (filter_var($input, FILTER_VALIDATE_URL)) {
+			$input = "~~~";
+		}
+	}
+
+	/**
 	 * @param string $ytid
 	 * @return bool
 	 */
 	public function mp3(string $ytid): bool
 	{
 		$this->lockd();
-		
+		$this->sanitize($ytid);
 		$ytid = escapeshellarg($ytid);
 		$ytdl = escapeshellarg(trim(shell_exec("which youtube-dl")));
 		$python = escapeshellarg(trim(shell_exec("which python")));
