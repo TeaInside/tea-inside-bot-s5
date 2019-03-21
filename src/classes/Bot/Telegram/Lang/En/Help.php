@@ -15,10 +15,11 @@ class Help
 		"private" => 
 "<b>Global Commands:</b>
 /sh <code>[command arg...]</code>\tExecute linux shell command.
-/tr &lt;from> &lt;to> &lt;string&gt\tTranslate a text.
+/tr &lt;from&gt; &lt;to&gt; &lt;string&gt\tTranslate a text.
 /fb &lt;fb_username&gt;|&lt;fb_userid&gt;\tGet facebook profile photo.
 /debug\tShow telegram JSON debug message.
 /whatanime\t(Reply to photo only) Search anime name by screenshot.
+/ytmp3 &lt;youtube_url|youtube_video_id&gt; Download youtube video as mp3\t
 
 <b>Group Commands:</b>
 /welcome <code>&lt;text_html&gt;</code>\t Set welcome message.
