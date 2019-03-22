@@ -77,7 +77,7 @@ class YoutubeDl extends ResponseFoundation
 	 */
 	private function sanitize(string &$input): void
 	{
-		if (preg_match("/(?:v\=)(.*?)(\&|$)/", $input, $m)) {
+		if (preg_match("/(?:v\=|youtu\.be\/|youtube\.com\/)([a-zA-Z0-9\_\.\-]+?)(\&|$)/", $input, $m)) {
 			$input = $m[1];
 			return;
 		}
