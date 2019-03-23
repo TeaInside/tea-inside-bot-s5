@@ -154,7 +154,7 @@ trait ResponseRoutes
 			}
 		}
 
-		if (preg_match("/^[\.\/\!\~\,]?me/Usi", $this->d["text"])) {
+		if (preg_match("/^[\.\/\!\~\,]me/Usi", $this->d["text"])) {
 			if ($this->exec("Me", "me")) {
 				return;
 			}
