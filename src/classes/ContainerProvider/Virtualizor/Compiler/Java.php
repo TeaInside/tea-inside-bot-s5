@@ -89,6 +89,8 @@ class Java implements CompilerInterface
 
 		shell_exec("chmod 777 {$csd}/java {$csd}/java/bin");
 
+		is_dir("{$csd}/java/classes") or mkdir("{$csd}/java/classes");
+
 		$this->executableFile = "{$this->classname}";
 		file_exists("{$csd}/java/classes/{$this->classname}.class") and unlink("{$csd}/java/classes/{$this->classname}.class");
 
