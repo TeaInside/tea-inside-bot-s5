@@ -26,7 +26,8 @@ class Start extends ResponseFoundation
 			$r = $lang->get("Start", "private");
 		} else {
 
-			if (GroupSetting::get($this->d["chat_id"])["cmd_start"] == 0) {
+			$me = GroupSetting::get($this->d["chat_id"]);
+			if ((!isset($me["cmd_start"])) || ($me["cmd_start"] == 0)) {
 				return false;
 			}
 
