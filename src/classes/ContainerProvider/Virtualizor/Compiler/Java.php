@@ -93,8 +93,8 @@ class Java implements CompilerInterface
 		file_exists("{$csd}/java/classes/{$this->classname}.class") and unlink("{$csd}/java/classes/{$this->classname}.class");
 
 		$st->setCmd(JAVAC_BINARY." /home/u{$uid}/scripts/java/{$file} -d /home/u{$uid}/scripts/java/classes");
-		$st->setMemoryLimit(2147483648);
-		$st->setMaxProcesses(30);
+		$st->setMemoryLimit(1073741824);
+		$st->setMaxProcesses(60);
 		$st->setMaxWallTime(100);
 		$st->setMaxExecutionTime(100);
 		$st->setErrToOut();
@@ -122,8 +122,8 @@ class Java implements CompilerInterface
 		$st = new Isolate($this->key);
 		$uid = $st->getUid();
 		$st->setCmd(JAVA_BINARY." -cp /home/u{$uid}/scripts/java/classes {$this->classname}");
-		$st->setMemoryLimit(2147483648);
-		$st->setMaxProcesses(15);
+		$st->setMemoryLimit(1073741824);
+		$st->setMaxProcesses(60);
 		$st->setMaxWallTime(17);
 		$st->setMaxExecutionTime(17);
 		$st->setErrToOut();
