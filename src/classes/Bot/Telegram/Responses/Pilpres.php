@@ -38,11 +38,11 @@ class Pilpres extends ResponseFoundation
 			$reply = "Internal Server Error";
 		} else {
 			$total = $out->chart->{"21"} + $out->chart->{"22"};
-			$a01 = $out->chart->{"21"} / $total * 100;
-			$a02 = $out->chart->{"22"} / $total * 100;
+			$a01 = str_replace(".", ",", $out->chart->{"21"} / $total * 100);
+			$a02 = str_replace(".", ",", $out->chart->{"22"} / $total * 100);
 			$bacTotal = $out->progress->total;
 			$bac = $out->progress->proses;
-			$bacPercent = $bac / $bacTotal * 100;
+			$bacPercent = str_replace(".", ",", (string)$bac / $bacTotal * 100);
 
 
 			$out->chart->{"21"} = number_format($out->chart->{"21"}, 0, ",", ".");
@@ -51,7 +51,7 @@ class Pilpres extends ResponseFoundation
 			$bacTotal = number_format($bacTotal, 0, ",", ".");
 			$bac = number_format($bac , 0, ",", ".");
 
-			$reply = date("Y-m-d H:i:s")."\n\n<b>[VST]</b>\n<b>Jokowi-Amin:</b> <code>{$out->chart->{"21"}}</code>\n<b>Prabowo-Sandi:</b> <code>{$out->chart->{"22"}}</code>\n<b>Total:</b> <code>{$total}</code>\n\n<b>[Percent]</b>\n<b>Jokowi-Amin:</b> <code>{$a01}</code>%\n<b>Prabowo-Sandi:</b> <code>{$a02}</code>%\n\n<b>[BAC]</b>\n<b>BAC:</b> <code>{$bac}</code>\n<b>BAC Percent:</b> <code>{$bacPercent}</code>%\n<b>Total:</b> <code>{$bacTotal}</code>";
+			$reply = date("Y-m-d H:i:s")."\n\n<b>[VST]</b>\n<b>Jokowi-Amin:</b> <code>{$out->chart->{"21"}}</code>\n<b>Prabowo-Sandi:</b> <code>{$out->chart->{"22"}}</code>\n<b>Total VST:</b> <code>{$total}</code>\n\n<b>[VST Percent]</b>\n<b>Jokowi-Amin:</b> <code>{$a01}</code> %\n<b>Prabowo-Sandi:</b> <code>{$a02}</code> %\n\n<b>[BAC]</b>\n<b>BAC:</b> <code>{$bac}</code>\n<b>BAC Percent:</b> <code>{$bacPercent}</code> %\n<b>Total BAC:</b> <code>{$bacTotal}</code>";
 		}
 
 		print Exe::sendMessage(
