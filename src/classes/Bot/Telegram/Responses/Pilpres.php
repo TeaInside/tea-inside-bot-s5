@@ -44,14 +44,14 @@ class Pilpres extends ResponseFoundation
 			$reply = date("Y-m-d H:i:s")."\n\n<b>Vst:<b>\n<b>Jokowi-Amin:</b> <code>{$out->chart->{"21"}}</code>\n<b>Prabowo-Sandi:</b> <code>{$out->chart->{"22"}}</code>\n<b>Total:</b> <code>{$total}</code>\n\n<b>Percent:</b>\n<b>Jokowi-Amin:</b> <code>{$a01}</code>%\n<b>Prabowo-Sandi:</b> <code>{$a02}</code>%\n\n";
 		}
 
-		Exe::sendMessage(
+		print Exe::sendMessage(
 			[
 				"chat_id" => $this->d["chat_id"],
 				"text" => $reply,
 				"reply_to_message_id" => $this->d["msg_id"],
 				"parse_mode" => "HTML"
 			]
-		);
+		)["out"];
 
 		return true;
 	}
