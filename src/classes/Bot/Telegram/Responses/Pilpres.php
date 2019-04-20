@@ -34,14 +34,14 @@ class Pilpres extends ResponseFoundation
 		curl_close($ch);
 		$out = json_decode($out);
 
-		if ((!isset($out->chart[21]))) {
+		if ((!isset($out->chart->{"21"}))) {
 			$reply = "Internal Server Error";
 		} else {
-			$total = $out->chart[21] + $out->chart[22];
-			$a01 = $out->chart[21] / $total * 100;
-			$a02 = $out->chart[22] / $total * 100;
+			$total = $out->chart->{"21"} + $out->chart->{"22"};
+			$a01 = $out->chart->{"21"} / $total * 100;
+			$a02 = $out->chart->{"22"} / $total * 100;
 
-			$reply = date("Y-m-d H:i:s")."\n\n<b>Vst:<b>\nJokowi-Amin: {$out->chart[21]}\nPrabowo-Sandi: {$out->chart[22]}\nTotal: {$total}\n\nPercent:</b>\nJokowi-Amin: {$a01}%\nPrabowo-Sandi: {$a02}%\n\n";
+			$reply = date("Y-m-d H:i:s")."\n\n<b>Vst:<b>\nJokowi-Amin: {$out->chart->{"21"}}\nPrabowo-Sandi: {$out->chart->{"22"}}\nTotal: {$total}\n\nPercent:</b>\nJokowi-Amin: {$a01}%\nPrabowo-Sandi: {$a02}%\n\n";
 		}
 
 		Exe::sendMessage(
