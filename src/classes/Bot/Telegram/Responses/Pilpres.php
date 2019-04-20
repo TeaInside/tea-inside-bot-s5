@@ -47,7 +47,7 @@ class Pilpres extends ResponseFoundation
 
 			$out->chart->{"21"} = number_format($out->chart->{"21"}, 0, ",", ".");
 			$out->chart->{"22"} = number_format($out->chart->{"22"}, 0, ",", ".");
-			$total = number_format($total, 3, 0, ",", ".");
+			$total = number_format($total, 0, ",", ".");
 			$bacTotal = number_format($bacTotal, 0, ",", ".");
 			$bac = number_format($bac , 0, ",", ".");
 
