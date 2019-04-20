@@ -48,7 +48,7 @@ class Pilpres extends ResponseFoundation
 			$out->chart->{"21"} = number_format($out->chart->{"21"}, 0, ",", ".");
 			$out->chart->{"22"} = number_format($out->chart->{"22"}, 0, ",", ".");
 			$total = number_format($total, 3, 0, ",", ".");
-			$bacTotal = snumber_format($bacTotal, 0, ",", ".");
+			$bacTotal = number_format($bacTotal, 0, ",", ".");
 			$bac = number_format($bac , 0, ",", ".");
 
 			$reply = date("Y-m-d H:i:s")."\n\n<b>[VST]</b>\n<b>Jokowi-Amin:</b> <code>{$out->chart->{"21"}}</code>\n<b>Prabowo-Sandi:</b> <code>{$out->chart->{"22"}}</code>\n<b>Total:</b> <code>{$total}</code>\n\n<b>[Percent]</b>\n<b>Jokowi-Amin:</b> <code>{$a01}</code>%\n<b>Prabowo-Sandi:</b> <code>{$a02}</code>%\n\n<b>[BAC]</b>\n<b>BAC:</b> <code>{$bac}</code>\n<b>BAC Percent:</b> <code>{$bacPercent}</code>%\n<b>Total:</b> <code>{$bacTotal}</code>";
