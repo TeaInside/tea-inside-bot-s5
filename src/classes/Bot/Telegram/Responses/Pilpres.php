@@ -21,7 +21,7 @@ class Pilpres extends ResponseFoundation
 	 */
 	public function check(): bool
 	{
-		$ch = curl_init("https://pemilu2019.kpu.go.id/static/json/hhcw/ppwp.json");
+		$ch = curl_init("https://pemilu2019.kpu.go.id:8443/static/json/hhcw/ppwp.json");
 		curl_setopt_array($ch, 
 			[
 				CURLOPT_RETURNTRANSFER => true,
