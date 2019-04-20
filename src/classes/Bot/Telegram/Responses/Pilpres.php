@@ -54,7 +54,7 @@ class Pilpres extends ResponseFoundation
 			$reply = "<b>STD Time:</b> <code>".date("r", strtotime($out->ts))."</code>\n\n<b>[VST]</b>\n<b>Jokowi-Amin:</b> <code>{$out->chart->{"21"}}</code>\n<b>Prabowo-Sandi:</b> <code>{$out->chart->{"22"}}</code>\n<b>Total VST:</b> <code>{$total}</code>\n\n<b>[VST Percent]</b>\n<b>Jokowi-Amin:</b> <code>{$a01}</code> %\n<b>Prabowo-Sandi:</b> <code>{$a02}</code> %\n\n<b>[BAC]</b>\n<b>BAC:</b> <code>{$bac}</code>\n<b>BAC Percent:</b> <code>{$bacPercent}</code> %\n<b>Total BAC:</b> <code>{$bacTotal}</code>";
 		}
 
-		print Exe::sendMessage(
+		Exe::sendMessage(
 			[
 				"chat_id" => $this->d["chat_id"],
 				"text" => $reply,
