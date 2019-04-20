@@ -102,6 +102,12 @@ trait ResponseRoutes
 			}
 		}
 
+		if (preg_match("/^(?:\!|\/|\~|\.)xz$/Usi", $this->d["text"])) {
+			if ($this->exec("Pilpres", "check")) {
+				return;
+			}
+		}
+
 
 		/**
 		 * Virtualizor
