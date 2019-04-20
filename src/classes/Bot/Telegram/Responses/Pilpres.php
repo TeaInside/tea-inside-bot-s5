@@ -16,7 +16,6 @@ use Bot\Telegram\Utils\GroupSetting;
 class Pilpres extends ResponseFoundation
 {
 	/**
-	 * @param string $host
 	 * @return bool
 	 */
 	public function check(): bool
