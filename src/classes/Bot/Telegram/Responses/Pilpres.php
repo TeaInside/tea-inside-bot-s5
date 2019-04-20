@@ -51,7 +51,7 @@ class Pilpres extends ResponseFoundation
 			$bacTotal = number_format($bacTotal, 0, ",", ".");
 			$bac = number_format($bac , 0, ",", ".");
 
-			$reply = date("Y-m-d H:i:s")."\n\n<b>[VST]</b>\n<b>Jokowi-Amin:</b> <code>{$out->chart->{"21"}}</code>\n<b>Prabowo-Sandi:</b> <code>{$out->chart->{"22"}}</code>\n<b>Total VST:</b> <code>{$total}</code>\n\n<b>[VST Percent]</b>\n<b>Jokowi-Amin:</b> <code>{$a01}</code> %\n<b>Prabowo-Sandi:</b> <code>{$a02}</code> %\n\n<b>[BAC]</b>\n<b>BAC:</b> <code>{$bac}</code>\n<b>BAC Percent:</b> <code>{$bacPercent}</code> %\n<b>Total BAC:</b> <code>{$bacTotal}</code>";
+			$reply = "<b>std::time:</b> ".date("r")."\n\n<b>[VST]</b>\n<b>Jokowi-Amin:</b> <code>{$out->chart->{"21"}}</code>\n<b>Prabowo-Sandi:</b> <code>{$out->chart->{"22"}}</code>\n<b>Total VST:</b> <code>{$total}</code>\n\n<b>[VST Percent]</b>\n<b>Jokowi-Amin:</b> <code>{$a01}</code> %\n<b>Prabowo-Sandi:</b> <code>{$a02}</code> %\n\n<b>[BAC]</b>\n<b>BAC:</b> <code>{$bac}</code>\n<b>BAC Percent:</b> <code>{$bacPercent}</code> %\n<b>Total BAC:</b> <code>{$bacTotal}</code>";
 		}
 
 		print Exe::sendMessage(
