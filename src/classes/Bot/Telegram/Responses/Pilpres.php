@@ -41,6 +41,9 @@ class Pilpres extends ResponseFoundation
 			$a01 = $out->chart->{"21"} / $total * 100;
 			$a02 = $out->chart->{"22"} / $total * 100;
 
+			$out->chart->{"21"} = str_replace(",", ".", rtrim(number_format($out->chart->{"21"}, 3), ".000"));
+			$out->chart->{"22"} = str_replace(",", ".", rtrim(number_format($out->chart->{"22"}, 3), ".000"));
+
 			$reply = date("Y-m-d H:i:s")."\n\n<b>[Vst]</b>\n<b>Jokowi-Amin:</b> <code>{$out->chart->{"21"}}</code>\n<b>Prabowo-Sandi:</b> <code>{$out->chart->{"22"}}</code>\n<b>Total:</b> <code>{$total}</code>\n\n<b>[Percent]</b>\n<b>Jokowi-Amin:</b> <code>{$a01}</code>%\n<b>Prabowo-Sandi:</b> <code>{$a02}</code>%\n\n";
 		}
 
