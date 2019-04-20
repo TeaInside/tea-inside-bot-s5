@@ -60,7 +60,7 @@ class Pilpres extends ResponseFoundation
 				"reply_to_message_id" => $this->d["msg_id"],
 				"parse_mode" => "HTML"
 			]
-		)["out"];
+		);
 
 		return true;
 	}
