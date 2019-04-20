@@ -40,11 +40,18 @@ class Pilpres extends ResponseFoundation
 			$total = $out->chart->{"21"} + $out->chart->{"22"};
 			$a01 = $out->chart->{"21"} / $total * 100;
 			$a02 = $out->chart->{"22"} / $total * 100;
+			$bacTotal = $out->progress->total;
+			$bac = $out->progress->proses;
+			$bacPercent = $bac / $bacTotal * 100;
+
 
 			$out->chart->{"21"} = str_replace(",", ".", rtrim(number_format($out->chart->{"21"}, 3), ".000"));
 			$out->chart->{"22"} = str_replace(",", ".", rtrim(number_format($out->chart->{"22"}, 3), ".000"));
+			$total = str_replace(",", ".", rtrim(number_format($total, 3), ".000"));
+			$bacTotal = str_replace(",", ".", rtrim(number_format($bacTotal, 3), ".000"));
+			$bac = str_replace(",", ".", rtrim(number_format($bac, 3), ".000"));
 
-			$reply = date("Y-m-d H:i:s")."\n\n<b>[Vst]</b>\n<b>Jokowi-Amin:</b> <code>{$out->chart->{"21"}}</code>\n<b>Prabowo-Sandi:</b> <code>{$out->chart->{"22"}}</code>\n<b>Total:</b> <code>{$total}</code>\n\n<b>[Percent]</b>\n<b>Jokowi-Amin:</b> <code>{$a01}</code>%\n<b>Prabowo-Sandi:</b> <code>{$a02}</code>%\n\n";
+			$reply = date("Y-m-d H:i:s")."\n\n<b>[VST]</b>\n<b>Jokowi-Amin:</b> <code>{$out->chart->{"21"}}</code>\n<b>Prabowo-Sandi:</b> <code>{$out->chart->{"22"}}</code>\n<b>Total:</b> <code>{$total}</code>\n\n<b>[Percent]</b>\n<b>Jokowi-Amin:</b> <code>{$a01}</code>%\n<b>Prabowo-Sandi:</b> <code>{$a02}</code>%\n<b>[BAC]</b>\n<b>BAC:</b> <code>{$bac}</code>\n<b>BAC Percent:</b> <code>{$bacPercent}</code>%\n<b>Total:</b> <code>{$bacTotal}</code>";
 		}
 
 		print Exe::sendMessage(
